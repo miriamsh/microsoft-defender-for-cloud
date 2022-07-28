@@ -61,6 +61,46 @@
 			{
 				"command": "connectors.filter.cloudExplorer",
 				"title": "Cloud Explorer"
+			},
+			{
+				"command": "connectors.create",
+				"title": "Create"
+			},
+			{
+				"command": "recommendation.showInBrowser",
+				"title": "Show in browser"
+			},
+			{
+				"command": "recommendations.showDetailed",
+				"title": "Show detailed"
+			},
+			{
+				"command": "recommendations.quickFix",
+				"title": "Quick fix"
+			},
+			{
+				"command": "alerts.showInBrowser",
+				"title": "Show in browser"
+			},
+			{
+				"command": "alerts.showAs.graph",
+				"title": "Graph"
+			},
+			{
+				"command": "alerts.showAs.hierarchy",
+				"title": "Hierarchy"
+			},
+			{
+				"command": "alerts.detailed",
+				"title": "Show detailed"
+			},
+			{
+				"command": "alerts.ActionMenu.sendNotifications",
+				"title": "Send notifications"
+			},
+			{
+				"command": "alerts.ActionMenu.mitigate",
+				"title": "Mitigate"
 			}
 		],
 		"menus": {
@@ -80,16 +120,56 @@
 					"submenu": "connectors.filters",
 					"when": "viewItem == securityCenter.connectors",
 					"group": "inline"
+				},
+				{
+					"command": "connectors.create",
+					"when": "viewItem == securityCenter.connectors",
+					"group": "1@1"
+				},
+				{
+					"command": "recommendation.showInBrowser",
+					"when": "viewItem == securityCenter.assesments",
+					"group": "1@1"
+				},
+				{
+					"command": "recommendations.showDetailed",
+					"when": "viewItem == securityCenter.assesments",
+					"group": "2@1"
+				},
+				{
+					"command": "recommendations.quickFix",
+					"when": "viewItem == securityCenter.assesments",
+					"group": "3@1"
+				},
+				{
+					"command": "alerts.showInBrowser",
+					"when": "viewItem == securityCenter.alerts",
+					"group": "1@1"
+				},
+				{
+					"submenu": "alerts.showAsMenu",
+					"when": "viewItem == securityCenter.alerts",
+					"group": "2@1"
+				},
+				{
+					"command": "alerts.detailed",
+					"when": "viewItem == securityCenter.alerts",
+					"group": "3@1"
+				},
+				{
+					"submenu": "alerts.actionMenu",
+					"when": "viewItem == securityCenter.alerts",
+					"group": "4@1"
 				}
 			],
 			"recommendations.filters": [
 				{
 					"command": "recommendation.filter.status",
-					"group": "2_default@1"
+					"group": "1_default@1"
 				},
 				{
 					"command": "recommendation.filter.environment",
-					"group": "3_default@1"
+					"group": "2_default@1"
 				}
 			],
 			"alerts.filters": [
@@ -106,6 +186,26 @@
 				{
 					"command": "connectors.filter.cloudExplorer",
 					"group": "1_default@1"
+				}
+			],
+			"alerts.showAsMenu": [
+				{
+					"command": "alerts.showAs.graph",
+					"group": "1_default@1"
+				},
+				{
+					"command": "alerts.showAs.hierarchy",
+					"group": "2_default@1"
+				}
+			],
+			"alerts.actionMenu":[
+				{
+					"command": "alerts.ActionMenu.sendNotifications",
+					"group": "1_default@1"
+				},
+				{
+					"command": "alerts.ActionMenu.mitigate",
+					"group": "2_default@1"
 				}
 			]
 		},
@@ -133,6 +233,14 @@
 					"light": "resources/light/filter.svg",
 					"dark": "resources/dark/filter.svg"
 				}
+			},
+			{
+				"id":"alerts.showAsMenu",
+				"label": "Show As.."
+			},
+			{
+				"id":"alerts.actionMenu",
+				"label": "Actions"
 			}
 		],
 		"configuration": {

@@ -14,7 +14,7 @@ export async function activate(context: vscode.ExtensionContext) {
         outputChannel: createAzExtOutputChannel('Azure Identity', ''),
         prefix: ''
     };
-    
+
     registerAzureUtilsExtensionVariables(uiExtensionVariables);
 
     const azureAccountTreeItem = new AzureAccountTreeItem();
@@ -78,6 +78,9 @@ export async function activate(context: vscode.ExtensionContext) {
         args.refresh();
     }));
 
+    registerCommand("recommendation.showInBrowser", (event, item) => {
+        vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/${item.parent._id}`));
+    });
 }
 
 // this method is called when your extension is deactivated

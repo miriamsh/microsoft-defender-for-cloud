@@ -1,4 +1,3 @@
-
 export class FilterSettings {
 
     public recommendations: Map<string, { "option": string, "enable": boolean }[]>;
@@ -11,7 +10,8 @@ export class FilterSettings {
                 ["status",
                     [
                         { option: "Healthy", enable: true },
-                        { option: "Unhealthy", enable: true }
+                        { option: "Unhealthy", enable: true },
+                        { option: "NotApplicable", enable: true }
                     ]
                 ],
                 ["environment",
@@ -34,7 +34,8 @@ export class FilterSettings {
                 ["status",
                     [
                         { option: "Completed", enable: true },
-                        { option: "Uncompleted", enable: true }
+                        { option: "Uncompleted", enable: true },
+                        { option: "NotApplicable", enable: true }
                     ]
                 ]
             ]);
