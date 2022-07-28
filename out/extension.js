@@ -73,7 +73,7 @@ async function activate(context) {
         args.refresh();
     }));
     (0, vscode_azext_utils_1.registerCommand)("recommendation.showInBrowser", (event, item) => {
-        vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/${item.parent._id}`));
+        vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/subscription/${item.parent._id.slice(item.parent._id.lastIndexOf("/"))}`));
     });
 }
 exports.activate = activate;

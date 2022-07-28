@@ -2,19 +2,13 @@ import * as vscode from 'vscode';
 import { AssessmentsMetadata, Assessments, SecurityCenter, SecurityAssessmentResponse } from "@azure/arm-security";
 import { AzExtParentTreeItem, IActionContext, TreeItemIconPath } from "@microsoft/vscode-azext-utils";
 import EventEmitter = require("events");
-import { Command, ThemeIcon } from "vscode";
-import { SubAssessmentTreeItem } from "./SubAssesmentTreeItem";
 import { assesmentIcon } from "../constants";
 import { AssessmentTreeItem } from "./AssesmentTreeItem";
 import { recommendationsFiltering } from '../Commands/FilterCommand';
 import { SubscriptionTreeItem } from './SubscriptionTreeItem';
-import { FilterSettings } from '../Models/FilterSettings';
-import { type } from 'os';
+
 
 export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
-    //private _onDidChangeTreeData: vscode.EventEmitter<AssessmentTreeItem | undefined> = new vscode.EventEmitter<AssessmentTreeItem | undefined>();
-
-    //readonly onDidChangeTreeData: vscode.Event<AssessmentTreeItem | undefined> = this._onDidChangeTreeData.event;
 
     private _onDidChangeTreeData: vscode.EventEmitter<AssessmentTreeItem | undefined | null | void> = new vscode.EventEmitter<AssessmentTreeItem | undefined | null | void>();
     readonly onDidChangeTreeData: vscode.Event<AssessmentTreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
@@ -33,8 +27,6 @@ export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
         this.iconPath = assesmentIcon;
     }
 
-
-
     public readonly contextValue: string = 'securityCenter.assesments';
 
     public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtParentTreeItem[]> {
@@ -42,7 +34,6 @@ export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
         let subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
         let value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
         if (this.children.length === 0) {
-            this.children = [];
             for (let item of value) {
                 const jsonItem = JSON.stringify(item);
                 this.children.push(new AssessmentTreeItem("Assessment", item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this));

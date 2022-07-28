@@ -10,8 +10,6 @@ const FilterCommand_1 = require("../Commands/FilterCommand");
 class AssessmentsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent) {
         super(parent);
-        //private _onDidChangeTreeData: vscode.EventEmitter<AssessmentTreeItem | undefined> = new vscode.EventEmitter<AssessmentTreeItem | undefined>();
-        //readonly onDidChangeTreeData: vscode.Event<AssessmentTreeItem | undefined> = this._onDidChangeTreeData.event;
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
         this.children = [];
@@ -26,7 +24,6 @@ class AssessmentsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeIt
         let subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
         let value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
         if (this.children.length === 0) {
-            this.children = [];
             for (let item of value) {
                 const jsonItem = JSON.stringify(item);
                 this.children.push(new AssesmentTreeItem_1.AssessmentTreeItem("Assessment", item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this));
