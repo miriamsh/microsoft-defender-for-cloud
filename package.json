@@ -63,44 +63,44 @@
 				"title": "Cloud Explorer"
 			},
 			{
-				"command": "connectors.create",
-				"title": "Create"
-			},
-			{
-				"command": "recommendation.showInBrowser",
+				"command": "recommendation.menu.showInBrowser",
 				"title": "Show in browser"
 			},
 			{
-				"command": "recommendations.showDetailed",
+				"command": "recommendations.menu.showDetailed",
 				"title": "Show detailed"
 			},
 			{
-				"command": "recommendations.quickFix",
+				"command": "recommendations.menu.quickFix",
 				"title": "Quick fix"
 			},
 			{
-				"command": "alerts.showInBrowser",
+				"command": "alerts.menu.showInBrowser",
 				"title": "Show in browser"
 			},
 			{
-				"command": "alerts.showAs.graph",
+				"command": "alerts.menu.showAs.graph",
 				"title": "Graph"
 			},
 			{
-				"command": "alerts.showAs.hierarchy",
+				"command": "alerts.menu.showAs.hierarchy",
 				"title": "Hierarchy"
 			},
 			{
-				"command": "alerts.detailed",
+				"command": "alerts.menu.detailed",
 				"title": "Show detailed"
 			},
 			{
-				"command": "alerts.ActionMenu.sendNotifications",
+				"command": "alerts.menu.ActionMenu.sendNotifications",
 				"title": "Send notifications"
 			},
 			{
-				"command": "alerts.ActionMenu.mitigate",
+				"command": "alerts.menu.ActionMenu.mitigate",
 				"title": "Mitigate"
+			},
+			{
+				"command": "connectors.menu.create",
+				"title": "Create"
 			}
 		],
 		"menus": {
@@ -122,44 +122,44 @@
 					"group": "inline"
 				},
 				{
-					"command": "connectors.create",
-					"when": "viewItem == securityCenter.connectors",
-					"group": "1@1"
-				},
-				{
-					"command": "recommendation.showInBrowser",
+					"command": "recommendation.menu.showInBrowser",
 					"when": "viewItem == securityCenter.assesments",
 					"group": "1@1"
 				},
 				{
-					"command": "recommendations.showDetailed",
+					"command": "recommendations.menu.showDetailed",
 					"when": "viewItem == securityCenter.assesments",
 					"group": "2@1"
 				},
 				{
-					"command": "recommendations.quickFix",
+					"command": "recommendations.menu.quickFix",
 					"when": "viewItem == securityCenter.assesments",
 					"group": "3@1"
 				},
 				{
-					"command": "alerts.showInBrowser",
+					"command": "alerts.menu.showInBrowser",
 					"when": "viewItem == securityCenter.alerts",
 					"group": "1@1"
 				},
 				{
-					"submenu": "alerts.showAsMenu",
+					"submenu": "alerts.menu.showAsMenu",
 					"when": "viewItem == securityCenter.alerts",
 					"group": "2@1"
 				},
 				{
-					"command": "alerts.detailed",
+					"command": "alerts.menu.detailed",
 					"when": "viewItem == securityCenter.alerts",
 					"group": "3@1"
 				},
 				{
-					"submenu": "alerts.actionMenu",
+					"submenu": "alerts.menu.actionMenu",
 					"when": "viewItem == securityCenter.alerts",
 					"group": "4@1"
+				},
+				{
+					"command": "connectors.menu.create",
+					"when": "viewItem == securityCenter.connectors",
+					"group": "1@1"
 				}
 			],
 			"recommendations.filters": [
@@ -188,23 +188,23 @@
 					"group": "1_default@1"
 				}
 			],
-			"alerts.showAsMenu": [
+			"alerts.menu.showAsMenu": [
 				{
-					"command": "alerts.showAs.graph",
+					"command": "alerts.menu.showAs.graph",
 					"group": "1_default@1"
 				},
 				{
-					"command": "alerts.showAs.hierarchy",
+					"command": "alerts.menu.showAs.hierarchy",
 					"group": "2_default@1"
 				}
 			],
-			"alerts.actionMenu":[
+			"alerts.menu.actionMenu":[
 				{
-					"command": "alerts.ActionMenu.sendNotifications",
+					"command": "alerts.menu.ActionMenu.sendNotifications",
 					"group": "1_default@1"
 				},
 				{
-					"command": "alerts.ActionMenu.mitigate",
+					"command": "alerts.menu.ActionMenu.mitigate",
 					"group": "2_default@1"
 				}
 			]
@@ -235,11 +235,11 @@
 				}
 			},
 			{
-				"id":"alerts.showAsMenu",
+				"id":"alerts.menu.showAsMenu",
 				"label": "Show As.."
 			},
 			{
-				"id":"alerts.actionMenu",
+				"id":"alerts.menu.actionMenu",
 				"label": "Actions"
 			}
 		],

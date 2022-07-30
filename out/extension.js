@@ -27,15 +27,18 @@ async function activate(context) {
         await (0, FilterCommand_1.selectFilters)(args, "recommendations", "environment");
     }));
     context.subscriptions.push(vscode.commands.registerCommand('alerts.filter.severity', async (args) => {
-        await (0, FilterCommand_1.selectFilters)(args, "alerts", "status");
+        await (0, FilterCommand_1.selectFilters)(args, "alerts", "severity");
     }));
     context.subscriptions.push(vscode.commands.registerCommand('alerts.filter.status', async (args) => {
-        await (0, FilterCommand_1.selectFilters)(args, "alerts", "severity");
+        await (0, FilterCommand_1.selectFilters)(args, "alerts", "status");
     }));
     context.subscriptions.push(vscode.commands.registerCommand('connectors.filter.cloudExplorer', async (args) => {
         await (0, FilterCommand_1.selectFilters)(args, "connectors", "cloudExplorer");
     }));
-    (0, vscode_azext_utils_1.registerCommand)("recommendation.showInBrowser", (event, item) => {
+    (0, vscode_azext_utils_1.registerCommand)("recommendation.menu.showInBrowser", (event, item) => {
+        vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/subscription/${item.parent._id.slice(item.parent._id.lastIndexOf("/"))}`));
+    });
+    (0, vscode_azext_utils_1.registerCommand)("alerts.menu.showInBrowser", (event, item) => {
         vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/subscription/${item.parent._id.slice(item.parent._id.lastIndexOf("/"))}`));
     });
 }

@@ -33,18 +33,22 @@ export async function activate(context: vscode.ExtensionContext) {
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('alerts.filter.severity', async (args) => {
-       await selectFilters(args,"alerts", "status");
+       await selectFilters(args,"alerts", "severity");
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('alerts.filter.status', async (args) => {
-       await selectFilters(args,"alerts", "severity");
+       await selectFilters(args,"alerts", "status");
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('connectors.filter.cloudExplorer', async (args) => {
        await selectFilters(args,"connectors", "cloudExplorer");
     }));
 
-    registerCommand("recommendation.showInBrowser", (event, item) => {
+    registerCommand("recommendation.menu.showInBrowser", (event, item) => {
+        vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/subscription/${item.parent._id.slice(item.parent._id.lastIndexOf("/"))}`));
+    });
+
+    registerCommand("alerts.menu.showInBrowser", (event, item) => {
         vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/subscription/${item.parent._id.slice(item.parent._id.lastIndexOf("/"))}`));
     });
 }
