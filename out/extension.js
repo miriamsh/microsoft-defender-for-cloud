@@ -21,56 +21,19 @@ async function activate(context) {
     context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
     vscode.window.registerTreeDataProvider('package-resources', treeDataProvider);
     context.subscriptions.push(vscode.commands.registerCommand('recommendation.filter.status', async (args) => {
-        const filtersSettings = args.parent.filteringSettings.recommendations.get('status');
-        const quickPickItems = filtersSettings.map((filter) => {
-            return {
-                label: `${filter.option}`,
-                picked: filter.enable
-            };
-        });
-        ;
-        const picks = await (0, FilterCommand_1.selectFilters)(quickPickItems, "status").then(data => {
-            return data?.map(p => p.label);
-        });
-        if (picks) {
-            const newFilters = filtersSettings.map((f) => {
-                if (picks.indexOf(f.option) === -1) {
-                    f.enable = false;
-                }
-                else {
-                    f.enable = true;
-                }
-                return f;
-            });
-            args.parent.filteringSettings.recommendations.set('status', newFilters);
-        }
-        args.refresh();
+        await (0, FilterCommand_1.selectFilters)(args, "recommendations", "status");
     }));
     context.subscriptions.push(vscode.commands.registerCommand('recommendation.filter.environment', async (args) => {
-        const filtersSettings = args.parent.filteringSettings.recommendations.get('environment');
-        const quickPickItems = filtersSettings.map((filter) => {
-            return {
-                label: `${filter.option}`,
-                picked: filter.enable
-            };
-        });
-        ;
-        const picks = await (0, FilterCommand_1.selectFilters)(quickPickItems, "environment").then(data => {
-            return data?.map(p => p.label);
-        });
-        if (picks) {
-            const newFilters = filtersSettings.map((f) => {
-                if (picks.indexOf(f.option) === -1) {
-                    f.enable = false;
-                }
-                else {
-                    f.enable = true;
-                }
-                return f;
-            });
-            args.parent.filteringSettings.recommendations.set('environment', newFilters);
-        }
-        args.refresh();
+        await (0, FilterCommand_1.selectFilters)(args, "recommendations", "environment");
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('alerts.filter.severity', async (args) => {
+        await (0, FilterCommand_1.selectFilters)(args, "alerts", "status");
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('alerts.filter.status', async (args) => {
+        await (0, FilterCommand_1.selectFilters)(args, "alerts", "severity");
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('connectors.filter.cloudExplorer', async (args) => {
+        await (0, FilterCommand_1.selectFilters)(args, "connectors", "cloudExplorer");
     }));
     (0, vscode_azext_utils_1.registerCommand)("recommendation.showInBrowser", (event, item) => {
         vscode.env.openExternal(vscode.Uri.parse(`https://portal.azure.com/#view/Microsoft_Azure_Security/RecommendationsBladeV2/subscription/${item.parent._id.slice(item.parent._id.lastIndexOf("/"))}`));

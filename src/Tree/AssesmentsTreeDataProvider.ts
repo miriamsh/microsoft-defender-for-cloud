@@ -16,7 +16,7 @@ export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
     public label: string;
     private readonly assessments: Assessments;
     private client!: SecurityCenter;
-    public context!: IActionContext;
+    private context!: IActionContext;
     private children: AssessmentTreeItem[] = [];
 
     constructor(label: string, parent: AzExtParentTreeItem) {
@@ -31,11 +31,10 @@ export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
 
     public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtParentTreeItem[]> {
         this.context = context;
-        let subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
-        let value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
         if (this.children.length === 0) {
+            const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
+            const value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
             for (let item of value) {
-                const jsonItem = JSON.stringify(item);
                 this.children.push(new AssessmentTreeItem("Assessment", item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this));
             }
         }

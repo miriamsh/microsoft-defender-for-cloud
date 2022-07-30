@@ -21,11 +21,10 @@ class AssessmentsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeIt
     }
     async loadMoreChildrenImpl(clearCache, context) {
         this.context = context;
-        let subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
-        let value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
         if (this.children.length === 0) {
+            const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
+            const value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
             for (let item of value) {
-                const jsonItem = JSON.stringify(item);
                 this.children.push(new AssesmentTreeItem_1.AssessmentTreeItem("Assessment", item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this));
             }
         }

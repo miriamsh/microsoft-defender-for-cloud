@@ -3,6 +3,8 @@ import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/v
 import { ResourceTreeItem } from "./ResourceTreeItem";
 import { connectorIcon } from '../constants';
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
+import { connectorsFiltering } from "../Commands/FilterCommand";
+import { SubscriptionTreeItem } from "./SubscriptionTreeItem";
 
 
 export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
@@ -10,7 +12,8 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
     private readonly connectors: Connectors;
     readonly label: string;
     private client!: SecurityCenter;
-    private children:ConnectorTreeItem[]=[];
+    public context!: IActionContext;
+    private children: ConnectorTreeItem[] = [];
 
     constructor(label: string, parent: AzExtParentTreeItem) {
         super(parent);
@@ -23,12 +26,14 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
     public readonly contextValue: string = 'securityCenter.connectors';
 
     public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtTreeItem[]> {
-        let value = await (await this.client.connectors.list().byPage().next()).value;
-		for (let item of value) {
-			this.children.push(new ConnectorTreeItem("Connector", item.name!,item.cloudProvider,this));
-		}
-
-		return this.children;
+        this.context = context;
+        if (this.children.length === 0) {
+            const value = await (await this.client.connectors.list().byPage().next()).value;
+            for (let item of value) {
+                this.children.push(new ConnectorTreeItem("Connector", item.name!, item.cloudProvider, this));
+            }
+        }
+        return connectorsFiltering((this.parent as SubscriptionTreeItem).filteringSettings, this.children);
     }
 
     public hasMoreChildrenImpl(): boolean {

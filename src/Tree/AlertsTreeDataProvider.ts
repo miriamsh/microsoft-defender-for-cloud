@@ -3,11 +3,14 @@ import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/v
 import { ResourceTreeItem } from "./ResourceTreeItem";
 import { alertIcon } from "../constants";
 import { AlertTreeItem } from "./AlertTreeItem";
+import { alertsFiltering } from "../Commands/FilterCommand";
+import { SubscriptionTreeItem } from "./SubscriptionTreeItem";
 
 export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 	private readonly alerts: Alerts;
 	private children: AlertTreeItem[] = [];
 	private client!: SecurityCenter;
+	public context!: IActionContext;
 	public label: string;
 
 	constructor(label: string, parent: AzExtParentTreeItem) {
@@ -21,12 +24,14 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 	public readonly contextValue: string = 'securityCenter.alerts';
 
 	public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtTreeItem[]> {
-
-		let value = await (await this.client.alerts.list().byPage().next()).value;
-		for (let item of value) {
-			this.children.push(new AlertTreeItem("Alert", item.alertDisplayName, item.severity, item.status, this));
+		this.context = context;
+		if (this.children.length === 0) {
+			const value = await (await this.client.alerts.list().byPage().next()).value;
+			for (let item of value) {
+				this.children.push(new AlertTreeItem("Alert", item.alertDisplayName, item.severity, item.status, this));
+			}
 		}
-		return this.children;
+		return alertsFiltering((this.parent as SubscriptionTreeItem).filteringSettings, this.children);
 	}
 
 	public hasMoreChildrenImpl(): boolean {

@@ -4,8 +4,8 @@ import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/v
 export class AlertTreeItem extends AzExtTreeItem {
 	public contextValue: string;
 	public label: string;
-    private severity!:string;
-    private status!:string;
+    public severity!:string;
+    public status!:string;
 	constructor(contextValue: string,label:string, severity:string, status:string,parent: AzExtParentTreeItem) {
 		super(parent);
 		this.label = label;

@@ -5,7 +5,7 @@ export class ConnectorTreeItem extends AzExtTreeItem {
 
 	public contextValue: string;
 	readonly label: string;
-    private cloudProvider!:string;
+    public cloudProvider!:string;
 	constructor(contextValue: string,label:string,cloudProvider:string, parent: AzExtParentTreeItem) {
 		super(parent);
 		this.contextValue = contextValue;
