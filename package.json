@@ -108,7 +108,7 @@
 			"view/item/context": [
 				{
 					"submenu": "recommendations.filters",
-					"when": "viewItem == securityCenter.assesments",
+					"when": "viewItem == securityCenter.recommendations",
 					"group": "inline"
 				},
 				{
@@ -123,17 +123,17 @@
 				},
 				{
 					"command": "recommendation.menu.showInBrowser",
-					"when": "viewItem == securityCenter.assesments",
+					"when": "viewItem == securityCenter.recommendations.assessments",
 					"group": "1@1"
 				},
 				{
 					"command": "recommendations.menu.showDetailed",
-					"when": "viewItem == securityCenter.assesments",
+					"when": "viewItem == securityCenter.recommendations.assessments",
 					"group": "2@1"
 				},
 				{
 					"command": "recommendations.menu.quickFix",
-					"when": "viewItem == securityCenter.assesments",
+					"when": "viewItem == securityCenter.recommendations.assessments",
 					"group": "3@1"
 				},
 				{

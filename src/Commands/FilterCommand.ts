@@ -43,11 +43,11 @@ export async function showFilteringMenu(filters:vscode.QuickPickItem[], category
     }
 }
 
-export function recommendationsFiltering(filteringSettings: FilterSettings, assesments: AssessmentTreeItem[]): AssessmentTreeItem[] {
+export function recommendationsFiltering(filteringSettings: FilterSettings, assessments: AssessmentTreeItem[]): AssessmentTreeItem[] {
     const statusFilters = filteringSettings.getType("recommendations")?.get('status');
     const environmentFilters = filteringSettings.getType("recommendations")?.get('environment');
 
-    const relevantData = assesments.filter(a => {
+    const relevantData = assessments.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) { return a; };
     });
     return relevantData.filter(a => {

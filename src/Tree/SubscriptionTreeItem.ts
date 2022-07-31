@@ -4,7 +4,7 @@ import { subscriptionIcon } from '../constants';
 import { FilterSettings } from "../Models/FilterSettings";
 import { AlertsTreeDataProvider } from "./AlertsTreeDataProvider";
 import { AlertTreeItem } from "./AlertTreeItem";
-import { AssessmentsTreeDataProvider } from "./AssesmentsTreeDataProvider";
+import { RecommendationsTreeDataProvider } from "./RecommendationsTreeDataProvider";
 import { AssessmentTreeItem } from "./AssesmentTreeItem";
 import { ConnectorsTreeDataProvider } from "./ConnectorsTreeDataProvider";
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
@@ -34,7 +34,7 @@ export class SubscriptionTreeItem extends SubscriptionTreeItemBase {
     public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtTreeItem[]> {
 
         let alerts: AlertsTreeDataProvider = new AlertsTreeDataProvider("Security Alerts", this);
-		let assessments: AssessmentsTreeDataProvider = new AssessmentsTreeDataProvider("Recommendations", this);
+		let assessments: RecommendationsTreeDataProvider = new RecommendationsTreeDataProvider("Recommendations", this);
 		let connectors: ConnectorsTreeDataProvider = new ConnectorsTreeDataProvider("Connectors", this);
 
 		return [alerts, assessments, connectors];

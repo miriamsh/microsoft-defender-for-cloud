@@ -8,7 +8,8 @@ import { recommendationsFiltering } from '../Commands/FilterCommand';
 import { SubscriptionTreeItem } from './SubscriptionTreeItem';
 
 
-export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
+export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
+
 
     private _onDidChangeTreeData: vscode.EventEmitter<AssessmentTreeItem | undefined | null | void> = new vscode.EventEmitter<AssessmentTreeItem | undefined | null | void>();
     readonly onDidChangeTreeData: vscode.Event<AssessmentTreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
@@ -18,16 +19,18 @@ export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
     private client!: SecurityCenter;
     private context!: IActionContext;
     private children: AssessmentTreeItem[] = [];
+    private title: string;
 
     constructor(label: string, parent: AzExtParentTreeItem) {
         super(parent);
+        this.title = label;
         this.label = label;
         this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.assessments = this.client.assessments;
         this.iconPath = assesmentIcon;
     }
 
-    public readonly contextValue: string = 'securityCenter.assesments';
+    public readonly contextValue: string = 'securityCenter.recommendations';
 
     public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtParentTreeItem[]> {
         this.context = context;
@@ -35,13 +38,19 @@ export class AssessmentsTreeDataProvider extends AzExtParentTreeItem {
             const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
             const value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
             for (let item of value) {
-                this.children.push(new AssessmentTreeItem("Assessment", item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this));
+                this.children.push(new AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this));
             }
         }
-        return recommendationsFiltering((this.parent as SubscriptionTreeItem).filteringSettings, this.children);
+        const filteredItems = recommendationsFiltering((this.parent as SubscriptionTreeItem).filteringSettings, this.children);
+        this.label = this.title + " " + `(${filteredItems.length})`; 
+        return filteredItems;
     }
 
+    
+
     public hasMoreChildrenImpl(): boolean {
-        return false;
+        return true;
     }
+
+
 }

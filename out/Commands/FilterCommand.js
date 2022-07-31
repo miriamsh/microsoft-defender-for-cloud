@@ -35,10 +35,10 @@ async function showFilteringMenu(filters, category) {
     }
 }
 exports.showFilteringMenu = showFilteringMenu;
-function recommendationsFiltering(filteringSettings, assesments) {
+function recommendationsFiltering(filteringSettings, assessments) {
     const statusFilters = filteringSettings.getType("recommendations")?.get('status');
     const environmentFilters = filteringSettings.getType("recommendations")?.get('environment');
-    const relevantData = assesments.filter(a => {
+    const relevantData = assessments.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) {
             return a;
         }
