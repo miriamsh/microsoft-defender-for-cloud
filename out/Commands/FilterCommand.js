@@ -2,8 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectorsFiltering = exports.alertsFiltering = exports.recommendationsFiltering = exports.showFilteringMenu = exports.selectFilters = void 0;
 const vscode = require("vscode");
-async function selectFilters(args, filter, option) {
-    const filtersSettings = args.parent.filteringSettings.getType(filter)?.get(option);
+const FilterSettings_1 = require("../Models/FilterSettings");
+const constants_1 = require("../constants");
+const configOperations_1 = require("../configOperations");
+async function selectFilters(args, type, property) {
+    const subscriptionId = args.parent.root.subscriptionId;
+    const configurations = (0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering)[subscriptionId];
+    const filtersSettings = (0, FilterSettings_1.getConcreteProperty)(type, property, configurations);
     const quickPickItems = filtersSettings.map((filter) => {
         return {
             label: `${filter.option}`,
@@ -11,15 +16,17 @@ async function selectFilters(args, filter, option) {
         };
     });
     ;
-    const picks = await showFilteringMenu(quickPickItems, option).then(data => {
+    const picks = await showFilteringMenu(quickPickItems, property).then(data => {
         return data?.map(p => p.label);
     });
-    const newFilters = filtersSettings.map((f) => {
-        f.enable = picks.indexOf(f.option) !== -1;
-        return f;
-    });
-    args.parent.filteringSettings.getType(filter)?.set(option, newFilters);
-    args.refresh();
+    if (picks) {
+        const newFilters = filtersSettings.map((f) => {
+            f.enable = picks.indexOf(f.option) !== -1;
+            return f;
+        });
+        await (0, configOperations_1.setConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering, subscriptionId, (0, FilterSettings_1.setConcreteProperty)(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
+        args.refresh();
+    }
 }
 exports.selectFilters = selectFilters;
 async function showFilteringMenu(filters, category) {
@@ -36,8 +43,8 @@ async function showFilteringMenu(filters, category) {
 }
 exports.showFilteringMenu = showFilteringMenu;
 function recommendationsFiltering(filteringSettings, assessments) {
-    const statusFilters = filteringSettings.getType("recommendations")?.get('status');
-    const environmentFilters = filteringSettings.getType("recommendations")?.get('environment');
+    const statusFilters = (0, FilterSettings_1.getConcreteProperty)("recommendations", "status", filteringSettings);
+    const environmentFilters = (0, FilterSettings_1.getConcreteProperty)("recommendations", "environment", filteringSettings);
     const relevantData = assessments.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) {
             return a;
@@ -53,8 +60,8 @@ function recommendationsFiltering(filteringSettings, assessments) {
 }
 exports.recommendationsFiltering = recommendationsFiltering;
 function alertsFiltering(filteringSettings, alerts) {
-    const statusFilters = filteringSettings.getType("alerts")?.get('status');
-    const severityFilters = filteringSettings.getType("alerts")?.get('severity');
+    const statusFilters = (0, FilterSettings_1.getConcreteProperty)("alerts", "status", filteringSettings);
+    const severityFilters = (0, FilterSettings_1.getConcreteProperty)("alerts", "severity", filteringSettings);
     const relevantData = alerts.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) {
             return a;
@@ -70,7 +77,7 @@ function alertsFiltering(filteringSettings, alerts) {
 }
 exports.alertsFiltering = alertsFiltering;
 function connectorsFiltering(filteringSettings, connectors) {
-    const cloudFilters = filteringSettings.getType("connectors")?.get('cloudExplorer');
+    const cloudFilters = (0, FilterSettings_1.getConcreteProperty)("connectors", "cloudExplorer", filteringSettings);
     return connectors.filter(a => {
         if (cloudFilters?.findIndex(cloudExplorer => { return cloudExplorer.option === a.cloudProvider && cloudExplorer.enable; }) !== -1) {
             return a;

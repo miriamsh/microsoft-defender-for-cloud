@@ -1,70 +1,57 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FilterSettings = void 0;
+exports.setConcreteProperty = exports.getConcreteProperty = exports.FilterSettings = void 0;
 class FilterSettings {
     constructor() {
-        this.settings = new Map([
-            [
-                "recommendations",
-                new Map([
-                    [
-                        "status",
-                        [
-                            { option: "Healthy", enable: true },
-                            { option: "Unhealthy", enable: true },
-                            { option: "NotApplicable", enable: true }
-                        ]
-                    ],
-                    [
-                        "environment",
-                        [
-                            { option: "Azure", enable: true },
-                            { option: "AWS", enable: true },
-                            { option: "GCP", enable: true }
-                        ]
-                    ]
-                ])
-            ],
-            [
-                "alerts",
-                new Map([
-                    [
-                        "severity",
-                        [
-                            { option: "High", enable: true },
-                            { option: "Medium", enable: true },
-                            { option: "Low", enable: true }
-                        ]
-                    ],
-                    [
-                        "status",
-                        [
-                            { option: "Completed", enable: true },
-                            { option: "Uncompleted", enable: true },
-                            { option: "NotApplicable", enable: true }
-                        ]
-                    ]
-                ])
-            ],
-            [
-                "connectors",
-                new Map([
-                    [
-                        "cloudExplorer",
-                        [
-                            { option: "cloud explorer_1", enable: true }
-                        ]
-                    ]
-                ])
-            ]
-        ]);
+        this.settings = {
+            "recommendations": {
+                "status": [
+                    { option: "Healthy", enable: true },
+                    { option: "Unhealthy", enable: true },
+                    { option: "NotApplicable", enable: true }
+                ],
+                "environment": [{ option: "Azure", enable: true },
+                    { option: "AWS", enable: true },
+                    { option: "GCP", enable: true }
+                ]
+            },
+            "alerts": {
+                "status": [
+                    { option: "High", enable: true },
+                    { option: "Medium", enable: true },
+                    { option: "Low", enable: true }
+                ],
+                "severity": [
+                    { option: "Healthy", enable: true },
+                    { option: "Unhealthy", enable: true },
+                    { option: "NotApplicable", enable: true }
+                ]
+            },
+            "connectors": {
+                "cloudExplorer": [
+                    { option: "cloud explorer_1", enable: true }
+                ]
+            }
+        };
     }
-    getSettings() {
+    getAllSettings() {
         return this.settings;
-    }
-    getType(type) {
-        return this.getSettings().get(type);
     }
 }
 exports.FilterSettings = FilterSettings;
+//gets type and property. returns concrete property array of concrete type property in this.settings property
+function getConcreteProperty(type, prop, settings) {
+    const concreteType = type;
+    const tempTypeObj = settings[concreteType];
+    const concreteProperty = prop;
+    return tempTypeObj[concreteProperty];
+}
+exports.getConcreteProperty = getConcreteProperty;
+//gets type and property. uses getConcreteProperty() function, set the returned value and returns it.
+function setConcreteProperty(type, prop, settings, concretePrOPSettings) {
+    let temp = getConcreteProperty(type, prop, settings);
+    temp = concretePrOPSettings;
+    return settings;
+}
+exports.setConcreteProperty = setConcreteProperty;
 //# sourceMappingURL=FilterSettings.js.map

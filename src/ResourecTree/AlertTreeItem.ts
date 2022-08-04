@@ -4,7 +4,6 @@ import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/v
 export class AlertTreeItem extends AzExtParentTreeItem {
 	
 	public contextValue: string;
-	private client!: SecurityCenter;
 	public label: string;
     public severity!:string;
     public status!:string;
@@ -15,7 +14,6 @@ export class AlertTreeItem extends AzExtParentTreeItem {
 		this.contextValue = contextValue;
 		this.severity = severity;
 		this.status = status;
-		this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
 	}
 
 	public loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtTreeItem[]> {

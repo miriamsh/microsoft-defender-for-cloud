@@ -1,13 +1,16 @@
 import * as vscode from 'vscode';
-import { AzExtParentTreeItem, IActionContext, TreeItemIconPath } from "@microsoft/vscode-azext-utils";
-import { AssessmentTreeItem } from '../Tree/AssesmentTreeItem';
-import { ISubscriptionContext } from 'vscode-azureextensionui';
-import { FilterSettings } from '../Models/FilterSettings';
-import { AlertTreeItem } from '../Tree/AlertTreeItem';
-import { ConnectorTreeItem } from '../Tree/ConnectorTreeItem';
+import { AssessmentTreeItem } from '../ResourecTree/AssesmentTreeItem';
+import { FilterSettings, getConcreteProperty, setConcreteProperty } from '../Models/FilterSettings';
+import { AlertTreeItem } from '../ResourecTree/AlertTreeItem';
+import { ConnectorTreeItem } from '../ResourecTree/ConnectorTreeItem';
+import { extensionPrefix, filtering } from '../constants';
+import { getConfigurationSettings, setConfigurationSettings } from '../configOperations';
 
-export async function selectFilters(args:any, filter:string, option:string){
-    const filtersSettings = args.parent.filteringSettings.getType(filter)?.get(option);
+export async function selectFilters(args: any, type: string, property: string) {
+    const subscriptionId: string = args.parent.root.subscriptionId;
+    const configurations = getConfigurationSettings(extensionPrefix, filtering)[subscriptionId];
+    const filtersSettings = getConcreteProperty(type, property, configurations);
+
     const quickPickItems = filtersSettings.map((filter: { option: string; enable: boolean; }) => {
         return {
             label: `${filter.option}`,
@@ -15,20 +18,23 @@ export async function selectFilters(args:any, filter:string, option:string){
         };
     });;
 
-    const picks = await showFilteringMenu(quickPickItems, option).then(data => {
+    const picks = await showFilteringMenu(quickPickItems, property).then(data => {
         return data?.map(p => p.label);
     });
+    if (picks) {
+        
+        const newFilters = filtersSettings.map((f: { option: string; enable: boolean; }) => {
+            f.enable = picks!.indexOf(f.option) !== -1;
+            return f;
+        });
 
-    const newFilters = filtersSettings.map((f: { option: string; enable: boolean; }) => {
-        f.enable = picks!.indexOf(f.option) !== -1;
-        return f;
-    });
+        await setConfigurationSettings(extensionPrefix, filtering, subscriptionId, setConcreteProperty(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
 
-    args.parent.filteringSettings.getType(filter)?.set(option, newFilters);
-    args.refresh();
+        args.refresh();
+    }
 }
 
-export async function showFilteringMenu(filters:vscode.QuickPickItem[], category:string){
+export async function showFilteringMenu(filters: vscode.QuickPickItem[], category: string) {
     try {
         const picks: vscode.QuickPickItem[] | undefined = await vscode.window.showQuickPick(
             filters,
@@ -43,9 +49,9 @@ export async function showFilteringMenu(filters:vscode.QuickPickItem[], category
     }
 }
 
-export function recommendationsFiltering(filteringSettings: FilterSettings, assessments: AssessmentTreeItem[]): AssessmentTreeItem[] {
-    const statusFilters = filteringSettings.getType("recommendations")?.get('status');
-    const environmentFilters = filteringSettings.getType("recommendations")?.get('environment');
+export function recommendationsFiltering(filteringSettings: any, assessments: AssessmentTreeItem[]): AssessmentTreeItem[] {
+    const statusFilters = getConcreteProperty("recommendations", "status", filteringSettings);
+    const environmentFilters = getConcreteProperty("recommendations", "environment", filteringSettings);
 
     const relevantData = assessments.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) { return a; };
@@ -56,8 +62,8 @@ export function recommendationsFiltering(filteringSettings: FilterSettings, asse
 }
 
 export function alertsFiltering(filteringSettings: FilterSettings, alerts: AlertTreeItem[]): AlertTreeItem[] {
-    const statusFilters = filteringSettings.getType("alerts")?.get('status');
-    const severityFilters = filteringSettings.getType("alerts")?.get('severity');
+    const statusFilters = getConcreteProperty("alerts", "status", filteringSettings);
+    const severityFilters = getConcreteProperty("alerts", "severity", filteringSettings);
 
     const relevantData = alerts.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) { return a; };
@@ -68,8 +74,8 @@ export function alertsFiltering(filteringSettings: FilterSettings, alerts: Alert
 }
 
 export function connectorsFiltering(filteringSettings: FilterSettings, connectors: ConnectorTreeItem[]): ConnectorTreeItem[] {
-    const cloudFilters = filteringSettings.getType("connectors")?.get('cloudExplorer');
- 
+    const cloudFilters = getConcreteProperty("connectors", "cloudExplorer", filteringSettings);
+
     return connectors.filter(a => {
         if (cloudFilters?.findIndex(cloudExplorer => { return cloudExplorer.option === a.cloudProvider && cloudExplorer.enable; }) !== -1) { return a; };
     });

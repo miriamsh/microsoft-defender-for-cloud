@@ -2,17 +2,17 @@ import * as vscode from 'vscode';
 import { AssessmentsMetadata, Assessments, SecurityCenter, SecurityAssessmentResponse } from "@azure/arm-security";
 import { AzExtParentTreeItem, IActionContext, TreeItemIconPath } from "@microsoft/vscode-azext-utils";
 import EventEmitter = require("events");
-import { assesmentIcon } from "../constants";
+import { assessmentIcon, extensionPrefix, filtering } from "../constants";
 import { AssessmentTreeItem } from "./AssesmentTreeItem";
 import { recommendationsFiltering } from '../Commands/FilterCommand';
 import { SubscriptionTreeItem } from './SubscriptionTreeItem';
+import { getConfigurationSettings } from '../configOperations';
 
 
 export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
-
-
     private _onDidChangeTreeData: vscode.EventEmitter<AssessmentTreeItem | undefined | null | void> = new vscode.EventEmitter<AssessmentTreeItem | undefined | null | void>();
     readonly onDidChangeTreeData: vscode.Event<AssessmentTreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
+        
 
     public label: string;
     private readonly assessments: Assessments;
@@ -27,7 +27,7 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
         this.label = label;
         this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.assessments = this.client.assessments;
-        this.iconPath = assesmentIcon;
+        this.iconPath = assessmentIcon;
     }
 
     public readonly contextValue: string = 'securityCenter.recommendations';
@@ -38,15 +38,14 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
             const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
             const value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
             for (let item of value) {
-                this.children.push(new AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this));
+                //how to get the severity of an assessments??
+                this.children.push(new AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this, item));
             }
         }
-        const filteredItems = recommendationsFiltering((this.parent as SubscriptionTreeItem).filteringSettings, this.children);
-        this.label = this.title + " " + `(${filteredItems.length})`; 
-        return filteredItems;
+        // this.label = this.title + " " + `(${filteredItems.length})`;
+        return recommendationsFiltering(getConfigurationSettings(extensionPrefix, filtering)[this.subscription.subscriptionId], this.children);
+       //return this.children;
     }
-
-    
 
     public hasMoreChildrenImpl(): boolean {
         return true;

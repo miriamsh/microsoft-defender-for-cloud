@@ -31,7 +31,7 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 				this.children.push(new AlertTreeItem("Alert", item.alertDisplayName, item.severity, item.status, this));
 			}
 		}
-		return alertsFiltering((this.parent as SubscriptionTreeItem).filteringSettings, this.children);
+ 		return alertsFiltering((this.parent as SubscriptionTreeItem).filteringSettings, this.children);
 	}
 
 	public hasMoreChildrenImpl(): boolean {

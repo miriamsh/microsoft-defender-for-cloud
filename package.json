@@ -36,8 +36,8 @@
 					"name": "MORE FEATURES"
 				},
 				{
-					"id": "nodeDependencies",
-					"name": "Node Dependencies"
+					"id": "settings-package",
+					"name": "SETTINGS"
 				}
 			]
 		},
@@ -101,6 +101,14 @@
 			{
 				"command": "connectors.menu.create",
 				"title": "Create"
+			},
+			{
+				"command": "subscription.email.notification.settings",
+				"title": "Email Notification Settings"
+			},
+			{
+				"command": "subscription.sms.notification.settings",
+				"title": "SMS Notification Settings"
 			}
 		],
 		"menus": {
@@ -120,6 +128,16 @@
 					"submenu": "connectors.filters",
 					"when": "viewItem == securityCenter.connectors",
 					"group": "inline"
+				},
+				{
+					"command": "subscription.email.notification.settings",
+					"when": "viewItem == azureutils.subscription",
+					"group": "1@1"
+				},
+				{
+					"command": "subscription.sms.notification.settings",
+					"when": "viewItem == azureutils.subscription",
+					"group": "2@1"
 				},
 				{
 					"command": "recommendation.menu.showInBrowser",
@@ -198,7 +216,7 @@
 					"group": "2_default@1"
 				}
 			],
-			"alerts.menu.actionMenu":[
+			"alerts.menu.actionMenu": [
 				{
 					"command": "alerts.menu.ActionMenu.sendNotifications",
 					"group": "1_default@1"
@@ -235,39 +253,39 @@
 				}
 			},
 			{
-				"id":"alerts.menu.showAsMenu",
+				"id": "alerts.menu.showAsMenu",
 				"label": "Show As.."
 			},
 			{
-				"id":"alerts.menu.actionMenu",
+				"id": "alerts.menu.actionMenu",
 				"label": "Actions"
 			}
 		],
 		"configuration": {
 			"type": "object",
-			"title": "Azure configuration",
+			"title": "MDC configuration",
 			"properties": {
-				"azure.severityFilter": {
-					"type": "array",
-					"default": null,
-					"description": "The severity filter"
+				"mdc.filterSettings": {
+					"type": "object",
+					"default": {},
+					"description": "filtering settings per subscription. each object has subscriptionId and filterSettings object",
+					"scope": "window"
 				},
-				"azure.statusFilter": {
-					"type": "array",
-					"default": null,
-					"description": "The status filter, "
+				"mdc.notification": {
+					"type": "object",
+					"default": {},
+					"description": "object of security center for email notification settings",
+					"scope": "window"
 				},
-				"azure.environmentFilter": {
-					"type": "array",
-					"default": null,
-					"description": "The environment filter"
-				},
-				"azure.cloudProvider": {
-					"type": "array",
-					"default": null,
-					"description": "The cloud provider filter"
+				"mdc.phoneNotificationSettings": {
+					"type": "string",
+					"default": {},
+					"description": "phone number for notification by phone settings",
+					"scope": "window"
 				}
-			}
+			},
+			"default": null,
+			"description": "filter settings, each object has subscriptionId and filerSettings object."
 		}
 	},
 	"scripts": {
@@ -295,9 +313,18 @@
 		"ms-vscode.azure-account"
 	],
 	"dependencies": {
+		"@azure/arm-communication": "^3.0.1",
 		"@azure/arm-security": "^5.0.0",
+		"@azure/arm-subscriptions": "^5.0.1",
+		"@azure/arm-templatespecs": "^2.0.1",
+		"@azure/communication-phone-numbers": "^1.0.0",
+		"@azure/identity": "^2.1.0",
 		"@azure/ms-rest-azure-env": "^2.0.0",
+		"@azure/ms-rest-nodeauth": "^3.1.1",
 		"@microsoft/vscode-azext-azureutils": "^0.3.4",
+		"az-ts": "^1.0.18",
+		"azure-cli": "^0.10.20",
+		"fs": "^0.0.1-security",
 		"vscode-azureextensionui": "^0.50.0"
 	}
 }
