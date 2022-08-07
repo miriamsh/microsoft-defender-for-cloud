@@ -7,7 +7,7 @@ const AzureAccountTreeItem_1 = require("./ResourecTree/AzureAccountTreeItem");
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const vscode_azext_azureutils_1 = require("@microsoft/vscode-azext-azureutils");
 const FilterCommand_1 = require("./Commands/FilterCommand");
-const NotificationSettingsCommand_1 = require("./Commands/NotificationSettingsCommand");
+const SendNotificationCommand_1 = require("./Commands/SendNotificationCommand");
 async function activate(context) {
     const uiExtensionVariables = {
         context,
@@ -22,12 +22,10 @@ async function activate(context) {
     context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
     vscode.window.registerTreeDataProvider('package-resources', treeDataProvider);
     context.subscriptions.push(vscode.commands.registerCommand('subscription.email.notification.settings', async (args) => {
-        const notify = new NotificationSettingsCommand_1.Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
-        await notify.setEmailNotificationSettings();
+        await args.getNotify().setEmailNotificationSettings();
     }));
     context.subscriptions.push(vscode.commands.registerCommand('subscription.sms.notification.settings', async (args) => {
-        const notify = new NotificationSettingsCommand_1.Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
-        await notify.verifyRequiredInfrastructure();
+        await args.getNotify().setSmsNotificationSettings();
     }));
     context.subscriptions.push(vscode.commands.registerCommand('recommendation.filter.status', async (args) => {
         await (0, FilterCommand_1.selectFilters)(args, "recommendations", "status");
@@ -63,7 +61,7 @@ async function activate(context) {
         vscode.window.showTextDocument(vscode.Uri.file('C:/Users/מירי/.vscode/extensions/microsoft-defender-for-cloud/src/myFile.json'));
     });
     context.subscriptions.push(vscode.commands.registerCommand("alerts.menu.ActionMenu.sendNotifications", async (args) => {
-        //Todo: call send function. 
+        await (0, SendNotificationCommand_1.sendSmsNotification)(args.parent.subscription, args.parent.notify, args.alert);
     }));
 }
 exports.activate = activate;

@@ -9,11 +9,13 @@ const RecommendationsTreeDataProvider_1 = require("./RecommendationsTreeDataProv
 const ConnectorsTreeDataProvider_1 = require("./ConnectorsTreeDataProvider");
 const vscode = require("vscode");
 const configOperations_1 = require("../configOperations");
+const NotificationSettingsCommand_1 = require("../Commands/NotificationSettingsCommand");
 class SubscriptionTreeItem extends vscode_azext_azureutils_1.SubscriptionTreeItemBase {
     constructor(parent, root) {
         super(parent, root);
         this.contextValue = 'azureutils.subscription';
         this.iconPath = constants_1.subscriptionIcon;
+        this.notify = new NotificationSettingsCommand_1.Notification(root);
     }
     hasMoreChildrenImpl() {
         return this._nextLink !== undefined;
@@ -27,6 +29,9 @@ class SubscriptionTreeItem extends vscode_azext_azureutils_1.SubscriptionTreeIte
         const recommendations = new RecommendationsTreeDataProvider_1.RecommendationsTreeDataProvider("Recommendations", this);
         const connectors = new ConnectorsTreeDataProvider_1.ConnectorsTreeDataProvider("Connectors", this);
         return [connectors, recommendations, alerts];
+    }
+    getNotify() {
+        return this.notify;
     }
 }
 exports.SubscriptionTreeItem = SubscriptionTreeItem;

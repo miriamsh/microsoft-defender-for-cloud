@@ -92,7 +92,7 @@
 			},
 			{
 				"command": "alerts.menu.ActionMenu.sendNotifications",
-				"title": "Send notifications"
+				"title": "Send notifications (sms)"
 			},
 			{
 				"command": "alerts.menu.ActionMenu.mitigate",
@@ -108,7 +108,7 @@
 			},
 			{
 				"command": "subscription.sms.notification.settings",
-				"title": "SMS Notification Settings"
+				"title": "Sms Notification Settings"
 			}
 		],
 		"menus": {
@@ -318,6 +318,7 @@
 		"@azure/arm-subscriptions": "^5.0.1",
 		"@azure/arm-templatespecs": "^2.0.1",
 		"@azure/communication-phone-numbers": "^1.0.0",
+		"@azure/communication-sms": "^1.0.0",
 		"@azure/identity": "^2.1.0",
 		"@azure/ms-rest-azure-env": "^2.0.0",
 		"@azure/ms-rest-nodeauth": "^3.1.1",

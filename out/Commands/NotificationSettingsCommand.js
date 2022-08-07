@@ -14,17 +14,25 @@ const communication_phone_numbers_1 = require("@azure/communication-phone-number
 //function to check the phone existence
 //the send function itself
 class Notification {
-    constructor(subscriptionId, credentials, context) {
+    constructor(subscription) {
         this.resourceGroupName = "vscodeExSmsNotification";
         this.communicationResourceName = "smsNotification-2";
-        this.subscriptionId = subscriptionId;
-        this.credentials = credentials;
-        this.context = context;
-        this.resourceManagementClient = new arm_resources_1.ResourceManagementClient(this.credentials, this.subscriptionId);
-        this.communicationManagementClient = new arm_communication_1.CommunicationServiceManagementClient(this.credentials, this.subscriptionId);
-        this.securityCenterClient = new arm_security_1.SecurityCenter(this.credentials, this.subscriptionId);
+        this.subscription = subscription;
+        this.resourceManagementClient = new arm_resources_1.ResourceManagementClient(subscription.credentials, subscription.subscriptionId);
+        this.communicationManagementClient = new arm_communication_1.CommunicationServiceManagementClient(subscription.credentials, subscription.subscriptionId);
+        this.securityCenterClient = new arm_security_1.SecurityCenter(subscription.credentials, subscription.subscriptionId);
     }
-    //Required:: check if there is a phone number
+    //SetSmsNotification Command
+    async setSmsNotificationSettings() {
+        const ans = await this.verifyRequiredInfrastructure();
+        if (ans) {
+            const set = await this.setPhoneNumbersAsConfig();
+            if (set) {
+                return true;
+            }
+        }
+        return false;
+    }
     //Checks (and creates if needed) the required infrastructure for send sms messages
     async verifyRequiredInfrastructure() {
         const exists = await this.checkExistenceResource();
@@ -38,14 +46,18 @@ class Notification {
             }
         }
         if (exists) {
-            //check if there is a phone number
-            //if yes (save if as config?) return true;
+            const connectionString = await (await this.getAccessKey()).primaryConnectionString;
+            this.phoneNumberClient = new communication_phone_numbers_1.PhoneNumbersClient(connectionString);
+            const purchasedPhone = (await (await this.phoneNumberClient.listPurchasedPhoneNumbers()).byPage().next()).value;
+            if (purchasedPhone.length > 0) {
+                return true;
+            }
         }
-        const phoneNumber = await this.purchasePhoneNumber(this.credentials);
+        const phoneNumber = await this.purchasePhoneNumber();
         if (phoneNumber === "") {
             return false;
         }
-        (0, configOperations_1.setConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings, this.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
+        (0, configOperations_1.setConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
         return true;
     }
     ;
@@ -65,14 +77,14 @@ class Notification {
     }
     //Create Azure Communication Services resource
     async createCommunicationServiceResource() {
-        const resourcegroupParams = {
-            "location": "eastus"
-        };
-        const resourceGroup = this.resourceManagementClient.resourceGroups.createOrUpdate(this.communicationResourceName, resourcegroupParams);
         try {
-            const pick = await vscode.window.showInformationMessage("Azure communication services doesn't exist in the current subscription", "Create Resource", "Cancel");
+            const pick = await vscode.window.showInformationMessage("Azure communication Services is required, and doesn't exist in this subscription", "Create Resource", "Cancel");
             if (pick === "Create Resource") {
                 {
+                    const resourceGroupParams = {
+                        "location": "eastus"
+                    };
+                    await this.resourceManagementClient.resourceGroups.createOrUpdate(this.communicationResourceName, resourceGroupParams);
                     const properties = {
                         "location": "Global",
                         "dataLocation": "United States",
@@ -81,35 +93,40 @@ class Notification {
                         "parameters": properties,
                     };
                     //Show vscode loader
-                    await vscode.window.withProgress({
+                    const resource = await vscode.window.withProgress({
                         location: vscode.ProgressLocation.Notification,
                     }, async (progress) => {
                         progress.report({
-                            message: `Creating communication services resource ...`
+                            message: `Creating Communication Services resource ...`
                         });
-                        await this.communicationManagementClient.communicationService.beginCreateOrUpdate(this.resourceGroupName, this.communicationResourceName, params);
+                        return await this.communicationManagementClient.communicationService.beginCreateOrUpdateAndWait(this.resourceGroupName, this.communicationResourceName, params);
                     });
-                    vscode.window.showInformationMessage("Resource created successfully. Resource id will be shown soon");
+                    //save the accessKey for the resource as config
+                    //const accessKey=await this.communicationManagementClient.communicationService.listKeys(this.resourceGroupName, this.communicationResourceName);
+                    //await setConfigurationSettings(extensionPrefix, communicationResourceAccessKey,this.subscriptionId, {"accessKey":accessKey.primaryConnectionString},vscode.ConfigurationTarget.Global);
+                    await vscode.window.showInformationMessage("Communication Services resource created successfully. Resource id:" + resource.id);
                     return true;
                 }
             }
             else {
-                vscode.window.showErrorMessage("The action is cancelled");
+                await vscode.window.showErrorMessage("The action is cancelled");
                 return false;
             }
         }
         catch (error) {
-            vscode.window.showErrorMessage("Error ocurred while creating Communication Services resource.");
+            await vscode.window.showErrorMessage("Error ocurred while creating Communication Services resource.");
             return false;
         }
     }
     //Purchase phone number
-    async purchasePhoneNumber(credentials) {
+    async purchasePhoneNumber() {
         try {
             const purchase = await vscode.window.showInformationMessage("Purchase a Phone number. Note: In this operation you will be charged the required rate", "OK", "Cancel");
             if (purchase === "OK") {
-                const connectionString = `endpoint=https://${this.communicationResourceName}.communication.azure.com/;accessKey=${credentials}`;
-                const phoneNumberClient = new communication_phone_numbers_1.PhoneNumbersClient(connectionString);
+                if (this.phoneNumberClient === undefined) {
+                    const connectionString = await (await this.getAccessKey()).primaryConnectionString;
+                    this.phoneNumberClient = new communication_phone_numbers_1.PhoneNumbersClient(connectionString);
+                }
                 const searchRequest = {
                     countryCode: "US",
                     phoneNumberType: "tollFree",
@@ -120,12 +137,12 @@ class Notification {
                     },
                     quantity: 1
                 };
-                const searchPoller = await phoneNumberClient.beginSearchAvailablePhoneNumbers(searchRequest);
+                const searchPoller = await this.phoneNumberClient.beginSearchAvailablePhoneNumbers(searchRequest);
                 // The search is underway. Wait to receive searchId.
                 const searchResults = await searchPoller.pollUntilDone();
                 console.log(`Found phone number: ${searchResults.phoneNumbers[0]}`);
                 console.log(`searchId: ${searchResults.searchId}`);
-                const purchasePoller = await phoneNumberClient.beginPurchasePhoneNumbers(searchResults.searchId);
+                const purchasePoller = await this.phoneNumberClient.beginPurchasePhoneNumbers(searchResults.searchId);
                 const purchaseResult = await purchasePoller.pollUntilDone();
                 console.log(`Purchase Result:${purchaseResult}`);
                 return "00000000";
@@ -141,21 +158,28 @@ class Notification {
         //If the purchase is succeeded, return the phone number
         //else, show error message, return undefined;
     }
-    //Set phone list with input, save it as config
+    //Return accessKey for Azure Communication Services resource
+    async getAccessKey() {
+        const accessKey = await this.communicationManagementClient.communicationService.listKeys(this.resourceGroupName, this.communicationResourceName);
+        return accessKey;
+    }
+    //Get a phone list  as an input, save it as config
     async setPhoneNumbersAsConfig() {
         const phonesList = await this.inputPhoneBox();
         if (phonesList === "") {
+            vscode.window.showErrorMessage("No phone numbers have been entered");
             return false;
         }
-        const smsConfig = (0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings)[this.subscriptionId];
-        (0, configOperations_1.setConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings, this.subscriptionId, { "from": smsConfig.from, "to": phonesList }, vscode.ConfigurationTarget.Global);
+        const smsConfig = (0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings)[this.subscription.subscriptionId];
+        await (0, configOperations_1.setConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings, this.subscription.subscriptionId, { "from": smsConfig.from, "to": phonesList }, vscode.ConfigurationTarget.Global);
+        vscode.window.showInformationMessage("The recipient's phone list saved successfully");
         return true;
     }
     //Show inputBoxMenu
     async inputPhoneBox() {
         const options = {
-            "placeHolder": "list of recipient's phone numbers, separated by ;",
-            "title": "Press phone numbers",
+            "placeHolder": "list of phone numbers, separated by ,",
+            "title": "Enter phone numbers to send the sms messages to",
         };
         const phoneList = await vscode.window.showInputBox(options);
         return phoneList !== undefined ? phoneList : "";

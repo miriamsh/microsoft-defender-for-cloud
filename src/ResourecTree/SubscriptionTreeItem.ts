@@ -7,6 +7,7 @@ import { RecommendationsTreeDataProvider } from "./RecommendationsTreeDataProvid
 import { ConnectorsTreeDataProvider } from "./ConnectorsTreeDataProvider";
 import * as vscode from 'vscode';
 import { getConfigurationSettings, setConfigurationSettings } from "../configOperations";
+import { Notification } from "../Commands/NotificationSettingsCommand";
 
 
 export class SubscriptionTreeItem extends SubscriptionTreeItemBase {
@@ -14,12 +15,15 @@ export class SubscriptionTreeItem extends SubscriptionTreeItemBase {
     private _nextLink: string | undefined;
     parent!: AzExtParentTreeItem;
     filteringSettings!: FilterSettings;
+    private notify:Notification;
+
 
     constructor(
         parent: AzExtParentTreeItem,
         root: ISubscriptionContext) {
         super(parent, root);
         this.iconPath = subscriptionIcon;
+        this.notify= new Notification(root);
     }
 
     public readonly contextValue: string = 'azureutils.subscription';
@@ -39,6 +43,11 @@ export class SubscriptionTreeItem extends SubscriptionTreeItemBase {
         const connectors: ConnectorsTreeDataProvider = new ConnectorsTreeDataProvider("Connectors", this);
 
         return [connectors, recommendations, alerts];
+    }
+
+    public getNotify()
+    {
+        return this.notify;
     }
 
 }

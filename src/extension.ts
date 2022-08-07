@@ -8,6 +8,7 @@ import { Notification } from './Commands/NotificationSettingsCommand';
 import { ext } from './extensionVariables';
 import { AzureAccountLoginHelper } from './login/AzureAccountLoginHelper';
 import { extensionPrefix, displayName } from './constants';
+import { sendSmsNotification } from './Commands/SendNotificationCommand';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -28,13 +29,11 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.registerTreeDataProvider('package-resources', treeDataProvider);
 
     context.subscriptions.push(vscode.commands.registerCommand('subscription.email.notification.settings', async (args) => {
-        const notify = new Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
-        await notify.setEmailNotificationSettings();
+         await args.getNotify().setEmailNotificationSettings();
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('subscription.sms.notification.settings', async (args) => {
-        const notify = new Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
-        await notify.verifyRequiredInfrastructure();
+         await args.getNotify().setSmsNotificationSettings();
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('recommendation.filter.status', async (args) => {
@@ -79,7 +78,7 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(vscode.commands.registerCommand("alerts.menu.ActionMenu.sendNotifications", async (args) => {
-        //Todo: call send function. 
+         await sendSmsNotification(args.parent.subscription, args.parent.notify, args.alert);
     }));
 }
 
