@@ -7,7 +7,7 @@ import { extensionPrefix, filtering } from '../constants';
 import { getConfigurationSettings, setConfigurationSettings } from '../configOperations';
 
 export async function selectFilters(args: any, type: string, property: string) {
-    const subscriptionId: string = args.parent.root.subscriptionId;
+    const subscriptionId: string = args.parent.subscription.subscriptionId;
     const configurations = getConfigurationSettings(extensionPrefix, filtering)[subscriptionId];
     const filtersSettings = getConcreteProperty(type, property, configurations);
 

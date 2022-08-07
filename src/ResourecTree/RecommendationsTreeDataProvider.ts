@@ -17,23 +17,21 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
     public label: string;
     private readonly assessments: Assessments;
     private client!: SecurityCenter;
-    private context!: IActionContext;
     private children: AssessmentTreeItem[] = [];
-    private title: string;
-
+    private title:string;
+ 
     constructor(label: string, parent: AzExtParentTreeItem) {
         super(parent);
-        this.title = label;
         this.label = label;
         this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.assessments = this.client.assessments;
         this.iconPath = assessmentIcon;
+        this.title=label;
     }
 
     public readonly contextValue: string = 'securityCenter.recommendations';
 
     public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtParentTreeItem[]> {
-        this.context = context;
         if (this.children.length === 0) {
             const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
             const value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
@@ -42,9 +40,9 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
                 this.children.push(new AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this, item));
             }
         }
-        // this.label = this.title + " " + `(${filteredItems.length})`;
+         this.label+=`${this.children.length}`;
+        //this.label = this.title + " " + `(${this.children.length})`;
         return recommendationsFiltering(getConfigurationSettings(extensionPrefix, filtering)[this.subscription.subscriptionId], this.children);
-       //return this.children;
     }
 
     public hasMoreChildrenImpl(): boolean {

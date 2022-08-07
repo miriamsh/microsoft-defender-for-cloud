@@ -8,21 +8,8 @@ import { SubscriptionOperations } from '@azure/arm-subscriptions';
 
 export class AzureAccountTreeItem extends AzureAccountTreeItemBase {
 
-	private subscriptions:ISubscriptionContext[];
-
-	constructor()
-	{
-		super();
-		this.subscriptions=[];
-	}
-
 	public createSubscriptionTreeItem(root: ISubscriptionContext): SubscriptionTreeItemBase {
-		this.subscriptions.push(root);
-  		return new SubscriptionTreeItem(this, root);
+   		return new SubscriptionTreeItem(this, root);
 	}
 
-	public getSubscriptions()
-	{
-		return this.subscriptions;
-	}
 }

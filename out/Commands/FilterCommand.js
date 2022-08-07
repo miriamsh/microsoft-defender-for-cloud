@@ -6,7 +6,7 @@ const FilterSettings_1 = require("../Models/FilterSettings");
 const constants_1 = require("../constants");
 const configOperations_1 = require("../configOperations");
 async function selectFilters(args, type, property) {
-    const subscriptionId = args.parent.root.subscriptionId;
+    const subscriptionId = args.parent.subscription.subscriptionId;
     const configurations = (0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering)[subscriptionId];
     const filtersSettings = (0, FilterSettings_1.getConcreteProperty)(type, property, configurations);
     const quickPickItems = filtersSettings.map((filter) => {

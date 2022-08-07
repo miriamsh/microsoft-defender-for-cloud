@@ -15,14 +15,13 @@ class RecommendationsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTr
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
         this.children = [];
         this.contextValue = 'securityCenter.recommendations';
-        this.title = label;
         this.label = label;
         this.client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.assessments = this.client.assessments;
         this.iconPath = constants_1.assessmentIcon;
+        this.title = label;
     }
     async loadMoreChildrenImpl(clearCache, context) {
-        this.context = context;
         if (this.children.length === 0) {
             const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
             const value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
@@ -31,9 +30,9 @@ class RecommendationsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTr
                 this.children.push(new AssesmentTreeItem_1.AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this, item));
             }
         }
-        // this.label = this.title + " " + `(${filteredItems.length})`;
+        this.label += `${this.children.length}`;
+        //this.label = this.title + " " + `(${this.children.length})`;
         return (0, FilterCommand_1.recommendationsFiltering)((0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering)[this.subscription.subscriptionId], this.children);
-        //return this.children;
     }
     hasMoreChildrenImpl() {
         return true;

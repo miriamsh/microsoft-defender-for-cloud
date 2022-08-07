@@ -4,7 +4,7 @@ import { AzureAccountTreeItem } from './ResourecTree/AzureAccountTreeItem';
 import { createAzExtOutputChannel, AzExtTreeDataProvider, registerCommand } from '@microsoft/vscode-azext-utils';
 import { registerAzureUtilsExtensionVariables } from '@microsoft/vscode-azext-azureutils';
 import { selectFilters, showFilteringMenu } from './Commands/FilterCommand';
-import { setEmailNotificationSettings, setSmsNotificationSettings } from './Commands/NotificationSettingsCommand';
+import { Notification } from './Commands/NotificationSettingsCommand';
 import { ext } from './extensionVariables';
 import { AzureAccountLoginHelper } from './login/AzureAccountLoginHelper';
 import { extensionPrefix, displayName } from './constants';
@@ -19,19 +19,22 @@ export async function activate(context: vscode.ExtensionContext) {
     };
 
     registerAzureUtilsExtensionVariables(uiExtensionVariables);
-
-    const azureAccountTreeItem = new AzureAccountTreeItem();
+    const azureAccountTreeItem = new AzureAccountTreeItem();   
     context.subscriptions.push(azureAccountTreeItem);
     const treeDataProvider = new AzExtTreeDataProvider(azureAccountTreeItem, "subscription.getSubscription");
+
     context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
+
     vscode.window.registerTreeDataProvider('package-resources', treeDataProvider);
 
     context.subscriptions.push(vscode.commands.registerCommand('subscription.email.notification.settings', async (args) => {
-        await setEmailNotificationSettings(args.securityCenterClient);
+        const notify = new Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
+        await notify.setEmailNotificationSettings();
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('subscription.sms.notification.settings', async (args) => {
-        await setSmsNotificationSettings(args.resourceManagementClient, args.communicationManagementClient,args.root.credentials ,context);
+        const notify = new Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
+        await notify.verifyRequiredInfrastructure();
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('recommendation.filter.status', async (args) => {

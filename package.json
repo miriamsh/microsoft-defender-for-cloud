@@ -271,14 +271,14 @@
 					"description": "filtering settings per subscription. each object has subscriptionId and filterSettings object",
 					"scope": "window"
 				},
-				"mdc.notification": {
+				"mdc.emailNotification": {
 					"type": "object",
 					"default": {},
 					"description": "object of security center for email notification settings",
 					"scope": "window"
 				},
-				"mdc.phoneNotificationSettings": {
-					"type": "string",
+				"mdc.smsNotification": {
+					"type": "object",
 					"default": {},
 					"description": "phone number for notification by phone settings",
 					"scope": "window"

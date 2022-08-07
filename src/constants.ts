@@ -1,7 +1,8 @@
 export const extensionPrefix: string = 'mdc';
 export const displayName: string = 'microsoft defender for cloud';
 export const filtering: string = 'filterSettings';
-export const notificationSettings: string = 'notification';
+export const emailNotificationSettings: string = 'emailNotification';
+export const smsNotificationSettings:string='smsNotification';
 
 // dark: Uri.file(context.asAbsolutePath('resources/dark/add.svg')),
 // light: Uri.file(context.asAbsolutePath('resources/light/add.svg')),

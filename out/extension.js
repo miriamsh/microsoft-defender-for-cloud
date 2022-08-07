@@ -22,10 +22,12 @@ async function activate(context) {
     context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
     vscode.window.registerTreeDataProvider('package-resources', treeDataProvider);
     context.subscriptions.push(vscode.commands.registerCommand('subscription.email.notification.settings', async (args) => {
-        await (0, NotificationSettingsCommand_1.setEmailNotificationSettings)(args.securityCenterClient);
+        const notify = new NotificationSettingsCommand_1.Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
+        await notify.setEmailNotificationSettings();
     }));
     context.subscriptions.push(vscode.commands.registerCommand('subscription.sms.notification.settings', async (args) => {
-        await (0, NotificationSettingsCommand_1.setSmsNotificationSettings)(args.resourceManagementClient, args.communicationManagementClient, args.root.credentials, context);
+        const notify = new NotificationSettingsCommand_1.Notification(args.subscription.subscriptionId, args.subscription.credentials, context);
+        await notify.verifyRequiredInfrastructure();
     }));
     context.subscriptions.push(vscode.commands.registerCommand('recommendation.filter.status', async (args) => {
         await (0, FilterCommand_1.selectFilters)(args, "recommendations", "status");
