@@ -8,7 +8,9 @@ const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const vscode_azext_azureutils_1 = require("@microsoft/vscode-azext-azureutils");
 const FilterCommand_1 = require("./Commands/FilterCommand");
 const SendNotificationCommand_1 = require("./Commands/SendNotificationCommand");
+const constants_1 = require("./constants");
 async function activate(context) {
+    constants_1.Constants.initialize(context);
     const uiExtensionVariables = {
         context,
         ignoreBundle: false,
@@ -19,10 +21,10 @@ async function activate(context) {
     const azureAccountTreeItem = new AzureAccountTreeItem_1.AzureAccountTreeItem();
     context.subscriptions.push(azureAccountTreeItem);
     const treeDataProvider = new vscode_azext_utils_1.AzExtTreeDataProvider(azureAccountTreeItem, "subscription.getSubscription");
-    context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
+    // context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
     vscode.window.registerTreeDataProvider('package-resources', treeDataProvider);
     context.subscriptions.push(vscode.commands.registerCommand('subscription.email.notification.settings', async (args) => {
-        await args.getNotify().setEmailNotificationSettings();
+        await args.getNotify().setEmailNotificationSettings(context);
     }));
     context.subscriptions.push(vscode.commands.registerCommand('subscription.sms.notification.settings', async (args) => {
         await args.getNotify().setSmsNotificationSettings();

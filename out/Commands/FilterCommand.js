@@ -7,7 +7,7 @@ const constants_1 = require("../constants");
 const configOperations_1 = require("../configOperations");
 async function selectFilters(args, type, property) {
     const subscriptionId = args.parent.subscription.subscriptionId;
-    const configurations = (0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering)[subscriptionId];
+    const configurations = (0, configOperations_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[subscriptionId];
     const filtersSettings = (0, FilterSettings_1.getConcreteProperty)(type, property, configurations);
     const quickPickItems = filtersSettings.map((filter) => {
         return {
@@ -24,7 +24,7 @@ async function selectFilters(args, type, property) {
             f.enable = picks.indexOf(f.option) !== -1;
             return f;
         });
-        await (0, configOperations_1.setConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering, subscriptionId, (0, FilterSettings_1.setConcreteProperty)(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
+        await (0, configOperations_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId, (0, FilterSettings_1.setConcreteProperty)(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
         args.refresh();
     }
 }

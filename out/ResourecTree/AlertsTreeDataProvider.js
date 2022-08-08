@@ -6,6 +6,7 @@ const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const constants_1 = require("../constants");
 const AlertTreeItem_1 = require("./AlertTreeItem");
 const FilterCommand_1 = require("../Commands/FilterCommand");
+const treeUtils_1 = require("../Utility/treeUtils");
 class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent) {
         super(parent);
@@ -14,7 +15,7 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
         this.label = label;
         this.client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.alerts = this.client.alerts;
-        this.iconPath = constants_1.alertIcon;
+        this.iconPath = treeUtils_1.TreeUtils.getIconPath(constants_1.Constants.alertIcon);
     }
     async loadMoreChildrenImpl(clearCache, context) {
         this.context = context;

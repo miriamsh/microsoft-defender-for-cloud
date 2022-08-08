@@ -6,6 +6,7 @@ const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const constants_1 = require("../constants");
 const ConnectorTreeItem_1 = require("./ConnectorTreeItem");
 const FilterCommand_1 = require("../Commands/FilterCommand");
+const treeUtils_1 = require("../Utility/treeUtils");
 class ConnectorsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent) {
         super(parent);
@@ -14,7 +15,7 @@ class ConnectorsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeIte
         this.label = label;
         this.client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.connectors = this.client.connectors;
-        this.iconPath = constants_1.connectorIcon;
+        this.iconPath = treeUtils_1.TreeUtils.getIconPath(constants_1.Constants.connectorIcon);
     }
     async loadMoreChildrenImpl(clearCache, context) {
         this.context = context;

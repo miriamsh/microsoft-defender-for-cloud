@@ -1,21 +1,16 @@
-import { SecurityCenter, SecurityContact, SecurityContacts, SecurityTask } from "@azure/arm-security";
+import { SecurityCenter, SecurityContact, SecurityContactsCreateOptionalParams, AlertNotifications } from "@azure/arm-security";
 import * as vscode from 'vscode';
-import { extensionPrefix, emailNotificationSettings, smsNotificationSettings, communicationResourceAccessKey } from "../constants";
+import { Constants } from "../constants";
 import { getConfigurationSettings, setConfigurationSettings } from '../configOperations';
 import { ResourceManagementClient, DeploymentProperties, Deployment, ResourceGroup, DeploymentOperation, DeploymentOperations } from '@azure/arm-resources';
 import { CommunicationServiceCreateOrUpdateOptionalParams, CommunicationService, CommunicationServiceGetOptionalParams, CommunicationServiceManagementClient, CommunicationServiceResource } from "@azure/arm-communication";
 import { RestError, URLBuilder } from "@azure/ms-rest-js";
 import { PhoneNumbersClient, PurchasePhoneNumbersResult, SearchAvailablePhoneNumbersRequest } from "@azure/communication-phone-numbers";
 import { ISubscriptionContext } from "vscode-azureextensionui";
-
-
-//ToDo:
-//function for setSmsNotification
-//add for each subscription notify object
-//function to check the phone existence
-//the send function itself
-
-
+import { multiStepInput } from "./emailNotificationSettingsInput";
+import { on } from "events";
+// import { multiStepInput } from "../multiStepInput";
+ 
 export class Notification {
 
     private readonly resourceGroupName: string = "vscodeExSmsNotification";
@@ -48,9 +43,8 @@ export class Notification {
         return false;
     }
 
-
     //Checks (and creates if needed) the required infrastructure for send sms messages
-    public async verifyRequiredInfrastructure(): Promise<boolean> {
+    async verifyRequiredInfrastructure(): Promise<boolean> {
         const exists = await this.checkExistenceResource();
         if (exists === undefined) {
             return false;
@@ -74,7 +68,7 @@ export class Notification {
         if (phoneNumber === "") {
             return false;
         }
-        setConfigurationSettings(extensionPrefix, smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
+        setConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
         return true;
     };
 
@@ -127,7 +121,7 @@ export class Notification {
                     //save the accessKey for the resource as config
                     //const accessKey=await this.communicationManagementClient.communicationService.listKeys(this.resourceGroupName, this.communicationResourceName);
                     //await setConfigurationSettings(extensionPrefix, communicationResourceAccessKey,this.subscriptionId, {"accessKey":accessKey.primaryConnectionString},vscode.ConfigurationTarget.Global);
-                    
+
                     await vscode.window.showInformationMessage("Communication Services resource created successfully. Resource id:" + resource.id);
                     return true;
                 }
@@ -198,49 +192,49 @@ export class Notification {
 
     //Get a phone list  as an input, save it as config
     async setPhoneNumbersAsConfig() {
-        const phonesList = await this.inputPhoneBox();
+        const phonesList = await this.inputBox("6505135041, 9508477714", "List of phone numbers (separated by commas)");
         if (phonesList === "") {
             vscode.window.showErrorMessage("No phone numbers have been entered");
             return false;
         }
-        const smsConfig = getConfigurationSettings(extensionPrefix, smsNotificationSettings)[this.subscription.subscriptionId];
-        await setConfigurationSettings(extensionPrefix, smsNotificationSettings, this.subscription.subscriptionId, { "from": smsConfig.from, "to": phonesList }, vscode.ConfigurationTarget.Global);
+        const smsConfig = getConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings)[this.subscription.subscriptionId];
+        await setConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": smsConfig.from, "to": phonesList }, vscode.ConfigurationTarget.Global);
         vscode.window.showInformationMessage("The recipient's phone list saved successfully");
         return true;
     }
 
     //Show inputBoxMenu
-    async inputPhoneBox(): Promise<string> {
+    async inputBox(placeHolder: string, title: string): Promise<string> {
         const options: vscode.InputBoxOptions = {
-            "placeHolder": "list of phone numbers, separated by ,",
-            "title": "Enter phone numbers to send the sms messages to",
+            "placeHolder": placeHolder,
+            "title": title,
+            "ignoreFocusOut": true
         };
-        const phoneList = await vscode.window.showInputBox(options);
-        return phoneList !== undefined ? phoneList : "";
+        const input = await vscode.window.showInputBox(options);
+        return input !== undefined ? input : "";
     }
 
     //Sets or updates email notification for alerts 
-    public async setEmailNotificationSettings() {
-        const contactsDetails: SecurityContact = {
-            email: "b-mkleiner@microsoft.com",
-            phone: "0587171443",
-            alertNotifications: "on",
-            alertsToAdmins: "on"
-        };
+    public async setEmailNotificationSettings(context: vscode.ExtensionContext) {
 
-        await this.securityCenterClient.securityContacts.create("default", contactsDetails,).then(async (response) => {
-            await setConfigurationSettings(extensionPrefix, emailNotificationSettings, this.securityCenterClient.subscriptionId, response, vscode.ConfigurationTarget.Global);
-        }).catch(error => {
-            console.log(error.message);
+        let contactsDetails: SecurityContact;
+
+        await multiStepInput(context, this.subscription).then(response => {
+            contactsDetails = response;
+        }).catch(console.error);
+
+        await this.securityCenterClient.securityContacts.create("default", contactsDetails!).then(async (response) => {
+            await setConfigurationSettings(Constants.extensionPrefix, Constants.emailNotificationSettings, this.securityCenterClient.subscriptionId, response, vscode.ConfigurationTarget.Global);
+            vscode.window.showInformationMessage("Email notification settings are updated successfully.");
+        }).then().catch(error => {
+            vscode.window.showErrorMessage("Error while saving Email notification settings.");
         });
     }
-
 }
 
 
 
-     // multiStepInput(context)
-    //     .catch(console.error);
+
 
     // const properties: DeploymentProperties = {
     //     "mode": "Incremental",

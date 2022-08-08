@@ -39,7 +39,7 @@ class FilterSettings {
     }
 }
 exports.FilterSettings = FilterSettings;
-//gets type and property. returns concrete property array of concrete type property in this.settings property
+//Gets type and property. returns concrete property array of concrete type property in this.settings property
 function getConcreteProperty(type, prop, settings) {
     const concreteType = type;
     const tempTypeObj = settings[concreteType];
@@ -47,7 +47,7 @@ function getConcreteProperty(type, prop, settings) {
     return tempTypeObj[concreteProperty];
 }
 exports.getConcreteProperty = getConcreteProperty;
-//gets type and property. uses getConcreteProperty() function, set the returned value and returns it.
+//Gets type and property. uses getConcreteProperty() function, set the returned value and returns it.
 function setConcreteProperty(type, prop, settings, concretePrOPSettings) {
     let temp = getConcreteProperty(type, prop, settings);
     temp = concretePrOPSettings;

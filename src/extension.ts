@@ -3,15 +3,14 @@ import * as fs from 'fs';
 import { AzureAccountTreeItem } from './ResourecTree/AzureAccountTreeItem';
 import { createAzExtOutputChannel, AzExtTreeDataProvider, registerCommand } from '@microsoft/vscode-azext-utils';
 import { registerAzureUtilsExtensionVariables } from '@microsoft/vscode-azext-azureutils';
-import { selectFilters, showFilteringMenu } from './Commands/FilterCommand';
-import { Notification } from './Commands/NotificationSettingsCommand';
-import { ext } from './extensionVariables';
-import { AzureAccountLoginHelper } from './login/AzureAccountLoginHelper';
-import { extensionPrefix, displayName } from './constants';
+import { selectFilters } from './Commands/FilterCommand';
 import { sendSmsNotification } from './Commands/SendNotificationCommand';
+import { Constants } from './constants';
 
 export async function activate(context: vscode.ExtensionContext) {
 
+    Constants.initialize(context);
+    
     const uiExtensionVariables = {
         context,
         ignoreBundle: false,
@@ -20,16 +19,17 @@ export async function activate(context: vscode.ExtensionContext) {
     };
 
     registerAzureUtilsExtensionVariables(uiExtensionVariables);
+
     const azureAccountTreeItem = new AzureAccountTreeItem();   
     context.subscriptions.push(azureAccountTreeItem);
     const treeDataProvider = new AzExtTreeDataProvider(azureAccountTreeItem, "subscription.getSubscription");
 
-    context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
+    // context.subscriptions.push(vscode.window.createTreeView("package-resources", { treeDataProvider }));
 
     vscode.window.registerTreeDataProvider('package-resources', treeDataProvider);
 
     context.subscriptions.push(vscode.commands.registerCommand('subscription.email.notification.settings', async (args) => {
-         await args.getNotify().setEmailNotificationSettings();
+         await args.getNotify().setEmailNotificationSettings(context);
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('subscription.sms.notification.settings', async (args) => {

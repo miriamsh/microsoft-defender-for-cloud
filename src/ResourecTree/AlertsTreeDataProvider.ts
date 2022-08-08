@@ -1,10 +1,11 @@
 import { Alerts, SecurityCenter } from "@azure/arm-security";
 import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/vscode-azext-utils";
 import { ResourceTreeItem } from "./ResourceTreeItem";
-import { alertIcon } from "../constants";
+import { Constants } from "../constants";
 import { AlertTreeItem } from "./AlertTreeItem";
 import { alertsFiltering } from "../Commands/FilterCommand";
 import { SubscriptionTreeItem } from "./SubscriptionTreeItem";
+import { TreeUtils } from "../Utility/treeUtils";
 
 export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 	private readonly alerts: Alerts;
@@ -18,7 +19,7 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 		this.label = label;
 		this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
 		this.alerts = this.client.alerts;
-		this.iconPath = alertIcon;
+		this.iconPath =  TreeUtils.getIconPath(Constants.alertIcon);
 	}
 
 	public readonly contextValue: string = 'securityCenter.alerts';

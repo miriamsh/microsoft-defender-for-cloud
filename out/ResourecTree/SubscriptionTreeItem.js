@@ -10,11 +10,12 @@ const ConnectorsTreeDataProvider_1 = require("./ConnectorsTreeDataProvider");
 const vscode = require("vscode");
 const configOperations_1 = require("../configOperations");
 const NotificationSettingsCommand_1 = require("../Commands/NotificationSettingsCommand");
+const treeUtils_1 = require("../Utility/treeUtils");
 class SubscriptionTreeItem extends vscode_azext_azureutils_1.SubscriptionTreeItemBase {
     constructor(parent, root) {
         super(parent, root);
         this.contextValue = 'azureutils.subscription';
-        this.iconPath = constants_1.subscriptionIcon;
+        this.iconPath = treeUtils_1.TreeUtils.getIconPath(constants_1.Constants.subscriptionIcon);
         this.notify = new NotificationSettingsCommand_1.Notification(root);
     }
     hasMoreChildrenImpl() {
@@ -22,8 +23,8 @@ class SubscriptionTreeItem extends vscode_azext_azureutils_1.SubscriptionTreeIte
     }
     async loadMoreChildrenImpl(clearCache, context) {
         //set configuration filtering
-        if (!(0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering)[this.subscription.subscriptionId]) {
-            await (0, configOperations_1.setConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering, this.subscription.subscriptionId, new FilterSettings_1.FilterSettings().getAllSettings(), vscode.ConfigurationTarget.Global);
+        if (!(0, configOperations_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[this.subscription.subscriptionId]) {
+            await (0, configOperations_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId, new FilterSettings_1.FilterSettings().getAllSettings(), vscode.ConfigurationTarget.Global);
         }
         const alerts = new AlertsTreeDataProvider_1.AlertsTreeDataProvider("Security Alerts", this);
         const recommendations = new RecommendationsTreeDataProvider_1.RecommendationsTreeDataProvider("Recommendations", this);

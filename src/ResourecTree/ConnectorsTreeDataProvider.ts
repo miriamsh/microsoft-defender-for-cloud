@@ -1,10 +1,11 @@
 import { Connectors, SecurityCenter } from "@azure/arm-security";
 import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/vscode-azext-utils";
 import { ResourceTreeItem } from "./ResourceTreeItem";
-import { connectorIcon } from '../constants';
+import { Constants } from '../constants';
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
 import { connectorsFiltering } from "../Commands/FilterCommand";
 import { SubscriptionTreeItem } from "./SubscriptionTreeItem";
+import { TreeUtils } from "../Utility/treeUtils";
 
 
 export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
@@ -20,7 +21,7 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
         this.label = label;
         this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.connectors = this.client.connectors;
-        this.iconPath = connectorIcon;
+        this.iconPath =  TreeUtils.getIconPath(Constants.connectorIcon);
     }
 
     public readonly contextValue: string = 'securityCenter.connectors';

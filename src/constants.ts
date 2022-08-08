@@ -1,14 +1,26 @@
-export const extensionPrefix: string = 'mdc';
-export const displayName: string = 'microsoft defender for cloud';
-export const filtering: string = 'filterSettings';
-export const emailNotificationSettings: string = 'emailNotification';
-export const smsNotificationSettings: string = 'smsNotification';
-export const communicationResourceAccessKey: string = 'CommunicationResourceAccessKey';
+import * as vscode from "vscode";
 
-// dark: Uri.file(context.asAbsolutePath('resources/dark/add.svg')),
-// light: Uri.file(context.asAbsolutePath('resources/light/add.svg')),
-export const subscriptionIcon: string = 'C:/Users/מירי/.vscode/extensions/microsoft-defender-for-cloud/node_modules/@microsoft/vscode-azext-azureutils/resources/azureSubscription.svg';
-export const assessmentIcon: string = 'C:/Users/מירי/.vscode/extensions/microsoft-defender-for-cloud/node_modules/@microsoft/vscode-azext-azureutils/resources/recommendation.png';
-export const subAssessmentIcon: string = '';
-export const alertIcon: string = 'C:/Users/מירי/.vscode/extensions/microsoft-defender-for-cloud/node_modules/@microsoft/vscode-azext-azureutils/resources/alert.png';
-export const connectorIcon: string = 'C:/Users/מירי/.vscode/extensions/microsoft-defender-for-cloud/node_modules/@microsoft/vscode-azext-azureutils/resources/connector.svg';
+export class Constants {
+
+    public static extensionContext: vscode.ExtensionContext;
+
+    public static extensionPrefix: string = 'mdc';
+    public static displayName: string = 'microsoft defender for cloud';
+    public static filtering: string = 'filterSettings';
+    public static emailNotificationSettings: string = 'emailNotification';
+    public static smsNotificationSettings: string = 'smsNotification';
+    public static communicationResourceAccessKey: string = 'CommunicationResourceAccessKey';
+ 
+    public static subscriptionIcon: string = 'azureSubscription';
+    public static assessmentIcon: string = 'recommendation';
+    public static subAssessmentIcon: string = '';
+    public static alertIcon: string = 'alert';
+    public static connectorIcon: string = 'connector';
+    public static filterIcon:string = 'filter';
+
+    public static resourcesFolderPath: string;
+
+    public static initialize(context: vscode.ExtensionContext) {
+        Constants.resourcesFolderPath = context.asAbsolutePath("resources");
+    }
+}

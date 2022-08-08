@@ -3,12 +3,12 @@ import { AssessmentTreeItem } from '../ResourecTree/AssesmentTreeItem';
 import { FilterSettings, getConcreteProperty, setConcreteProperty } from '../Models/FilterSettings';
 import { AlertTreeItem } from '../ResourecTree/AlertTreeItem';
 import { ConnectorTreeItem } from '../ResourecTree/ConnectorTreeItem';
-import { extensionPrefix, filtering } from '../constants';
+import { Constants } from '../constants';
 import { getConfigurationSettings, setConfigurationSettings } from '../configOperations';
 
 export async function selectFilters(args: any, type: string, property: string) {
     const subscriptionId: string = args.parent.subscription.subscriptionId;
-    const configurations = getConfigurationSettings(extensionPrefix, filtering)[subscriptionId];
+    const configurations = getConfigurationSettings(Constants.extensionPrefix, Constants.filtering)[subscriptionId];
     const filtersSettings = getConcreteProperty(type, property, configurations);
 
     const quickPickItems = filtersSettings.map((filter: { option: string; enable: boolean; }) => {
@@ -28,7 +28,7 @@ export async function selectFilters(args: any, type: string, property: string) {
             return f;
         });
 
-        await setConfigurationSettings(extensionPrefix, filtering, subscriptionId, setConcreteProperty(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
+        await setConfigurationSettings(Constants.extensionPrefix, Constants.filtering, subscriptionId, setConcreteProperty(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
 
         args.refresh();
     }

@@ -1,1 +1,1 @@
-{"version":3,"file":"extensionVariables.js","sourceRoot":"","sources":["../src/extensionVariables.ts"],"names":[],"mappings":";;;AAMA,IAAiB,GAAG,CAQnB;AARD,WAAiB,GAAG;AAQpB,CAAC,EARgB,GAAG,GAAH,WAAG,KAAH,WAAG,QAQnB"}
+{"version":3,"file":"extensionVariables.js","sourceRoot":"","sources":["../src/extensionVariables.ts"],"names":[],"mappings":";;;AAMA,IAAiB,GAAG,CAQnB;AARD,WAAiB,GAAG;IAMT,EAAE,CAAA;IAAC,iBAAiB,EAAC,oBAAoB,CAAC,CAAC,CAAC;AAEvD,CAAC,EARgB,GAAG,GAAH,WAAG,KAAH,WAAG,QAQnB"}

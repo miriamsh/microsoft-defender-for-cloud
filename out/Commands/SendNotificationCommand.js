@@ -10,7 +10,7 @@ async function sendSmsNotification(subscription, notify, alert) {
         const _notify = notify;
         const ans = await _notify.verifyRequiredInfrastructure();
         if (ans) {
-            const phoneList = (0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings)[subscription.subscriptionId].to;
+            const phoneList = (0, configOperations_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings)[subscription.subscriptionId].to;
             if (phoneList === undefined || phoneList === "") {
                 const set = await _notify.setPhoneNumbersAsConfig();
                 if (!set) {
@@ -23,7 +23,7 @@ async function sendSmsNotification(subscription, notify, alert) {
         }
         const connectionString = await (await _notify.getAccessKey()).primaryConnectionString;
         const smsClient = new communication_sms_1.SmsClient(connectionString);
-        const smsData = await (0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.smsNotificationSettings);
+        const smsData = await (0, configOperations_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings);
         const sendRequest = {
             "from": smsData.from,
             "to": smsData.to.split(','),

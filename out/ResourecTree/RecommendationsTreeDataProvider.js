@@ -8,6 +8,7 @@ const constants_1 = require("../constants");
 const AssesmentTreeItem_1 = require("./AssesmentTreeItem");
 const FilterCommand_1 = require("../Commands/FilterCommand");
 const configOperations_1 = require("../configOperations");
+const treeUtils_1 = require("../Utility/treeUtils");
 class RecommendationsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent) {
         super(parent);
@@ -18,7 +19,7 @@ class RecommendationsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTr
         this.label = label;
         this.client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.assessments = this.client.assessments;
-        this.iconPath = constants_1.assessmentIcon;
+        this.iconPath = treeUtils_1.TreeUtils.getIconPath(constants_1.Constants.assessmentIcon);
         this.title = label;
     }
     async loadMoreChildrenImpl(clearCache, context) {
@@ -32,7 +33,7 @@ class RecommendationsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTr
         }
         this.label += `${this.children.length}`;
         //this.label = this.title + " " + `(${this.children.length})`;
-        return (0, FilterCommand_1.recommendationsFiltering)((0, configOperations_1.getConfigurationSettings)(constants_1.extensionPrefix, constants_1.filtering)[this.subscription.subscriptionId], this.children);
+        return (0, FilterCommand_1.recommendationsFiltering)((0, configOperations_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[this.subscription.subscriptionId], this.children);
     }
     hasMoreChildrenImpl() {
         return true;

@@ -2,11 +2,12 @@ import * as vscode from 'vscode';
 import { AssessmentsMetadata, Assessments, SecurityCenter, SecurityAssessmentResponse } from "@azure/arm-security";
 import { AzExtParentTreeItem, IActionContext, TreeItemIconPath } from "@microsoft/vscode-azext-utils";
 import EventEmitter = require("events");
-import { assessmentIcon, extensionPrefix, filtering } from "../constants";
+import { Constants } from "../constants";
 import { AssessmentTreeItem } from "./AssesmentTreeItem";
 import { recommendationsFiltering } from '../Commands/FilterCommand';
 import { SubscriptionTreeItem } from './SubscriptionTreeItem';
 import { getConfigurationSettings } from '../configOperations';
+import { TreeUtils } from '../Utility/treeUtils';
 
 
 export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
@@ -25,7 +26,7 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
         this.label = label;
         this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
         this.assessments = this.client.assessments;
-        this.iconPath = assessmentIcon;
+        this.iconPath = TreeUtils.getIconPath(Constants.assessmentIcon);
         this.title=label;
     }
 
@@ -42,7 +43,7 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
         }
          this.label+=`${this.children.length}`;
         //this.label = this.title + " " + `(${this.children.length})`;
-        return recommendationsFiltering(getConfigurationSettings(extensionPrefix, filtering)[this.subscription.subscriptionId], this.children);
+        return recommendationsFiltering(getConfigurationSettings(Constants.extensionPrefix,Constants.filtering)[this.subscription.subscriptionId], this.children);
     }
 
     public hasMoreChildrenImpl(): boolean {
