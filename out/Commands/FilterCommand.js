@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectorsFiltering = exports.alertsFiltering = exports.recommendationsFiltering = exports.showFilteringMenu = exports.selectFilters = void 0;
+exports.connectorsFiltering = exports.alertsFiltering = exports.recommendationsFiltering = exports.selectFiltersCommand = void 0;
 const vscode = require("vscode");
-const FilterSettings_1 = require("../Models/FilterSettings");
+const Filtering_1 = require("../Models/Filtering");
 const constants_1 = require("../constants");
-const configOperations_1 = require("../configOperations");
-async function selectFilters(args, type, property) {
+const configUtils_1 = require("../Utility/configUtils");
+const FilterSettingsInput_1 = require("./FilteringServices/FilterSettingsInput");
+async function selectFiltersCommand(args, type, property) {
     const subscriptionId = args.parent.subscription.subscriptionId;
-    const configurations = (0, configOperations_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[subscriptionId];
-    const filtersSettings = (0, FilterSettings_1.getConcreteProperty)(type, property, configurations);
+    const configurations = (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[subscriptionId];
+    const filtersSettings = (0, Filtering_1.getConcreteProperty)(type, property, configurations);
     const quickPickItems = filtersSettings.map((filter) => {
         return {
             label: `${filter.option}`,
@@ -16,7 +17,7 @@ async function selectFilters(args, type, property) {
         };
     });
     ;
-    const picks = await showFilteringMenu(quickPickItems, property).then(data => {
+    const picks = await (0, FilterSettingsInput_1.showFilteringMenu)(quickPickItems, property).then(data => {
         return data?.map(p => p.label);
     });
     if (picks) {
@@ -24,27 +25,14 @@ async function selectFilters(args, type, property) {
             f.enable = picks.indexOf(f.option) !== -1;
             return f;
         });
-        await (0, configOperations_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId, (0, FilterSettings_1.setConcreteProperty)(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
+        await (0, configUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId, (0, Filtering_1.setConcreteProperty)(type, property, configurations, newFilters), vscode.ConfigurationTarget.Global);
         args.refresh();
     }
 }
-exports.selectFilters = selectFilters;
-async function showFilteringMenu(filters, category) {
-    try {
-        const picks = await vscode.window.showQuickPick(filters, {
-            canPickMany: true,
-            placeHolder: `Filter ${category} By...`,
-        });
-        return picks ? picks : undefined;
-    }
-    catch (error) {
-        throw error;
-    }
-}
-exports.showFilteringMenu = showFilteringMenu;
+exports.selectFiltersCommand = selectFiltersCommand;
 function recommendationsFiltering(filteringSettings, assessments) {
-    const statusFilters = (0, FilterSettings_1.getConcreteProperty)("recommendations", "status", filteringSettings);
-    const environmentFilters = (0, FilterSettings_1.getConcreteProperty)("recommendations", "environment", filteringSettings);
+    const statusFilters = (0, Filtering_1.getConcreteProperty)("recommendations", "status", filteringSettings);
+    const environmentFilters = (0, Filtering_1.getConcreteProperty)("recommendations", "environment", filteringSettings);
     const relevantData = assessments.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) {
             return a;
@@ -60,8 +48,8 @@ function recommendationsFiltering(filteringSettings, assessments) {
 }
 exports.recommendationsFiltering = recommendationsFiltering;
 function alertsFiltering(filteringSettings, alerts) {
-    const statusFilters = (0, FilterSettings_1.getConcreteProperty)("alerts", "status", filteringSettings);
-    const severityFilters = (0, FilterSettings_1.getConcreteProperty)("alerts", "severity", filteringSettings);
+    const statusFilters = (0, Filtering_1.getConcreteProperty)("alerts", "status", filteringSettings);
+    const severityFilters = (0, Filtering_1.getConcreteProperty)("alerts", "severity", filteringSettings);
     const relevantData = alerts.filter(a => {
         if (statusFilters?.findIndex(status => { return status.option === a.status && status.enable; }) !== -1) {
             return a;
@@ -77,7 +65,7 @@ function alertsFiltering(filteringSettings, alerts) {
 }
 exports.alertsFiltering = alertsFiltering;
 function connectorsFiltering(filteringSettings, connectors) {
-    const cloudFilters = (0, FilterSettings_1.getConcreteProperty)("connectors", "cloudExplorer", filteringSettings);
+    const cloudFilters = (0, Filtering_1.getConcreteProperty)("connectors", "cloudProvider", filteringSettings);
     return connectors.filter(a => {
         if (cloudFilters?.findIndex(cloudExplorer => { return cloudExplorer.option === a.cloudProvider && cloudExplorer.enable; }) !== -1) {
             return a;
@@ -86,4 +74,4 @@ function connectorsFiltering(filteringSettings, connectors) {
     });
 }
 exports.connectorsFiltering = connectorsFiltering;
-//# sourceMappingURL=FilterCommand.js.map
+//# sourceMappingURL=filterCommand.js.map

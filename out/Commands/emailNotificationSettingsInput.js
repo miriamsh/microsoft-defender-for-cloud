@@ -18,10 +18,6 @@ async function multiStepInput(context, subscription) {
             this.tooltip = tooltip;
         }
     }
-    // const createResourceGroupButton = new MyButton({
-    // 	dark: vscode.Uri.file(context.asAbsolutePath('resources/dark/add.svg')),
-    // 	light: vscode.Uri.file(context.asAbsolutePath('resources/light/add.svg')),
-    // }, 'Create Resource Group');
     const options = ['on', 'off']
         .map(label => ({ label }));
     async function collectInputs() {
@@ -39,7 +35,7 @@ async function multiStepInput(context, subscription) {
             value: settings.email !== undefined ? settings.email : '',
             prompt: 'Enter Additional email addresses (separated by commas)',
             validate: validEmailAddresses,
-            // shouldResume: shouldResume
+            shouldResume: shouldResume
         });
         return (input) => inputPhone(input);
     }
@@ -51,7 +47,7 @@ async function multiStepInput(context, subscription) {
             value: settings.phone !== undefined ? settings.phone : '',
             prompt: 'Enter a phone number (optional)',
             validate: validatePhone,
-            // shouldResume: shouldResume
+            shouldResume: shouldResume
         });
         return (input) => pickSendingAlertsNotificationOption(input);
     }
@@ -62,41 +58,40 @@ async function multiStepInput(context, subscription) {
             totalSteps: 4,
             placeholder: 'Whether to send security alerts notifications to the security contact',
             items: options,
-            activeItem: ,
-            // shouldResume: shouldResume
-        }).then(response => { return res; }, response.label);
+            activeItem: settings.alertNotifications === 'on' ? options[0] : settings.alertNotifications === 'off' ? options[1] : { label: '' },
+            shouldResume: shouldResume
+        }).then(response => { return response.label; });
+        ;
+        return (input) => pickAlertToAdminOption(input);
     }
-    ;
-    ;
-    return (input) => pickAlertToAdminOption(input);
+    async function pickAlertToAdminOption(input) {
+        settings.alertsToAdmins = await input.showQuickPick({
+            title,
+            step: 4,
+            totalSteps: 4,
+            placeholder: 'Whether to send security alerts notifications to subscription admins',
+            items: options,
+            activeItem: settings.alertsToAdmins !== undefined ? { label: settings.alertsToAdmins } : undefined,
+            shouldResume: shouldResume
+        }).then(pick => { return pick.label; });
+    }
+    function shouldResume() {
+        // Could show a notification with the option to resume.
+        return new Promise((resolve, reject) => {
+            // noop
+        });
+    }
+    async function validatePhone(phone) {
+        // ...validate...
+        return phone.length < 9 || phone.length > 10 ? 'Phone is invalid' : undefined;
+    }
+    async function validEmailAddresses(name) {
+        // ...validate...
+        return !name.includes('@') ? 'Email is invalid' : undefined;
+    }
+    const settings_ = await collectInputs();
+    //vscode.window.showInformationMessage(`Creating Application Service '${state.name}'`);
+    return settings;
 }
 exports.multiStepInput = multiStepInput;
-async function pickAlertToAdminOption(input) {
-    settings.alertsToAdmins = await input.showQuickPick({
-        title,
-        step: 4,
-        totalSteps: 4,
-        placeholder: 'Whether to send security alerts notifications to subscription admins',
-        items: options,
-        activeItem: settings.alertsToAdmins !== undefined ? { label: settings.alertsToAdmins } : undefined,
-        // shouldResume: shouldResume
-    }).then(pick => { return pick.label; });
-}
-function shouldResume() {
-    // Could show a notification with the option to resume.
-    return new Promise((resolve, reject) => {
-        // noop
-    });
-}
-async function validatePhone(phone) {
-    // ...validate...
-    return phone.length < 9 || phone.length > 10 ? 'Phone is invalid' : undefined;
-}
-async function validEmailAddresses(name) {
-    // ...validate...
-    return !name.includes('@') ? 'Email is invalid' : undefined;
-}
-const settings_ = await collectInputs();
-//vscode.window.showInformationMessage(`Creating Application Service '${state.name}'`);
-return settings;
 //# sourceMappingURL=emailNotificationSettingsInput.js.map

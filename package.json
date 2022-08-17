@@ -59,24 +59,24 @@
 				"title": "Status"
 			},
 			{
-				"command": "connectors.filter.cloudExplorer",
-				"title": "Cloud Explorer"
+				"command": "connectors.filter.cloudProvider",
+				"title": "Cloud Provider"
 			},
 			{
 				"command": "recommendation.menu.showInBrowser",
-				"title": "Show in browser"
+				"title": "Show In Browser"
 			},
 			{
 				"command": "recommendations.menu.showDetailed",
-				"title": "Show detailed"
+				"title": "Show Detailed"
 			},
 			{
 				"command": "recommendations.menu.quickFix",
-				"title": "Quick fix"
+				"title": "Quick Fix"
 			},
 			{
 				"command": "alerts.menu.showInBrowser",
-				"title": "Show in browser"
+				"title": "Show In Browser"
 			},
 			{
 				"command": "alerts.menu.showAs.graph",
@@ -88,11 +88,11 @@
 			},
 			{
 				"command": "alerts.menu.detailed",
-				"title": "Show detailed"
+				"title": "Show Detailed"
 			},
 			{
 				"command": "alerts.menu.ActionMenu.sendNotifications",
-				"title": "Send notifications (sms)"
+				"title": "Send Notifications (SMS)"
 			},
 			{
 				"command": "alerts.menu.ActionMenu.mitigate",
@@ -100,7 +100,15 @@
 			},
 			{
 				"command": "connectors.menu.create",
-				"title": "Create"
+				"title": "Create Connector"
+			},
+			{
+				"command": "connector.menu.showDetailed",
+				"title": "Show Details"
+			},
+			{
+				"command": "connector.plan.menu.enable",
+				"title": "Enable/Disable"
 			},
 			{
 				"command": "subscription.email.notification.settings",
@@ -108,7 +116,7 @@
 			},
 			{
 				"command": "subscription.sms.notification.settings",
-				"title": "Sms Notification Settings"
+				"title": "SMS Notification Settings"
 			}
 		],
 		"menus": {
@@ -178,6 +186,16 @@
 					"command": "connectors.menu.create",
 					"when": "viewItem == securityCenter.connectors",
 					"group": "1@1"
+				},
+				{
+					"command": "connector.menu.showDetailed",
+					"when": "viewItem === securityCenter.connectors.cloudProvider.connector",
+					"group": "1@1"
+				},
+				{
+					"command": "connector.plan.menu.enable",
+					"when": "viewItem === securityCenter.connectors.cloudProvider.offering",
+					"group": "1@1"
 				}
 			],
 			"recommendations.filters": [
@@ -202,7 +220,7 @@
 			],
 			"connectors.filters": [
 				{
-					"command": "connectors.filter.cloudExplorer",
+					"command": "connectors.filter.cloudProvider",
 					"group": "1_default@1"
 				}
 			],
@@ -314,6 +332,7 @@
 	],
 	"dependencies": {
 		"@azure/arm-communication": "^3.0.1",
+		"@azure/arm-monitor": "^7.0.0",
 		"@azure/arm-security": "^5.0.0",
 		"@azure/arm-subscriptions": "^5.0.1",
 		"@azure/arm-templatespecs": "^2.0.1",
@@ -323,6 +342,7 @@
 		"@azure/ms-rest-azure-env": "^2.0.0",
 		"@azure/ms-rest-nodeauth": "^3.1.1",
 		"@microsoft/vscode-azext-azureutils": "^0.3.4",
+		"axios": "^0.27.2",
 		"az-ts": "^1.0.18",
 		"azure-cli": "^0.10.20",
 		"fs": "^0.0.1-security",

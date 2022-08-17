@@ -1,0 +1,1 @@
+{"version":3,"file":"SubAssesmentTreeItem.js","sourceRoot":"","sources":["../../src/VulnerabilitiesTree/SubAssesmentTreeItem.ts"],"names":[],"mappings":";;;AACA,sEAAmG;AAEnG,MAAa,qBAAsB,SAAQ,kCAAa;IAIpD,YAAY,YAAoB,EAAC,KAAa,EAAE,MAA2B;QACvE,KAAK,CAAC,MAAM,CAAC,CAAC;QACd,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;QACnB,IAAI,CAAC,YAAY,GAAG,YAAY,CAAC;IACrC,CAAC;CACJ;AATD,sDASC"}

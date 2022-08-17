@@ -1,0 +1,1 @@
+{"version":3,"file":"ResourceTreeItem.js","sourceRoot":"","sources":["../../src/VulnerabilitiesTree/ResourceTreeItem.ts"],"names":[],"mappings":";;;AAAA,sEAAmF;AAEnF,MAAa,gBAAiB,SAAQ,kCAAa;IAGlD,YAAY,YAAoB,EAAE,MAA2B;QAC5D,KAAK,CAAC,MAAM,CAAC,CAAC;QACd,IAAI,CAAC,KAAK,GAAG,YAAY,CAAC;QAC1B,IAAI,CAAC,YAAY,GAAG,YAAY,CAAC;IAClC,CAAC;CAED;AATD,4CASC"}

@@ -19,4 +19,7 @@ Constants.subAssessmentIcon = '';
 Constants.alertIcon = 'alert';
 Constants.connectorIcon = 'connector';
 Constants.filterIcon = 'filter';
+Constants.cloudConnector = 'cloudConnector';
+Constants.awsConnector = 'awsCloudProvider';
+Constants.gcpConnector = 'gcpCloudProvider';
 //# sourceMappingURL=constants.js.map

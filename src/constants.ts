@@ -18,6 +18,11 @@ export class Constants {
     public static connectorIcon: string = 'connector';
     public static filterIcon:string = 'filter';
 
+    public static cloudConnector:string='cloudConnector';
+    public static awsConnector:string='awsCloudProvider';
+    public static gcpConnector:string='gcpCloudProvider';
+
+
     public static resourcesFolderPath: string;
 
     public static initialize(context: vscode.ExtensionContext) {

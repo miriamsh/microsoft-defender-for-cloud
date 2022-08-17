@@ -46,6 +46,7 @@ class Notification {
             const connectionString = await (await this.getAccessKey()).primaryConnectionString;
             this.phoneNumberClient = new communication_phone_numbers_1.PhoneNumbersClient(connectionString);
             const purchasedPhone = (await (await this.phoneNumberClient.listPurchasedPhoneNumbers()).byPage().next()).value;
+            //const purchasedPhone = [];           
             if (purchasedPhone.length > 0) {
                 return true;
             }
@@ -57,7 +58,6 @@ class Notification {
         (0, configOperations_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
         return true;
     }
-    ;
     //Check existence of Azure Communication Services resource
     async checkExistenceResource() {
         try {
@@ -111,7 +111,7 @@ class Notification {
             }
         }
         catch (error) {
-            await vscode.window.showErrorMessage("Error ocurred while creating Communication Services resource.");
+            await vscode.window.showErrorMessage("Error ocurred while creating Communication Services resource. " + error);
             return false;
         }
     }

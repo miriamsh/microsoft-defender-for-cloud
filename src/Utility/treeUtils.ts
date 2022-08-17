@@ -4,8 +4,8 @@ import { Constants } from "../constants";
 
 export class TreeUtils {
 
-    public static getIconPath(iconName: string): string {
-        return path.join(Constants.resourcesFolderPath, `${iconName}.svg`);
+    public static getIconPath(iconName: string,suffix:string="svg"): string {
+        return path.join(Constants.resourcesFolderPath, `${iconName}.${suffix}`);
     }
 
     public static getThemedIconPath(iconName: string): TreeItemIconPath {

@@ -4,8 +4,8 @@ exports.TreeUtils = void 0;
 const path = require("path");
 const constants_1 = require("../constants");
 class TreeUtils {
-    static getIconPath(iconName) {
-        return path.join(constants_1.Constants.resourcesFolderPath, `${iconName}.svg`);
+    static getIconPath(iconName, suffix = "svg") {
+        return path.join(constants_1.Constants.resourcesFolderPath, `${iconName}.${suffix}`);
     }
     static getThemedIconPath(iconName) {
         return {
