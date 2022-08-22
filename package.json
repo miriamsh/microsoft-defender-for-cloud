@@ -34,10 +34,6 @@
 				{
 					"id": "package-features",
 					"name": "MORE FEATURES"
-				},
-				{
-					"id": "settings-package",
-					"name": "SETTINGS"
 				}
 			]
 		},
@@ -71,10 +67,6 @@
 				"title": "Show Detailed"
 			},
 			{
-				"command": "recommendations.menu.quickFix",
-				"title": "Quick Fix"
-			},
-			{
 				"command": "alerts.menu.showInBrowser",
 				"title": "Show In Browser"
 			},
@@ -87,7 +79,7 @@
 				"title": "Hierarchy"
 			},
 			{
-				"command": "alerts.menu.detailed",
+				"command": "alerts.menu.showDetailed",
 				"title": "Show Detailed"
 			},
 			{
@@ -95,20 +87,12 @@
 				"title": "Send Notifications (SMS)"
 			},
 			{
-				"command": "alerts.menu.ActionMenu.mitigate",
-				"title": "Mitigate"
+				"command": "alerts.menu.ActionMenu.activate",
+				"title": "Activate"
 			},
 			{
-				"command": "connectors.menu.create",
-				"title": "Create Connector"
-			},
-			{
-				"command": "connector.menu.showDetailed",
-				"title": "Show Details"
-			},
-			{
-				"command": "connector.plan.menu.enable",
-				"title": "Enable/Disable"
+				"command": "alerts.menu.ActionMenu.dismiss",
+				"title": "Dismiss"
 			},
 			{
 				"command": "subscription.email.notification.settings",
@@ -158,11 +142,6 @@
 					"group": "2@1"
 				},
 				{
-					"command": "recommendations.menu.quickFix",
-					"when": "viewItem == securityCenter.recommendations.assessments",
-					"group": "3@1"
-				},
-				{
 					"command": "alerts.menu.showInBrowser",
 					"when": "viewItem == securityCenter.alerts",
 					"group": "1@1"
@@ -173,7 +152,7 @@
 					"group": "2@1"
 				},
 				{
-					"command": "alerts.menu.detailed",
+					"command": "alerts.menu.showDetailed",
 					"when": "viewItem == securityCenter.alerts",
 					"group": "3@1"
 				},
@@ -181,21 +160,6 @@
 					"submenu": "alerts.menu.actionMenu",
 					"when": "viewItem == securityCenter.alerts",
 					"group": "4@1"
-				},
-				{
-					"command": "connectors.menu.create",
-					"when": "viewItem == securityCenter.connectors",
-					"group": "1@1"
-				},
-				{
-					"command": "connector.menu.showDetailed",
-					"when": "viewItem === securityCenter.connectors.cloudProvider.connector",
-					"group": "1@1"
-				},
-				{
-					"command": "connector.plan.menu.enable",
-					"when": "viewItem === securityCenter.connectors.cloudProvider.offering",
-					"group": "1@1"
 				}
 			],
 			"recommendations.filters": [
@@ -240,8 +204,12 @@
 					"group": "1_default@1"
 				},
 				{
-					"command": "alerts.menu.ActionMenu.mitigate",
+					"command": "alerts.menu.ActionMenu.activate",
 					"group": "2_default@1"
+				},
+				{
+					"command": "alerts.menu.ActionMenu.dismiss",
+					"group": "3_default@1"
 				}
 			]
 		},
@@ -286,24 +254,29 @@
 				"mdc.filterSettings": {
 					"type": "object",
 					"default": {},
-					"description": "filtering settings per subscription. each object has subscriptionId and filterSettings object",
+					"description": "filter settings, saved as a map - subscriptionId as a key, and filter settings as a value",
 					"scope": "window"
 				},
 				"mdc.emailNotification": {
 					"type": "object",
 					"default": {},
-					"description": "object of security center for email notification settings",
+					"description": "email notification settings of security center",
 					"scope": "window"
 				},
 				"mdc.smsNotification": {
 					"type": "object",
 					"default": {},
-					"description": "phone number for notification by phone settings",
+					"description": "SMS settings of Azure Communication Services SMS messages",
+					"scope": "window"
+				},
+				"mdc.actionGroupId": {
+					"type": "object",
+					"default": {},
+					"description": "action group settings, saved as a map - actionGroupId as a key, action group notification settings as a value",
 					"scope": "window"
 				}
 			},
-			"default": null,
-			"description": "filter settings, each object has subscriptionId and filerSettings object."
+			"default": null
 		}
 	},
 	"scripts": {

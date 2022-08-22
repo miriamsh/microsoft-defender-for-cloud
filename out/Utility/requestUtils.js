@@ -1,11 +1,8 @@
 "use strict";
-// import { HttpMethods, HttpOperationResponse, ParameterValue, ServiceClient, WebResource } from "@azure/ms-rest-js";
-// import { TokenCredentialsBase } from "@azure/ms-rest-nodeauth";
-// import requestPromise from 'request-promise';
-// import { appendExtensionUserAgent, AzExtGenericClientInfo, createGenericClient } from "vscode-azureextensionui";
+Object.defineProperty(exports, "__esModule", { value: true });
 // export type nRequest = WebResource & requestPromise.RequestPromiseOptions;
-// // tslint:disable-next-line: no-any
-// export async function request(credentials: TokenCredentialsBase, url: string, method: HttpMethods, queryParameters?: { [key: string]: any | ParameterValue }, body?: any): Promise<HttpOperationResponse> {
+//tslint:disable-next-line: no-any
+// export async function request(credentials: AzExtServiceClientCredentials, url: string, method: HttpMethods, queryParameters?: { [key: string]: any | ParameterValue }, body?: any): Promise<HttpOperationResponse> {
 //     const clientInfo:AzExtGenericClientInfo={
 //         credentials:credentials,
 //     };

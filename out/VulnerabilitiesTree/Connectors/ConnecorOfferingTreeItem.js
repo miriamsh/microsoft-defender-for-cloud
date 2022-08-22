@@ -7,7 +7,10 @@ class ConnectorOfferingTreeItem extends vscode_azext_utils_1.AzExtTreeItem {
         super(parent);
         this.contextValue = "securityCenter.connectors.cloudProvider.offering";
         this.label = label;
-        this.enable = enable;
+        this._enable = enable;
+    }
+    get enable() {
+        return this._enable;
     }
 }
 exports.ConnectorOfferingTreeItem = ConnectorOfferingTreeItem;

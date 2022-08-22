@@ -31,9 +31,8 @@ class RecommendationsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTr
                 this.children.push(new AssesmentTreeItem_1.AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this, item));
             }
         }
-        this.label += `${this.children.length}`;
-        //this.label = this.title + " " + `(${this.children.length})`;
-        return (0, filterVulnerabilities_1.recommendationsFiltering)((0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[this.subscription.subscriptionId], this.children);
+        this.label = `${this.children.length}`;
+        return (0, filterVulnerabilities_1.recommendationsFiltering)(await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId), this.children);
     }
     hasMoreChildrenImpl() {
         return true;

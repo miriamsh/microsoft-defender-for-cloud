@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConnectorsTreeDataProvider = void 0;
-const arm_security_1 = require("@azure/arm-security");
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const constants_1 = require("../../constants");
 const filterVulnerabilities_1 = require("../../Commands/filterVulnerabilities");
@@ -14,20 +13,22 @@ const ConnectorTreeItem_1 = require("./ConnectorTreeItem");
 class ConnectorsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent) {
         super(parent);
-        this.children = [];
+        this._children = [];
         this.contextValue = 'securityCenter.connectors';
         this.label = label;
         this.iconPath = treeUtils_1.TreeUtils.getIconPath(constants_1.Constants.connectorIcon);
-        this.client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
     }
-    async loadMoreChildrenImpl(clearCache, context) {
-        if (this.children.length === 0) {
+    get children() {
+        return this._children;
+    }
+    async loadMoreChildrenImpl() {
+        if (this._children.length === 0) {
             const awsConnector = new CloudProviderTreeItem_1.CloudProviderTreeItem("AWS", this);
             const azureConnector = new CloudProviderTreeItem_1.CloudProviderTreeItem("Azure", this);
             const githubConnector = new CloudProviderTreeItem_1.CloudProviderTreeItem("Github", this);
             const gcpConnector = new CloudProviderTreeItem_1.CloudProviderTreeItem("GCP", this);
             const token = await this.subscription.credentials.getToken();
-            const connectorList = await axios_1.default.get(`https://management.azure.com/subscriptions/${this.subscription.subscriptionId}/providers/Microsoft.Security/securityConnectors?api-version=2021-12-01-preview`, {
+            await axios_1.default.get(constants_1.Constants.getConnectorsList(this.subscription.subscriptionId), {
                 headers: {
                     'authorization': `Bearer ${token.accessToken}`
                 }
@@ -45,9 +46,9 @@ class ConnectorsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeIte
                     }
                 });
             });
-            this.children = [awsConnector, azureConnector, gcpConnector, githubConnector];
+            this._children = [awsConnector, azureConnector, gcpConnector, githubConnector];
         }
-        return (0, filterVulnerabilities_1.connectorsFiltering)((0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[this.subscription.subscriptionId], this.children);
+        return (0, filterVulnerabilities_1.connectorsFiltering)((await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId)), this.children);
     }
     hasMoreChildrenImpl() {
         return false;

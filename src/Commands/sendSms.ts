@@ -7,7 +7,7 @@ import { getConfigurationSettings } from "../Utility/configUtils";
 import { Constants } from "../constants";
 import * as vscode from 'vscode';
 import { Context } from "mocha";
-import { CommunicationServices } from "./communicationServices";
+import { CommunicationServices } from "../azure/communicationServices";
 
 
 export async function sendSmsNotification(subscription: ISubscriptionContext, notify: CommunicationServices, alert: Alert) {
@@ -17,9 +17,9 @@ export async function sendSmsNotification(subscription: ISubscriptionContext, no
         const ans = await _notify.verifyRequiredInfrastructure();
 
         if (ans) {
-            const phoneList = getConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings)[subscription.subscriptionId].to;
+            const phoneList = (await getConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, subscription.subscriptionId)).to;
             if (phoneList === undefined || phoneList === "") {
-                const set = await _notify.setPhoneNumbersAsConfig();
+                const set = await _notify.updateToPhoneNumber();
                 if (!set) {
                     return false;
                 }
@@ -31,7 +31,7 @@ export async function sendSmsNotification(subscription: ISubscriptionContext, no
 
         const connectionString = await (await _notify.getAccessKey()).primaryConnectionString!;
         const smsClient = new SmsClient(connectionString);
-        const smsData = await getConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings);
+        const smsData = await getConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, subscription.subscriptionId);
         const sendRequest: SmsSendRequest = {
             "from": smsData.from,
             "to": smsData.to.split(','),

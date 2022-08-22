@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setEmailNotificationSettings = void 0;
 const vscode = require("vscode");
-const emailNotificationSettingsInput_1 = require("./SettingsServices/emailNotificationSettingsInput");
+const emailSettingsInputs_1 = require("./InputsUtils/emailSettingsInputs");
 const constants_1 = require("../constants");
 const configUtils_1 = require("../Utility/configUtils");
 //Sets or updates email notification for alerts 
 async function setEmailNotificationSettings(context, client, subscription) {
     let contactsDetails;
     const _client = client;
-    await (0, emailNotificationSettingsInput_1.multiStepInput)(context, subscription).then(response => {
+    await (0, emailSettingsInputs_1.emailSettingsInput)(context, subscription).then(response => {
         contactsDetails = response;
     }).catch(console.error);
     await _client.getSecurityCenterClient().securityContacts.create("default", contactsDetails).then(async (response) => {

@@ -1,35 +1,33 @@
-import { SecurityCenter, SecurityConnectors, ConnectorSetting, Connectors, CloudOfferingUnion } from "@azure/arm-security";
-import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/vscode-azext-utils";
+import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
 import { AWSOfferings, GCPOfferings, GithubOfferings } from "../../Models/connectorOfferings.enum";
 import { ConnectorOfferingTreeItem } from "./ConnecorOfferingTreeItem";
 
 
 export class ConnectorTreeItem extends AzExtParentTreeItem {
 
-	public readonly contextValue: string = 'securityCenter.connectors.cloudProvider.connector';
+	public label: string;
+	private readonly _possibleOfferings: { "offeringType": AWSOfferings | GCPOfferings | GithubOfferings }[];
+	private _children: AzExtTreeItem[] = [];
+	private _cloudOfferings!: string[];
 
-	readonly label: string;
-	protected enableOfferings: { "offeringType": AWSOfferings | GCPOfferings | GithubOfferings }[];
-	protected children: AzExtTreeItem[] = [];
-	private CloudOfferings!:string []; 
-
-	constructor(label: string, enableOfferings: any[], cloudOfferings:string[], parent: AzExtParentTreeItem) {
+	constructor(label: string, possibleOfferings: any[], cloudOfferings: string[], parent: AzExtParentTreeItem) {
 		super(parent);
 		this.label = label;
-		this.enableOfferings = enableOfferings;
-		this.CloudOfferings = cloudOfferings;
+		this._possibleOfferings = possibleOfferings;
+		this._cloudOfferings = cloudOfferings;
+	}
+
+	public readonly contextValue: string = 'securityCenter.connectors.cloudProvider.connector';
+
+	public hasMoreChildrenImpl(): boolean {
+		return false;
 	}
 
 	public async loadMoreChildrenImpl(): Promise<AzExtTreeItem[]> {
-		this.children = this.CloudOfferings.map((offering) => {
-			const enable: boolean = this.enableOfferings.findIndex(o => o.offeringType === offering) !== -1;
+		this._children = this._cloudOfferings.map((offering) => {
+			const enable: boolean = this._possibleOfferings.findIndex(o => o.offeringType === offering) !== -1;
 			return new ConnectorOfferingTreeItem(offering.toString(), this, enable);
 		});
-		return this.children;
+		return this._children;
 	}
-	public hasMoreChildrenImpl(): boolean {
-		 return true;
-	}
-
-
 }

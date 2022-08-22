@@ -1,44 +1,26 @@
-import { MultiStepInput } from '../../Models/multiStepInputContract';
-import * as vscode from 'vscode';
-import { getConfigurationSettings } from '../../Utility/configUtils';
-import { Constants } from '../../constants';
-import { ISubscriptionContext } from 'vscode-azureextensionui';
-import { KnownAlertNotifications, SecurityCenter, SecurityContact, SecurityContacts } from '@azure/arm-security';
-import { resolvePtr } from 'dns';
-
-export async function multiStepInput(context: vscode.ExtensionContext, subscription: ISubscriptionContext): Promise<SecurityContact> {
-   
-    const configSettings = getConfigurationSettings(Constants.extensionPrefix, Constants.emailNotificationSettings)[subscription.subscriptionId];
-   
-    const settings: SecurityContact = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.emailSettingsInput = void 0;
+const configUtils_1 = require("../../Utility/configUtils");
+const constants_1 = require("../../constants");
+const multiStepInputContract_1 = require("../../Models/multiStepInputContract");
+async function emailSettingsInput(context, subscription) {
+    const configSettings = (await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.emailNotificationSettings))[subscription.subscriptionId];
+    const settings = {
         email: configSettings?.email ? configSettings.email : '',
         phone: configSettings?.phone ? configSettings.phone : '',
         alertNotifications: configSettings?.alertNotifications ? configSettings.alertNotifications : '',
         alertsToAdmins: configSettings?.alertsToAdmins ? configSettings.alertsToAdmins : ''
     };
-
-    const options: vscode.QuickPickItem[] = ['on', 'off']
+    const options = ['on', 'off']
         .map(label => ({ label }));
-
-
-    interface State {
-        title: string;
-        step: number;
-        totalSteps: number;
-        resourceGroup: vscode.QuickPickItem | string;
-        name: string;
-        runtime: vscode.QuickPickItem;
-    }
-
     async function collectInputs() {
-        const state = {} as Partial<State>;
-        await MultiStepInput.run(input => inputAdditionalEmails(input));
-        return state as State;
+        const state = {};
+        await multiStepInputContract_1.MultiStepInput.run(input => inputAdditionalEmails(input));
+        return state;
     }
-
     const title = 'Email Notification Settings';
-
-    async function inputAdditionalEmails(input: MultiStepInput) {
+    async function inputAdditionalEmails(input) {
         settings.email = await input.showInputBox({
             title,
             step: 1,
@@ -49,11 +31,9 @@ export async function multiStepInput(context: vscode.ExtensionContext, subscript
             validate: validEmailAddresses,
             shouldResume: shouldResume
         });
-
-        return (input: MultiStepInput) => inputPhone(input);
+        return (input) => inputPhone(input);
     }
-
-    async function inputPhone(input: MultiStepInput) {
+    async function inputPhone(input) {
         settings.phone = await input.showInputBox({
             title,
             step: 2,
@@ -63,10 +43,9 @@ export async function multiStepInput(context: vscode.ExtensionContext, subscript
             validate: validatePhone,
             shouldResume: shouldResume
         });
-        return (input: MultiStepInput) => pickSendingAlertsNotificationOption(input);
+        return (input) => pickSendingAlertsNotificationOption(input);
     }
-
-    async function pickSendingAlertsNotificationOption(input: MultiStepInput) {
+    async function pickSendingAlertsNotificationOption(input) {
         settings.alertNotifications = await input.showQuickPick({
             title,
             step: 3,
@@ -75,13 +54,11 @@ export async function multiStepInput(context: vscode.ExtensionContext, subscript
             items: options,
             activeItem: settings.alertNotifications === 'on' ? options[0] : settings.alertNotifications === 'off' ? options[1] : { label: '' },
             shouldResume: shouldResume
-        }).then(response => { return response.label; });;
-
-        return (input: MultiStepInput) => pickAlertToAdminOption(input);
-
+        }).then(response => { return response.label; });
+        ;
+        return (input) => pickAlertToAdminOption(input);
     }
-
-    async function pickAlertToAdminOption(input: MultiStepInput) {
+    async function pickAlertToAdminOption(input) {
         settings.alertsToAdmins = await input.showQuickPick({
             title,
             step: 4,
@@ -92,26 +69,24 @@ export async function multiStepInput(context: vscode.ExtensionContext, subscript
             shouldResume: shouldResume
         }).then(pick => { return pick.label; });
     }
-
     function shouldResume() {
         // Could show a notification with the option to resume.
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             // noop
         });
     }
-
-    async function validatePhone(phone: string) {
+    async function validatePhone(phone) {
         // ...validate...
         return phone.length < 9 || phone.length > 10 ? 'Phone is invalid' : undefined;
     }
-
     //TODO: fix the validation for each email address: includes . after @
-    async function validEmailAddresses(name: string) {
+    async function validEmailAddresses(name) {
         // ...validate...
         return !name.includes('@') ? 'Email is invalid' : undefined;
     }
-
     const settings_ = await collectInputs();
     //vscode.window.showInformationMessage(`Creating Application Service '${state.name}'`);
     return settings;
 }
+exports.emailSettingsInput = emailSettingsInput;
+//# sourceMappingURL=emailSettingsInputs.js.map

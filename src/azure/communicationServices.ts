@@ -2,25 +2,28 @@ import { SecurityCenter, SecurityContact, SecurityContactsCreateOptionalParams, 
 import * as vscode from 'vscode';
 import { Constants } from "../constants";
 import { getConfigurationSettings, setConfigurationSettings } from '../Utility/configUtils';
-import { ResourceManagementClient, DeploymentProperties, Deployment, ResourceGroup, DeploymentOperation, DeploymentOperations } from '@azure/arm-resources';
+import { ResourceManagementClient ,ResourceGroup, DeploymentOperation, DeploymentOperations } from '@azure/arm-resources';
 import { CommunicationServiceCreateOrUpdateOptionalParams, CommunicationService, CommunicationServiceGetOptionalParams, CommunicationServiceManagementClient, CommunicationServiceResource } from "@azure/arm-communication";
 import { RestError, URLBuilder } from "@azure/ms-rest-js";
 import { PhoneNumbersClient, PurchasePhoneNumbersResult, SearchAvailablePhoneNumbersRequest } from "@azure/communication-phone-numbers";
 import { ISubscriptionContext } from "vscode-azureextensionui";
 import { Client } from "../Utility/clientUtils";
+import { singleStepInputBox } from "../Commands/InputsUtils/singleStepInputBox";
  
 export class CommunicationServices {
 
     private readonly resourceGroupName: string = "vscodeExSmsNotification";
-    private readonly communicationResourceName: string = "smsNotification-2";
+    private readonly communicationResourceName: string = "smsNotification";
 
     private resourceManagementClient: ResourceManagementClient;
     private communicationManagementClient: CommunicationServiceManagementClient;
     private phoneNumberClient!: PhoneNumbersClient;
+    private _client:Client;
     private subscription: ISubscriptionContext;
 
     constructor(subscription: ISubscriptionContext, client:Client) {
         this.subscription = subscription;
+        this._client=client;
         this.resourceManagementClient = client.getResourceManagementClient();
         this.communicationManagementClient = client.getCommunicationManagementClient();
     }
@@ -51,7 +54,7 @@ export class CommunicationServices {
         if (phoneNumber === "") {
             return false;
         }
-        setConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
+        await setConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
         return true;
     }
 
@@ -76,7 +79,7 @@ export class CommunicationServices {
             const pick = await vscode.window.showInformationMessage("Azure communication Services is required, and doesn't exist in this subscription", "Create Resource", "Cancel");
             if (pick === "Create Resource") {
                 {
-                    //sets these properties as configuration settings
+                    //TODO:set these properties as configuration settings
                     const resourceGroupParams: ResourceGroup = {
                         "location": "eastus"
                     };
@@ -121,7 +124,7 @@ export class CommunicationServices {
         }
     }
 
-    //Purchases phone number
+    //Purchases a phone number
     async purchasePhoneNumber(): Promise<String> {
         try {
             const purchase = await vscode.window.showInformationMessage("Purchase a Phone number. Note: In this operation you will be charged the required rate", "OK", "Cancel")
@@ -175,27 +178,18 @@ export class CommunicationServices {
     }
 
     //Gets a phone list  as an input, saves it as config
-    async setPhoneNumbersAsConfig() {
-        const phonesList = await this.inputBox("6505135041, 9508477714", "List of phone numbers (separated by commas)");
+    async updateToPhoneNumber() {
+        
+        const phonesList = await singleStepInputBox("6505135041, 9508477714", "List of phone numbers (separated by commas)");
         if (phonesList === "") {
             vscode.window.showErrorMessage("No phone numbers have been entered");
             return false;
         }
-        const smsConfig = getConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings)[this.subscription.subscriptionId];
+
+        const smsConfig =await getConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, this.subscription.subscriptionId);
         await setConfigurationSettings(Constants.extensionPrefix, Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": smsConfig.from, "to": phonesList }, vscode.ConfigurationTarget.Global);
         vscode.window.showInformationMessage("The recipient's phone list saved successfully");
         return true;
-    }
-
-    //Shows inputBoxMenu
-    async inputBox(placeHolder: string, title: string): Promise<string> {
-        const options: vscode.InputBoxOptions = {
-            "placeHolder": placeHolder,
-            "title": title,
-            "ignoreFocusOut": true
-        };
-        const input = await vscode.window.showInputBox(options);
-        return input !== undefined ? input : "";
     }
 
 }

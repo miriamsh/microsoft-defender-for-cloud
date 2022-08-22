@@ -61,7 +61,7 @@ class CommunicationServices {
             const pick = await vscode.window.showInformationMessage("Azure communication Services is required, and doesn't exist in this subscription", "Create Resource", "Cancel");
             if (pick === "Create Resource") {
                 {
-                    //sets these properties as configuration settings
+                    //TODO:set these properties as configuration settings
                     const resourceGroupParams = {
                         "location": "eastus"
                     };
@@ -99,7 +99,7 @@ class CommunicationServices {
             return false;
         }
     }
-    //Purchases phone number
+    //Purchases a phone number
     async purchasePhoneNumber() {
         try {
             const purchase = await vscode.window.showInformationMessage("Purchase a Phone number. Note: In this operation you will be charged the required rate", "OK", "Cancel");

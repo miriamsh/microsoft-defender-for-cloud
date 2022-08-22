@@ -25,7 +25,7 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
                 this.children.push(new AlertTreeItem_1.AlertTreeItem("Alert", item.alertDisplayName, item.severity, item.status, this));
             }
         }
-        return (0, filterVulnerabilities_1.alertsFiltering)((0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering)[this.subscription.subscriptionId], this.children);
+        return (0, filterVulnerabilities_1.alertsFiltering)((await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering))[this.subscription.subscriptionId], this.children);
     }
     hasMoreChildrenImpl() {
         return false;

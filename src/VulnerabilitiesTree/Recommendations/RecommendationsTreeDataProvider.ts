@@ -41,15 +41,12 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
                 this.children.push(new AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this, item));
             }
         }
-         this.label+=`${this.children.length}`;
-        //this.label = this.title + " " + `(${this.children.length})`;
-        return recommendationsFiltering(getConfigurationSettings(Constants.extensionPrefix,Constants.filtering)[this.subscription.subscriptionId], this.children);
+        this.label=`${this.children.length}`;
+        return recommendationsFiltering(await getConfigurationSettings(Constants.extensionPrefix,Constants.filtering, this.subscription.subscriptionId), this.children);
     }
 
     public hasMoreChildrenImpl(): boolean {
         return true;
     }
-
-
 
 }

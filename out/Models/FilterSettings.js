@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setConcreteProperty = exports.getConcreteProperty = exports.FilterSettings = void 0;
+exports.updateConcreteProperty = exports.getConcreteProperty = exports.FilterSettings = void 0;
 class FilterSettings {
     constructor() {
-        this.settings = {
+        //NOTE: In case of changing _settings' value, restart filter configuration is required
+        this._settings = {
             "recommendations": {
                 "status": [
                     { option: "Healthy", enable: true },
                     { option: "Unhealthy", enable: true },
-                    { option: "NotApplicable", enable: true }
+                    { option: "NotApplicable", enable: true },
                 ],
                 "environment": [{ option: "Azure", enable: true },
                     { option: "AWS", enable: true },
@@ -37,8 +38,8 @@ class FilterSettings {
             }
         };
     }
-    getAllSettings() {
-        return this.settings;
+    get settings() {
+        return this._settings;
     }
 }
 exports.FilterSettings = FilterSettings;
@@ -50,12 +51,10 @@ function getConcreteProperty(type, prop, settings) {
     return tempTypeObj[concreteProperty];
 }
 exports.getConcreteProperty = getConcreteProperty;
-//todo:change the parameters, should get the concretePrperty as a parameter, and simply update
+//todo:change the parameters, should get the concreteProperty as a parameter, and simply update
 //Gets type and property. uses getConcreteProperty() function, set the returned value and returns it.
-function setConcreteProperty(type, prop, settings, concretePrOPSettings) {
-    let temp = getConcreteProperty(type, prop, settings);
-    temp = concretePrOPSettings;
-    return settings;
+function updateConcreteProperty(type, prop, settings, propertyToUpdate, updatedProperty) {
+    propertyToUpdate = updatedProperty;
 }
-exports.setConcreteProperty = setConcreteProperty;
+exports.updateConcreteProperty = updateConcreteProperty;
 //# sourceMappingURL=filterSettings.js.map
