@@ -41,21 +41,37 @@ class AlertTreeItem extends vscode_azext_utils_1.AzExtTreeItem {
     }
     //Dismisses a security alert
     async dismiss() {
-        this._client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this._name, this._resourceGroupName).then(() => {
-            vscode_1.window.showInformationMessage(this._alertName + " Dismissed");
+        try {
+            this._client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this._name, this._resourceGroupName);
+            await vscode_1.window.showInformationMessage("Security alert:" + this._alertName + " dismissed");
             this.label += " (Dismissed)";
-        }).catch((err) => {
-            vscode_1.window.showErrorMessage(err.code + ": " + err.message);
-        });
+        }
+        catch (error) {
+            if (error.code === 'ResourceNotFound' || error.code === 'ResourceGroupNotFound') {
+                {
+                    await vscode_1.window.showInformationMessage("The action is not supported for the selected security alert");
+                }
+                await vscode_1.window.showErrorMessage("Error occurred while dismissing the selected security alert");
+            }
+            ;
+        }
     }
     //Activates a security alert
     async activate() {
-        this._client.alerts.updateResourceGroupLevelStateToActivate(this.location, this._name, this._resourceGroupName).then(() => {
-            vscode_1.window.showInformationMessage(this._alertName + " Activate");
+        try {
+            this._client.alerts.updateResourceGroupLevelStateToActivate(this.location, this._name, this._resourceGroupName);
+            await vscode_1.window.showInformationMessage("Security alert:" + this._alertName + " activated");
             this.label = this._alertName;
-        }).catch((err) => {
-            vscode_1.window.showErrorMessage(err.code + ": " + err.message);
-        });
+        }
+        catch (error) {
+            if (error.code === 'ResourceNotFound' || error.code === 'ResourceGroupNotFound') {
+                {
+                    await vscode_1.window.showInformationMessage("The action is not supported for the selected security alert");
+                }
+                await vscode_1.window.showErrorMessage("Error occurred while activating the selected security alert");
+            }
+            ;
+        }
     }
 }
 exports.AlertTreeItem = AlertTreeItem;

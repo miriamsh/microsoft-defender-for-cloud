@@ -1,4 +1,5 @@
 import { AlertEntity, SecurityCenter } from "@azure/arm-security";
+import { RestError } from "@azure/ms-rest-js";
 import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
 import { window } from "vscode";
 
@@ -60,22 +61,36 @@ export class AlertTreeItem extends AzExtTreeItem {
 
 	//Dismisses a security alert
 	public async dismiss(): Promise<void> {
-		this._client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this._name, this._resourceGroupName).then(() => {
-			window.showInformationMessage(this._alertName + " Dismissed");
+		try {
+			this._client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this._name, this._resourceGroupName);
+			await window.showInformationMessage("Security alert:" + this._alertName + " dismissed");
 			this.label += " (Dismissed)";
-		}).catch((err) => {
-			window.showErrorMessage(err.code + ": " + err.message);
-		});
+		}
+		catch (error: RestError | any) {
+			if (error.code === 'ResourceNotFound' || error.code === 'ResourceGroupNotFound') {
+				{
+					await window.showInformationMessage("The action is not supported for the selected security alert");
+				}
+				await window.showErrorMessage("Error occurred while dismissing the selected security alert");
+			};
+		}
 	}
 
 	//Activates a security alert
 	public async activate(): Promise<void> {
-		this._client.alerts.updateResourceGroupLevelStateToActivate(this.location, this._name, this._resourceGroupName).then(() => {
-			window.showInformationMessage(this._alertName + " Activate");
+		try {
+			this._client.alerts.updateResourceGroupLevelStateToActivate(this.location, this._name, this._resourceGroupName);
+			await window.showInformationMessage("Security alert:" + this._alertName + " activated");
 			this.label = this._alertName;
-		}).catch((err) => {
-			window.showErrorMessage(err.code + ": " + err.message);
-		});
+		}
+		catch (error: RestError | any) {
+			if (error.code === 'ResourceNotFound' || error.code === 'ResourceGroupNotFound') {
+				{
+					await window.showInformationMessage("The action is not supported for the selected security alert");
+				}
+				await window.showErrorMessage("Error occurred while activating the selected security alert");
+			};
+		}
 	}
 
 }

@@ -43,10 +43,9 @@ export class Constants {
     public static sendSmsByAzureFunction =(name:string)=>{
        return `https://today2dayfunc.azurewebsites.net/api/HttpTrigger1?code=nDhyw-27FKoetpSDlQHEHLsvrKknUQ5Lc3ZcabGU8QSxAzFuobKWig==&name=${name}`;
     };
-
-
+    
     public static resourcesFolderPath: string;
-
+    
     public static initialize(context: vscode.ExtensionContext) {
         Constants.resourcesFolderPath = context.asAbsolutePath("resources");
     }

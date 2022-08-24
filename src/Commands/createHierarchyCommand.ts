@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { getHierarchyWebViewContent } from "./getHierarchyWebViewContentCommand";
 import * as fs from 'fs';
 import { createIconPath, createLabel } from '../Utility/NodeUtils';
-import { HierarchyTreeItem } from "./Hierarchy/HierarchyTreeItem";
+import { HierarchyTreeItem } from "./HierarchyTreeItem";
 
 export function createHierarchy(entities: AlertEntity[], context: vscode.ExtensionContext) {
     if (entities === undefined) {
@@ -55,7 +55,7 @@ export function createHierarchy(entities: AlertEntity[], context: vscode.Extensi
             }
         }
         );
-         
+
         panel.webview.html = getHierarchyWebViewContent(panel, context, JSON.stringify(tree));
     }
 }

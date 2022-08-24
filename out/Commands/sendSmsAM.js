@@ -26,7 +26,7 @@ async function sendSmsWithAzureMonitor(context, subscriptionId, monitor) {
             await vscode.window.showInformationMessage(`SMS message will be sent in a few minutes.${phone !== undefined ? "to:" + phone : ""}`);
         }
         else {
-            await vscode.window.showErrorMessage("Couldn't verify the requirements to complete this action");
+            await vscode.window.showErrorMessage("No permission to complete this action");
         }
     }
     catch (error) {

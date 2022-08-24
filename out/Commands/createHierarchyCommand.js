@@ -4,7 +4,7 @@ exports.createHierarchy = void 0;
 const vscode = require("vscode");
 const getHierarchyWebViewContentCommand_1 = require("./getHierarchyWebViewContentCommand");
 const NodeUtils_1 = require("../Utility/NodeUtils");
-const HierarchyTreeItem_1 = require("./Hierarchy/HierarchyTreeItem");
+const HierarchyTreeItem_1 = require("./HierarchyTreeItem");
 function createHierarchy(entities, context) {
     if (entities === undefined) {
         vscode.window.showInformationMessage("There are no entities to display.");
