@@ -3,6 +3,7 @@
 Microsoft Defender For Cloud Extension
 Use Microsoft Defender For Cloud extension to visible your Azure MDC workload without switching away from Visual Studio Code.
 
+\!\[View Tree]\(view_1.png\)
 ## Features
 Microsoft Defender For Cloud VSCode Extension provides additional features, such as graph view of the entities affected by a security alert, and send SMS notification for a security alerts (preview).
 
