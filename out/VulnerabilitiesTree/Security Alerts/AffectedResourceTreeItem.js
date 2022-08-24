@@ -6,7 +6,7 @@ class AffectedResourceTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem 
     constructor(label, parent) {
         super(parent);
         this._children = [];
-        this.contextValue = 'securityCenter.securityAlerts.affected-resources';
+        this.contextValue = 'securityCenter.securityAlerts.affectedResources';
         this.label = label;
         this._title = label;
     }
@@ -20,7 +20,7 @@ class AffectedResourceTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem 
         this.children ? this.children.push(child) : this._children = [child];
     }
     async loadMoreChildrenImpl(clearCache, context) {
-        this.label = `${this._title} (${this._children.length})`;
+        //this.label = `${this._title} (${this._children.length})`;
         return this._children;
     }
     hasMoreChildrenImpl() {

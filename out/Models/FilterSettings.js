@@ -18,14 +18,15 @@ class FilterSettings {
             },
             "alerts": {
                 "status": [
-                    { option: "High", enable: true },
-                    { option: "Medium", enable: true },
-                    { option: "Low", enable: true }
+                    { option: "Active", enable: true },
+                    { option: "Dismissed", enable: true },
+                    { option: "Resolved", enable: true }
                 ],
                 "severity": [
-                    { option: "Healthy", enable: true },
-                    { option: "Unhealthy", enable: true },
-                    { option: "NotApplicable", enable: true }
+                    { option: "High", enable: true },
+                    { option: "Informational", enable: true },
+                    { option: "Medium", enable: true },
+                    { option: "Low", enable: true }
                 ]
             },
             "connectors": {
@@ -56,4 +57,4 @@ function updateConcreteProperty(type, prop, settings, propertyToUpdate, updatedP
     propertyToUpdate = updatedProperty;
 }
 exports.updateConcreteProperty = updateConcreteProperty;
-//# sourceMappingURL=filterSettings.js.map
+//# sourceMappingURL=FilterSettings.js.map

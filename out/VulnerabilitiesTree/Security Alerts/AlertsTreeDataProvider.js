@@ -36,7 +36,7 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
             this._children = Array.from(alertByResource.values());
         }
         const filteredAlerts = (0, FilterVulnerabilities_1.alertsFiltering)(await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId), this._children);
-        this.label = `${this._title} (${filteredAlerts.length})`;
+        //this.label = `${this._title} (${filteredAlerts.length})`;
         return filteredAlerts;
     }
     hasMoreChildrenImpl() {

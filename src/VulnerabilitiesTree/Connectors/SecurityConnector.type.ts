@@ -3,10 +3,9 @@ import { AWSOfferings, GCPOfferings , GithubOfferings} from "../../Models/connec
 export type SecurityConnector={
    id:string, 
    name:string,
-   properties:{
-      environmentName:string,
+      cloudName:string,
       offerings:{
          offeringType: AWSOfferings | GCPOfferings | GithubOfferings
       }[]
-   }
+   
 };

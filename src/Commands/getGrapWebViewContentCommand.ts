@@ -11,7 +11,6 @@ export function getGraphWebviewContent(nodes: any, edges: any) {
           }
         </style>
     
- 
         <div id="mynetwork"></div>
         <script type="text/javascript">
           // create an array with nodes

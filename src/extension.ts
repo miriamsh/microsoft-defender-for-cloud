@@ -13,6 +13,9 @@ import { setSmsNotification } from './Commands/setSmsSettingsAM';
 import { AlertTreeItem } from './VulnerabilitiesTree/Security Alerts/AlertTreeItem';
 import { setSmsNotificationSettings } from './Commands/setSmsSettings';
 import { sendSmsNotification } from './Commands/SendSms';
+import { createGraph } from './Commands/createGraphCommand';
+import { createHierarchy } from './Commands/createHierarchyCommand';
+import { AlertEntity } from '@azure/arm-security';
 
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -77,8 +80,8 @@ async function registerCommands(context: vscode.ExtensionContext) {
 
     //TODO:Get the root file, of the project
     registerCommand("recommendations.menu.showDetailed", (_context: IActionContext, node) => {
-        fs.writeFile(path.join(Constants.resourcesFolderPath, 'details'), node.jsonItem, (err) => { });
-        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'details')));
+        fs.writeFile(path.join(Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
+        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'details.json')));
     });
 
     registerCommand("alerts.menu.showInBrowser", (_context: IActionContext, node: AlertTreeItem) => {
@@ -87,13 +90,11 @@ async function registerCommands(context: vscode.ExtensionContext) {
 
     registerCommand("alerts.menu.showDetailed", (_context: IActionContext, node: AlertTreeItem) => {
         fs.writeFile(path.join(Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
-        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'jsonFiles')));
+        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'details.json')));
     });
 
-    //TODO:sync with the correct hierarchy
     registerCommand("alerts.menu.actionMenu.sendNotifications", async (_context: IActionContext, node) => {
-        await sendSmsWithAzureMonitor(_context, node.parent.subscription.subscriptionId, await node.parent.getMonitor(_context));
-        //await sendSmsNotification(node.subscription.subscriptionId, node.parent._client.communicationServices(), new Alert());
+        await sendSmsWithAzureMonitor(_context, node.subscription.subscriptionId, await node.parent.parent.parent.getMonitor(_context));
     });
 
     registerCommand("alerts.menu.actionMenu.dismiss", (_context: IActionContext, node: AlertTreeItem) => {
@@ -103,10 +104,19 @@ async function registerCommands(context: vscode.ExtensionContext) {
     registerCommand("alerts.menu.actionMenu.activate", (_context: IActionContext, node: AlertTreeItem) => {
         node.activate();
     });
+
+
+    registerCommand('alerts.menu.showAs.graph', async (_context: IActionContext, node) => {
+            createGraph(node.entities, context);
+    });
+
+    registerCommand('alerts.menu.showAs.hierarchy', async (event, node) => {
+        createHierarchy(node.entities, context);
+    });
+
+
+
 }
-
-
-
 
 
 // this method is called when your extension is deactivated

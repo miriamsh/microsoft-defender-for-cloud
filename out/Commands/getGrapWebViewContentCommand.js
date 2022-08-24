@@ -13,7 +13,6 @@ function getGraphWebviewContent(nodes, edges) {
           }
         </style>
     
- 
         <div id="mynetwork"></div>
         <script type="text/javascript">
           // create an array with nodes

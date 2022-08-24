@@ -4,7 +4,7 @@ exports.AssessmentTreeItem = void 0;
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const SubAssessmentTreeItem_1 = require("./SubAssessmentTreeItem");
 class AssessmentTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem {
-    constructor(id, label, name, status, environment, parent, item, client) {
+    constructor(id, label, name, status, environment, parent, jsonItem, client) {
         super(parent);
         this.children = [];
         this.contextValue = 'securityCenter.recommendations.assessments';
@@ -14,7 +14,7 @@ class AssessmentTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem {
         this._client = client;
         this._status = status;
         this._environment = environment;
-        this._jsonItem = item;
+        this._jsonItem = jsonItem;
     }
     get status() {
         return this._status;

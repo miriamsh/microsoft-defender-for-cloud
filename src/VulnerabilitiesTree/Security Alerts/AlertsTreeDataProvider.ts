@@ -45,7 +45,7 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 		}
 
 		const filteredAlerts = alertsFiltering(await getConfigurationSettings(Constants.extensionPrefix,Constants.filtering, this.subscription.subscriptionId), this._children);
-		this.label = `${this._title} (${filteredAlerts.length})`;
+		//this.label = `${this._title} (${filteredAlerts.length})`;
 		return filteredAlerts;
 	}
 
@@ -63,7 +63,7 @@ export class URLParameters {
 	private endResourceGroup: string = "/referencedFrom";
 	constructor(url: string) {
 		this.url = url;
-	}
+ 	}
 
 	public getLocation(): string {
 		const index = this.url.indexOf(this.location);

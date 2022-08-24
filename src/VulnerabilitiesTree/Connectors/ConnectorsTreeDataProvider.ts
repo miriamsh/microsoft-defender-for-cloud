@@ -40,14 +40,14 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
 
             const data = (await this._client.securityConnectors.list().byPage().next()).value;
             data.map((connector: SecurityConnector) => {
-                if (connector.properties.environmentName === 'AWS') {
-                    awsConnector.appendChild(new ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(AWSOfferings), awsConnector, connector.id));
+                if (connector.cloudName === 'AWS') {
+                    awsConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(AWSOfferings), awsConnector, connector.id));
                 }
-                else if (connector.properties.environmentName === 'GCP') {
-                    gcpConnector.appendChild(new ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(GCPOfferings), gcpConnector, connector.id));
+                else if (connector.cloudName === 'GCP') {
+                    gcpConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(GCPOfferings), gcpConnector, connector.id));
                 }
                 else {
-                    githubConnector.appendChild(new ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(GithubOfferings), githubConnector, connector.id));
+                    githubConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(GithubOfferings), githubConnector, connector.id));
                 }
             });
 

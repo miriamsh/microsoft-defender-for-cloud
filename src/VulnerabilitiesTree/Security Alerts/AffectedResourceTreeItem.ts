@@ -14,7 +14,7 @@ export class AffectedResourceTreeItem extends AzExtParentTreeItem {
 		this._title = label;
 	}
 
-	public readonly contextValue: string = 'securityCenter.securityAlerts.affected-resources';
+	public readonly contextValue: string = 'securityCenter.securityAlerts.affectedResources';
 
 	public get children(): AlertTreeItem[] {
 		return this._children;
@@ -28,7 +28,7 @@ export class AffectedResourceTreeItem extends AzExtParentTreeItem {
 	}
 
 	public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtTreeItem[]> {
-		this.label = `${this._title} (${this._children.length})`;
+	    //this.label = `${this._title} (${this._children.length})`;
 		return this._children;
 	}
 

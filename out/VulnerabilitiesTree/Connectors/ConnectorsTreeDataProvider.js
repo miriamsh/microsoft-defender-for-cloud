@@ -29,14 +29,14 @@ class ConnectorsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeIte
             const gcpConnector = new CloudProviderTreeItem_1.CloudProviderTreeItem("GCP", this);
             const data = (await this._client.securityConnectors.list().byPage().next()).value;
             data.map((connector) => {
-                if (connector.properties.environmentName === 'AWS') {
-                    awsConnector.appendChild(new ConnectorTreeItem_1.ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(connectorOfferings_enum_1.AWSOfferings), awsConnector, connector.id));
+                if (connector.cloudName === 'AWS') {
+                    awsConnector.appendChild(new ConnectorTreeItem_1.ConnectorTreeItem(connector.name, connector.offerings, Object.keys(connectorOfferings_enum_1.AWSOfferings), awsConnector, connector.id));
                 }
-                else if (connector.properties.environmentName === 'GCP') {
-                    gcpConnector.appendChild(new ConnectorTreeItem_1.ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(connectorOfferings_enum_1.GCPOfferings), gcpConnector, connector.id));
+                else if (connector.cloudName === 'GCP') {
+                    gcpConnector.appendChild(new ConnectorTreeItem_1.ConnectorTreeItem(connector.name, connector.offerings, Object.keys(connectorOfferings_enum_1.GCPOfferings), gcpConnector, connector.id));
                 }
                 else {
-                    githubConnector.appendChild(new ConnectorTreeItem_1.ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(connectorOfferings_enum_1.GithubOfferings), githubConnector, connector.id));
+                    githubConnector.appendChild(new ConnectorTreeItem_1.ConnectorTreeItem(connector.name, connector.offerings, Object.keys(connectorOfferings_enum_1.GithubOfferings), githubConnector, connector.id));
                 }
             });
             this._children = [awsConnector, azureConnector, gcpConnector, githubConnector];

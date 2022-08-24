@@ -30,7 +30,7 @@ export class AssessmentTreeItem extends AzExtParentTreeItem {
 	}
 	
 
-    constructor(id:string,label:string,name:string, status:string,environment:string,parent: AzExtParentTreeItem,item:string, client:SecurityCenter) {
+    constructor(id:string,label:string,name:string, status:string,environment:string,parent: AzExtParentTreeItem,jsonItem:string, client:SecurityCenter) {
 		super(parent);
 		this.id=id;	
 		this._assessmentName=name;
@@ -38,7 +38,7 @@ export class AssessmentTreeItem extends AzExtParentTreeItem {
  		this._client = client;
 		this._status = status;
         this._environment=environment;
-		this._jsonItem=item;	
+		this._jsonItem=jsonItem;	
 	}
 
 	public readonly contextValue: string = 'securityCenter.recommendations.assessments';

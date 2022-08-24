@@ -16,7 +16,7 @@ export class AlertTreeItem extends AzExtTreeItem {
 	private _entities: AlertEntity[];
 	private _alertName: string;
 
-	public readonly contextValue: string = "securityCenter.securityAlerts.affected-resources.alert";
+	public readonly contextValue: string = "securityCenter.securityAlerts.affectedResources.alert";
 
 	public get jsonItem(): string {
 		return this._jsonItem;

@@ -11,21 +11,22 @@ export async function sendSmsWithAzureMonitor(context: IActionContext, subscript
     const _monitor: Monitor = monitor;
     const name = _monitor.getResourceGroup();
     try {
-        const ans = await vscode.window.withProgress({
-            location: vscode.ProgressLocation.Notification,
-        }, async (progress) => {
-            progress.report({
-                message: `Verifying the requirements to complete this action ...`,
-            });
-            //return await _monitor.verifyRequiredInfrastructure();
-            //NOTE: Preventing access to a private Azure account 
-             return false;
-        });
+        
+        const ans = false;
+        //NOTE: Preventing access to a private Azure account 
+        // await vscode.window.withProgress({
+        //     location: vscode.ProgressLocation.Notification,
+        // }, async (progress) => {
+        //     progress.report({
+        //         message: `Verifying the requirements to complete this action ...`,
+        //     });
+        //     return await _monitor.verifyRequiredInfrastructure();        
+        // });
 
         if (ans) {
             await axios.get(Constants.sendSmsByAzureFunction(name));
             const phone = (await getConfigurationSettings(Constants.extensionPrefix, Constants.actionGroupId, subscriptionId)).notificationSettings?.phoneNumber;
-            await vscode.window.showInformationMessage(`SMS message will be sent in a few minutes.${phone!==undefined?"to:"+phone:""}`);
+            await vscode.window.showInformationMessage(`SMS message will be sent in a few minutes.${phone !== undefined ? "to:" + phone : ""}`);
         }
         else {
             await vscode.window.showErrorMessage("Couldn't verify the requirements to complete this action");
@@ -38,9 +39,9 @@ export async function sendSmsWithAzureMonitor(context: IActionContext, subscript
     }
 }
 
-const latency = () =>{
-    const a = setTimeout(():boolean => {
+const latency = () => {
+    const a = setTimeout((): boolean => {
         return false;
-     } , 1000);
-    
+    }, 1000);
+
 };

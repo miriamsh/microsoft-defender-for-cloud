@@ -1,7 +1,7 @@
 import { SubscriptionTreeItemBase } from "@microsoft/vscode-azext-azureutils";
 import { AzExtParentTreeItem, AzExtTreeItem, IActionContext, ISubscriptionContext } from "@microsoft/vscode-azext-utils";
 import { Constants } from '../constants';
-import { FilterSettings } from "../Models/filterSettings";
+import { FilterSettings } from "../Models/FilterSettings";
 import { AlertsTreeDataProvider } from "./Security Alerts/AlertsTreeDataProvider";
 import { RecommendationsTreeDataProvider } from "./Recommendations/RecommendationsTreeDataProvider";
 import { ConnectorsTreeDataProvider } from "./Connectors/ConnectorsTreeDataProvider";

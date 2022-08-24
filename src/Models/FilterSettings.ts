@@ -21,15 +21,17 @@ export class FilterSettings {
                     ]
             },
             "alerts": {
-                "status": [
+                "status":
+                    [
+                        { option: "Active", enable: true },
+                        { option: "Dismissed", enable: true },
+                        { option: "Resolved", enable: true }
+                    ],
+                "severity": [
                     { option: "High", enable: true },
+                    { option: "Informational", enable: true },
                     { option: "Medium", enable: true },
                     { option: "Low", enable: true }
-                ],
-                "severity": [
-                    { option: "Healthy", enable: true },
-                    { option: "Unhealthy", enable: true },
-                    { option: "NotApplicable", enable: true }
                 ]
             },
             "connectors": {

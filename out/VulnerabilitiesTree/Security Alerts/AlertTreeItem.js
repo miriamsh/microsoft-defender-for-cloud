@@ -6,7 +6,7 @@ const vscode_1 = require("vscode");
 class AlertTreeItem extends vscode_azext_utils_1.AzExtTreeItem {
     constructor(label, severity, status, parent, jsonItem, name, resourceGroupName, location, entities, alertUri, id, client) {
         super(parent);
-        this.contextValue = "securityCenter.securityAlerts.affected-resources.alert";
+        this.contextValue = "securityCenter.securityAlerts.affectedResources.alert";
         this.label = label;
         if (status === "Dismissed") {
             this.label += " (Dismissed)";

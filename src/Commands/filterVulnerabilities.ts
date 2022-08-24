@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { AssessmentTreeItem } from '../VulnerabilitiesTree/Recommendations/AssesmentTreeItem';
-import { FilterSettings, getConcreteProperty, updateConcreteProperty, } from '../Models/filterSettings';
+import { FilterSettings, getConcreteProperty, updateConcreteProperty, } from '../Models/FilterSettings';
 import { AlertTreeItem } from '../VulnerabilitiesTree/Security Alerts/AlertTreeItem';
 import { ConnectorTreeItem } from '../VulnerabilitiesTree/Connectors/ConnectorTreeItem';
 import { Constants } from '../constants';
@@ -58,9 +58,8 @@ export function recommendationsFiltering(filteringSettings: any, assessments: As
 //Filters alerts vulnerability list
 //TODO: IMP
 export function alertsFiltering(filteringSettings: FilterSettings, affectedResources: AffectedResourceTreeItem[]): AffectedResourceTreeItem[] {
-    const statusFilters = getConcreteProperty("alerts", "severity", filteringSettings);
-
-    const severityFilters = getConcreteProperty("alerts", "status", filteringSettings);
+    const statusFilters = getConcreteProperty("alerts", "status", filteringSettings);
+    const severityFilters = getConcreteProperty("alerts", "severity", filteringSettings);
 
     let filteredAffectedResource: AffectedResourceTreeItem[] = [];
     affectedResources.map((resource: AffectedResourceTreeItem) => {
@@ -68,14 +67,14 @@ export function alertsFiltering(filteringSettings: FilterSettings, affectedResou
             if (statusFilters?.findIndex(status => { return status.option === alert.status && status.enable; }) !== -1) { return alert; };
         });
 
-        relevantData.filter(alert => {
+        relevantData = relevantData.filter(alert => {
             if (severityFilters?.findIndex(severity => { return severity.option === alert.severity && severity.enable; }) !== -1) { return alert; };
         });
 
-        if (relevantData !== undefined) {
-            const updatedaffectedResource: AffectedResourceTreeItem = resource;
-            updatedaffectedResource.children = relevantData;
-            filteredAffectedResource.push(updatedaffectedResource);
+        if (relevantData.length>0) {
+            const updatedAffectedResource: AffectedResourceTreeItem = resource;
+            updatedAffectedResource.children = relevantData;
+            filteredAffectedResource.push(updatedAffectedResource);
         }
     });
     return filteredAffectedResource;

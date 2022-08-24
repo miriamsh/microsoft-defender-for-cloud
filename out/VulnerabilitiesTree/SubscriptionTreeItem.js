@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SubscriptionTreeItem = void 0;
 const vscode_azext_azureutils_1 = require("@microsoft/vscode-azext-azureutils");
 const constants_1 = require("../constants");
-const filterSettings_1 = require("../Models/filterSettings");
+const FilterSettings_1 = require("../Models/FilterSettings");
 const AlertsTreeDataProvider_1 = require("./Security Alerts/AlertsTreeDataProvider");
 const RecommendationsTreeDataProvider_1 = require("./Recommendations/RecommendationsTreeDataProvider");
 const ConnectorsTreeDataProvider_1 = require("./Connectors/ConnectorsTreeDataProvider");
@@ -40,7 +40,7 @@ class SubscriptionTreeItem extends vscode_azext_azureutils_1.SubscriptionTreeIte
     async loadMoreChildrenImpl(clearCache, context) {
         const filterSettingsTemp = await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId);
         if (filterSettingsTemp === undefined) {
-            await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId, new filterSettings_1.FilterSettings().settings, vscode.ConfigurationTarget.Global);
+            await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId, new FilterSettings_1.FilterSettings().settings, vscode.ConfigurationTarget.Global);
         }
         const alerts = new AlertsTreeDataProvider_1.AlertsTreeDataProvider("Security Alerts", this, this._client.getSecurityCenterClient());
         const recommendations = new RecommendationsTreeDataProvider_1.RecommendationsTreeDataProvider("Recommendations", this, this._client.getSecurityCenterClient());

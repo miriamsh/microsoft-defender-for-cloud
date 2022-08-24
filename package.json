@@ -113,7 +113,7 @@
 				},
 				{
 					"submenu": "alerts.filters",
-					"when": "viewItem == securityCenter.alerts",
+					"when": "viewItem == securityCenter.securityAlerts",
 					"group": "inline"
 				},
 				{
@@ -143,22 +143,22 @@
 				},
 				{
 					"command": "alerts.menu.showInBrowser",
-					"when": "viewItem == securityCenter.securityAlerts",
+					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
 					"group": "1@1"
 				},
 				{
 					"submenu": "alerts.menu.showAsMenu",
-					"when": "viewItem == securityCenter.securityAlerts",
+					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
 					"group": "2@1"
 				},
 				{
 					"command": "alerts.menu.showDetailed",
-					"when": "viewItem == securityCenter.securityAlerts",
+					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
 					"group": "3@1"
 				},
 				{
 					"submenu": "alerts.menu.actionMenu",
-					"when": "viewItem == securityCenter.securityAlerts",
+					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
 					"group": "4@1"
 				}
 			],
@@ -319,6 +319,7 @@
 		"az-ts": "^1.0.18",
 		"azure-cli": "^0.10.20",
 		"fs": "^0.0.1-security",
+		"js-treeview": "^1.1.5",
 		"vscode-azureextensionui": "^0.50.0"
 	}
 }
