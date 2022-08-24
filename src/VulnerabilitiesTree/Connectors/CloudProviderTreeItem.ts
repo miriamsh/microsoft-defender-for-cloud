@@ -1,7 +1,7 @@
 import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
 import { Constants } from '../../constants';
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
-import { TreeUtils } from "../../Utility/treeUtils";
+import { TreeUtils } from "../../Utility/TreeUtils";
 
 
 export class CloudProviderTreeItem extends AzExtParentTreeItem {
@@ -26,6 +26,7 @@ export class CloudProviderTreeItem extends AzExtParentTreeItem {
     }
 
     public loadMoreChildrenImpl(): Promise<AzExtTreeItem[]> {
+        this.suppressMaskLabel=true;
         this.label = `${this._title} (${this._children.length})`;
         return Promise.resolve(this._children);
     }

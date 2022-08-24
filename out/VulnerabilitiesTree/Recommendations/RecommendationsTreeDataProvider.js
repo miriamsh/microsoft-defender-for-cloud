@@ -2,40 +2,38 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecommendationsTreeDataProvider = void 0;
 const vscode = require("vscode");
-const arm_security_1 = require("@azure/arm-security");
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
-const constants_1 = require("../../constants");
 const AssesmentTreeItem_1 = require("./AssesmentTreeItem");
-const filterVulnerabilities_1 = require("../../Commands/filterVulnerabilities");
-const configUtils_1 = require("../../Utility/configUtils");
-const treeUtils_1 = require("../../Utility/treeUtils");
+const TreeUtils_1 = require("../../Utility/TreeUtils");
+const constants_1 = require("../../constants");
+const FilterVulnerabilities_1 = require("../../Commands/FilterVulnerabilities");
+const ConfigUtils_1 = require("../../Utility/ConfigUtils");
 class RecommendationsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
-    constructor(label, parent) {
+    constructor(label, parent, client) {
         super(parent);
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
-        this.children = [];
+        this._children = [];
         this.contextValue = 'securityCenter.recommendations';
+        this._title = label;
         this.label = label;
-        this.client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
-        this.assessments = this.client.assessments;
-        this.iconPath = treeUtils_1.TreeUtils.getIconPath(constants_1.Constants.assessmentIcon);
-        this.title = label;
+        this._client = client;
+        this.iconPath = TreeUtils_1.TreeUtils.getIconPath(constants_1.Constants.assessmentIcon);
     }
-    async loadMoreChildrenImpl(clearCache, context) {
-        if (this.children.length === 0) {
+    async loadMoreChildrenImpl() {
+        if (this._children.length === 0) {
             const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
-            const value = await (await this.client.assessments.list(subscriptionId).byPage().next()).value;
-            for (let item of value) {
-                //how to get the severity of an assessments??
-                this.children.push(new AssesmentTreeItem_1.AssessmentTreeItem(item.displayName, item.name, item.severity, item.status.code, item.resourceDetails.Source, this, item));
-            }
+            const data = await (await this._client.assessments.list(subscriptionId).byPage().next()).value;
+            data.map((assessment) => {
+                this._children.push(new AssesmentTreeItem_1.AssessmentTreeItem(assessment.id, assessment.displayName, assessment.name, assessment.status.code, assessment.resourceDetails.Source, this, JSON.stringify(assessment), this._client));
+            });
         }
-        this.label = `${this.children.length}`;
-        return (0, filterVulnerabilities_1.recommendationsFiltering)(await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId), this.children);
+        const filteredRecommendations = (0, FilterVulnerabilities_1.recommendationsFiltering)(await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId), this._children);
+        this.label = `${this._title} (${filteredRecommendations.length})`;
+        return filteredRecommendations;
     }
     hasMoreChildrenImpl() {
-        return true;
+        return false;
     }
 }
 exports.RecommendationsTreeDataProvider = RecommendationsTreeDataProvider;

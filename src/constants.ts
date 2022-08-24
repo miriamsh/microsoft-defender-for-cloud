@@ -16,7 +16,7 @@ export class Constants {
     public static subscriptionIcon: string = 'azureSubscription';
     public static assessmentIcon: string = 'recommendation';
     public static subAssessmentIcon: string = '';
-    public static alertIcon: string = 'alert';
+    public static alertIcon: string = 'security-alerts';
     public static connectorIcon: string = 'connector';
     public static filterIcon: string = 'filter';
 
@@ -39,7 +39,10 @@ export class Constants {
     public static getAlertRule = (resourceGroupName: string, alertRuleName: string): string => {
         return `https://management.azure.com/subscriptions/9355a384-3349-404c-9589-1796edfdf799/resourceGroups/${resourceGroupName}/providers/Microsoft.Insights/scheduledQueryRules/${alertRuleName}?api-version=2021-08-01`;
     };
-
+    
+    public static sendSmsByAzureFunction =(name:string)=>{
+       return `https://today2dayfunc.azurewebsites.net/api/HttpTrigger1?code=nDhyw-27FKoetpSDlQHEHLsvrKknUQ5Lc3ZcabGU8QSxAzFuobKWig==&name=${name}`;
+    };
 
 
     public static resourcesFolderPath: string;

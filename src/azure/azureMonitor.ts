@@ -1,16 +1,18 @@
 import { ActionGroupResource, MonitorClient, SmsReceiver } from "@azure/arm-monitor";
 import { ServiceClient, OperationSpec, RestError } from "@azure/ms-rest-js";
-import { singleStepInputBox } from "../Commands/InputsUtils/singleStepInputBox";
-import { Client } from "../Utility/clientUtils";
+import { singleStepInputBox } from "../Commands/Inputs/SingleStepInputBox";
+import { Client } from "../Utility/ClientUtils";
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { IActionContext, ISubscriptionContext } from "@microsoft/vscode-azext-utils";
 import { DeviceTokenCredentials } from "@azure/ms-rest-nodeauth";
-import { getConfigurationSettings, setConfigurationSettings } from "../Utility/configUtils";
+import { getConfigurationSettings, setConfigurationSettings } from "../Utility/ConfigUtils";
 import { Constants } from "../constants";
 import { ConfigurationTarget } from "vscode";
 import * as vscode from 'vscode';
 import axios from "axios";
-import { smsSettingsInput } from "../Commands/InputsUtils/smsSettingsInputs";
+import { smsSettingsInput } from "../Commands/Inputs/SmsSettingsInputs";
+import { stringify } from "querystring";
+import { type } from "os";
 
 export class Monitor {
     private _genericClient: ServiceClient;
@@ -58,7 +60,8 @@ export class Monitor {
         const exists = await this.checkActionGroupExistence();
         if (exists === undefined) { return false; }
         if (exists === false) {
-            return await this.createActionGroup();
+            const actionGroup: ActionGroupResource = await this.getActionGroupParams();
+            return await this.createActionGroup(actionGroup);
         }
         return true;
     }
@@ -87,15 +90,14 @@ export class Monitor {
     }
 
     //Creates ActionGroup
-    async createActionGroup(name?: string, code?: string, phone?: string) {
+    async createActionGroup(actionGroup: ActionGroupResource) {
         try {
-            const actionGroup: ActionGroupResource = await this.getActionGroupParams(name || '', code || '', phone || '');
             await this._resourceManagement.resourceGroups.createOrUpdate(this.resourceGroupName, { location: 'eastus' });
             const newActionGroup = await this._monitorClient.actionGroups.createOrUpdate(this.resourceGroupName, this.actionGroupName, actionGroup);
-            const actionGroupSetting = {
-                "name": actionGroup!.smsReceivers![0].name,
-                "code": actionGroup!.smsReceivers![0].countryCode,
-                "phone": actionGroup!.smsReceivers![0].phoneNumber
+            const actionGroupSetting: SmsReceiver = {
+                name: actionGroup!.smsReceivers![0].name,
+                countryCode: actionGroup!.smsReceivers![0].countryCode,
+                phoneNumber: actionGroup!.smsReceivers![0].phoneNumber
             };
             await setConfigurationSettings(Constants.extensionPrefix, Constants.actionGroupId, this._subscription.subscriptionId, { "id": newActionGroup.id, "notificationSettings": actionGroupSetting }, ConfigurationTarget.Global);
             return true;
@@ -149,7 +151,8 @@ export class Monitor {
         return _id;
     }
 
-    private async getActionGroupParams(name: string, code: string, phone: string): Promise<ActionGroupResource> {
+    //Returns action group notification settings by an input
+    async getActionGroupParams(name: string = '', code: string = '', phone: string = ''): Promise<ActionGroupResource> {
         let smsSettings!: SmsReceiver;
         await smsSettingsInput(this._subscription).then(response => {
             smsSettings = response;
@@ -215,6 +218,5 @@ export class Monitor {
     public getResourceGroup() {
         return this.resourceGroupName;
     }
-
 
 }

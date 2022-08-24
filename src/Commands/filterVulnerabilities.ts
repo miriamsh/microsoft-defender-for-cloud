@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { AssessmentTreeItem } from '../VulnerabilitiesTree/Recommendations/AssesmentTreeItem';
-import { FilterSettings, getConcreteProperty, updateConcreteProperty,   } from '../Models/filterSettings';
+import { FilterSettings, getConcreteProperty, updateConcreteProperty, } from '../Models/filterSettings';
 import { AlertTreeItem } from '../VulnerabilitiesTree/Security Alerts/AlertTreeItem';
 import { ConnectorTreeItem } from '../VulnerabilitiesTree/Connectors/ConnectorTreeItem';
 import { Constants } from '../constants';
-import {setConfigurationSettings, getConfigurationSettings } from '../Utility/configUtils';
-import { showFilteringMenu } from './FilteringUtils/FilterSettingsInput';
+import { setConfigurationSettings, getConfigurationSettings } from '../Utility/ConfigUtils';
+import { showFilteringMenu } from './Inputs/FilterSettingsInput';
 import { CloudProviderTreeItem } from '../VulnerabilitiesTree/Connectors/CloudProviderTreeItem';
 import { AffectedResourceTreeItem } from '../VulnerabilitiesTree/Security Alerts/AffectedResourceTreeItem';
 
@@ -33,7 +33,9 @@ export async function selectFiltersCommand(args: any, type: string, property: st
             return f;
         });
 
-        await setConfigurationSettings(Constants.extensionPrefix, Constants.filtering, subscriptionId, updateConcreteProperty(type, property,  getConcreteProperty(type, property, configurations),configurations, newFilters), vscode.ConfigurationTarget.Global);
+        updateConcreteProperty(type, property, getConcreteProperty(type, property, configurations), configurations, newFilters);
+        const updatedSettings = await getConfigurationSettings(Constants.extensionPrefix, Constants.filtering,subscriptionId );
+        await setConfigurationSettings(Constants.extensionPrefix, Constants.filtering, subscriptionId, updatedSettings , vscode.ConfigurationTarget.Global);
 
         args.refresh();
     }
@@ -49,12 +51,12 @@ export function recommendationsFiltering(filteringSettings: any, assessments: As
     });
 
     return relevantData.filter(a => {
-        if (environmentFilters?.findIndex(environment => { return environment.option === a.cloud && environment.enable; }) !== -1) { return a; };
+        if (environmentFilters?.findIndex(environment => { return environment.option === a.environment && environment.enable; }) !== -1) { return a; };
     });
 }
 
 //Filters alerts vulnerability list
-//TODO: Change format, to match the requirements
+//TODO: IMP
 export function alertsFiltering(filteringSettings: FilterSettings, affectedResources: AffectedResourceTreeItem[]): AffectedResourceTreeItem[] {
     const statusFilters = getConcreteProperty("alerts", "severity", filteringSettings);
 

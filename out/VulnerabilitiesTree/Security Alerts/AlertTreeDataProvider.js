@@ -7,7 +7,8 @@ const AlertTreeItem_1 = require("./AlertTreeItem");
 const AffectedResourceTreeItem_1 = require("./AffectedResourceTreeItem");
 const constants_1 = require("../../constants");
 const filterVulnerabilities_1 = require("../../Commands/filterVulnerabilities");
-const configUtils_1 = require("../../Utility/configUtils");
+const ConfigUtils_1 = require("../../Utility/ConfigUtils");
+const TreeUtils_1 = require("../../Utility/TreeUtils");
 class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent) {
         super(parent);
@@ -16,7 +17,7 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
         this.label = label;
         this._title = label;
         this._client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
-        this.iconPath = constants_1.Constants.alertIcon;
+        this.iconPath = TreeUtils_1.TreeUtils.getIconPath(constants_1.Constants.alertIcon);
     }
     async loadMoreChildrenImpl(clearCache, context) {
         if (clearCache) {
@@ -37,9 +38,12 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
                 alertByResource.set(alert.compromisedEntity, resource);
             });
             this._children = Array.from(alertByResource.values());
-            this.label = `${this._title} (${this._children.length})`;
         }
-        return (0, filterVulnerabilities_1.alertsFiltering)(await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId), this._children);
+        const filteredAlerts = (0, filterVulnerabilities_1.alertsFiltering)(await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId), this._children);
+        this.suppressMaskLabel = true;
+        this.createNewLabel = `${this._title} (${filteredAlerts.length})`;
+        this.label = `${this._title} (${filteredAlerts.length})`;
+        return filteredAlerts;
     }
     hasMoreChildrenImpl() {
         return this._nextLink !== undefined;

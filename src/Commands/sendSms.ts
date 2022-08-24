@@ -1,13 +1,10 @@
 import { Alert } from "@azure/arm-security";
 import { SmsClient, SmsSendRequest } from "@azure/communication-sms";
-import { getVSCodeDownloadUrl } from "@vscode/test-electron/out/util";
-import { getCipherInfo } from "crypto";
 import { ISubscriptionContext } from "vscode-azureextensionui";
-import { getConfigurationSettings } from "../Utility/configUtils";
+import { getConfigurationSettings } from "../Utility/ConfigUtils";
 import { Constants } from "../constants";
 import * as vscode from 'vscode';
-import { Context } from "mocha";
-import { CommunicationServices } from "../azure/communicationServices";
+import { CommunicationServices } from "../azure/CommunicationServices";
 
 
 export async function sendSmsNotification(subscription: ISubscriptionContext, notify: CommunicationServices, alert: Alert) {

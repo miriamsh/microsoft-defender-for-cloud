@@ -1,22 +1,25 @@
 import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
 import { Constants } from '../../constants';
-import { connectorsFiltering } from "../../Commands/filterVulnerabilities";
-import { TreeUtils } from "../../Utility/treeUtils";
-import { getConfigurationSettings } from "../../Utility/configUtils";
+import { connectorsFiltering } from "../../Commands/FilterVulnerabilities";
+import { TreeUtils } from "../../Utility/TreeUtils";
+import { getConfigurationSettings } from "../../Utility/ConfigUtils";
 import { CloudProviderTreeItem } from './CloudProviderTreeItem';
-import axios from "axios";
 import { AWSOfferings, GCPOfferings, GithubOfferings } from "../../Models/connectorOfferings.enum";
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
+import { SecurityConnector } from "./SecurityConnector.type";
+import { SecurityCenter } from "@azure/arm-security";
 
 
 export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
 
     label: string;
     private _children: CloudProviderTreeItem[] = [];
+    private _client: SecurityCenter;
 
-    constructor(label: string, parent: AzExtParentTreeItem) {
+    constructor(label: string, parent: AzExtParentTreeItem, client: SecurityCenter) {
         super(parent);
         this.label = label;
+        this._client = client;
         this.iconPath = TreeUtils.getIconPath(Constants.connectorIcon);
     }
 
@@ -35,31 +38,20 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
             const githubConnector = new CloudProviderTreeItem("Github", this);
             const gcpConnector = new CloudProviderTreeItem("GCP", this);
 
-            const token = await this.subscription.credentials.getToken();
-
-            await axios.get(
-                Constants.getConnectorsList(this.subscription.subscriptionId),{
-                headers: {
-                    'authorization': `Bearer ${token.accessToken}`
+            const data = (await this._client.securityConnectors.list().byPage().next()).value;
+            data.map((connector: SecurityConnector) => {
+                if (connector.properties.environmentName === 'AWS') {
+                    awsConnector.appendChild(new ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(AWSOfferings), awsConnector, connector.id));
                 }
-            }
-            ).then(request => {
-                const connectorList = request.data.value;
-                connectorList.map((connector: { "environmentName": string, "name": string, "offerings": { "offeringType": AWSOfferings | GCPOfferings | GithubOfferings }[] }) => {
-                    if (connector.environmentName === 'AWS') {
-                        awsConnector.appendChild(new ConnectorTreeItem(connector.name!, connector.offerings, Object.keys(AWSOfferings), awsConnector));
-                    }
-                    else if (connector.environmentName === 'GCP') {
-                        gcpConnector.appendChild(new ConnectorTreeItem(connector.name!, connector.offerings, Object.keys(GCPOfferings), gcpConnector));
-                    }
-                    else {
-                        githubConnector.appendChild(new ConnectorTreeItem(connector.name!, connector.offerings, Object.keys(GithubOfferings), githubConnector));
-                    }
-                });
+                else if (connector.properties.environmentName === 'GCP') {
+                    gcpConnector.appendChild(new ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(GCPOfferings), gcpConnector, connector.id));
+                }
+                else {
+                    githubConnector.appendChild(new ConnectorTreeItem(connector.name, connector.properties.offerings, Object.keys(GithubOfferings), githubConnector, connector.id));
+                }
             });
 
             this._children = [awsConnector, azureConnector, gcpConnector, githubConnector];
-
         }
         return connectorsFiltering((await getConfigurationSettings(Constants.extensionPrefix, Constants.filtering, this.subscription.subscriptionId)), this.children);
     }

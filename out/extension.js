@@ -7,11 +7,11 @@ const path = require("path");
 const AzureAccountTreeItem_1 = require("./VulnerabilitiesTree/AzureAccountTreeItem");
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const vscode_azext_azureutils_1 = require("@microsoft/vscode-azext-azureutils");
-const filterVulnerabilities_1 = require("./Commands/filterVulnerabilities");
+const FilterVulnerabilities_1 = require("./Commands/FilterVulnerabilities");
 const constants_1 = require("./constants");
 const setEmailSettings_1 = require("./Commands/setEmailSettings");
 const vscode_azureextensionui_1 = require("vscode-azureextensionui");
-const sendSmsAM_1 = require("./Commands/sendSmsAM");
+const SendSmsAM_1 = require("./Commands/SendSmsAM");
 const setSmsSettingsAM_1 = require("./Commands/setSmsSettingsAM");
 async function activate(context) {
     constants_1.Constants.initialize(context);
@@ -37,48 +37,49 @@ async function registerCommands(context) {
         await (0, setEmailSettings_1.setEmailNotificationSettings)(context, node.client, node.root);
     });
     (0, vscode_azext_utils_1.registerCommand)('subscription.sms.notification.settings', async (_context, node) => {
-        //await setSmsNotificationSettings(args.getCommunicationServices());
+        //await setSmsNotificationSettings(node.getCommunicationServices());
         await (0, setSmsSettingsAM_1.setSmsNotification)(node.subscription.subscriptionId, await node.getMonitor(_context));
     });
     (0, vscode_azext_utils_1.registerCommand)('recommendation.filter.status', async (_context, node) => {
-        await (0, filterVulnerabilities_1.selectFiltersCommand)(node, "recommendations", "status");
+        await (0, FilterVulnerabilities_1.selectFiltersCommand)(node, "recommendations", "status");
     });
     (0, vscode_azext_utils_1.registerCommand)('recommendation.filter.environment', async (_context, node) => {
-        await (0, filterVulnerabilities_1.selectFiltersCommand)(node, "recommendations", "environment");
+        await (0, FilterVulnerabilities_1.selectFiltersCommand)(node, "recommendations", "environment");
     });
     (0, vscode_azext_utils_1.registerCommand)('alerts.filter.severity', async (_context, node) => {
-        await (0, filterVulnerabilities_1.selectFiltersCommand)(node, "alerts", "severity");
+        await (0, FilterVulnerabilities_1.selectFiltersCommand)(node, "alerts", "severity");
     });
     (0, vscode_azext_utils_1.registerCommand)('alerts.filter.status', async (_context, node) => {
-        await (0, filterVulnerabilities_1.selectFiltersCommand)(node, "alerts", "status");
+        await (0, FilterVulnerabilities_1.selectFiltersCommand)(node, "alerts", "status");
     });
     (0, vscode_azext_utils_1.registerCommand)('connectors.filter.cloudProvider', async (_context, node) => {
-        await (0, filterVulnerabilities_1.selectFiltersCommand)(node, "connectors", "cloudProvider");
+        await (0, FilterVulnerabilities_1.selectFiltersCommand)(node, "connectors", "cloudProvider");
     });
     (0, vscode_azext_utils_1.registerCommand)("recommendation.menu.showInBrowser", (_context, node) => {
-        vscode.env.openExternal(vscode.Uri.parse(constants_1.Constants.recommendationOnPortal(node.assessmentId)));
+        vscode.env.openExternal(vscode.Uri.parse(constants_1.Constants.recommendationOnPortal(node.assessmentName)));
     });
     //TODO:Get the root file, of the project
     (0, vscode_azext_utils_1.registerCommand)("recommendations.menu.showDetailed", (_context, node) => {
-        fs.writeFile(path.join(constants_1.Constants.resourcesFolderPath, 'details.json'), JSON.stringify(node.jsonItem), (err) => { });
-        vscode.window.showTextDocument(vscode.Uri.file(path.join(constants_1.Constants.resourcesFolderPath, 'jsonFiles')));
+        fs.writeFile(path.join(constants_1.Constants.resourcesFolderPath, 'details'), node.jsonItem, (err) => { });
+        vscode.window.showTextDocument(vscode.Uri.file(path.join(constants_1.Constants.resourcesFolderPath, 'details')));
     });
     (0, vscode_azext_utils_1.registerCommand)("alerts.menu.showInBrowser", (_context, node) => {
         vscode.env.openExternal(vscode.Uri.parse(node.alertUri));
     });
     (0, vscode_azext_utils_1.registerCommand)("alerts.menu.showDetailed", (_context, node) => {
-        fs.writeFile(path.join(constants_1.Constants.resourcesFolderPath, 'details.json'), JSON.stringify(node.jsonItem), (err) => { });
+        fs.writeFile(path.join(constants_1.Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
         vscode.window.showTextDocument(vscode.Uri.file(path.join(constants_1.Constants.resourcesFolderPath, 'jsonFiles')));
     });
     //TODO:sync with the correct hierarchy
-    (0, vscode_azext_utils_1.registerCommand)("alerts.menu.ActionMenu.sendNotifications", async (_context, node) => {
-        await (0, sendSmsAM_1.sendSmsWithAzureMonitor)(_context, node.parent.client, await node.parent.getMonitor(_context));
+    (0, vscode_azext_utils_1.registerCommand)("alerts.menu.actionMenu.sendNotifications", async (_context, node) => {
+        await (0, SendSmsAM_1.sendSmsWithAzureMonitor)(_context, node.parent.subscription.subscriptionId, await node.parent.getMonitor(_context));
+        //await sendSmsNotification(node.subscription.subscriptionId, node.parent._client.communicationServices(), new Alert());
     });
-    (0, vscode_azext_utils_1.registerCommand)("alerts.menu.ActionMenu.Dismiss", (event, item) => {
-        item.dismiss();
+    (0, vscode_azext_utils_1.registerCommand)("alerts.menu.actionMenu.dismiss", (_context, node) => {
+        node.dismiss();
     });
-    (0, vscode_azext_utils_1.registerCommand)("alerts.menu.ActionMenu.Activate", (event, item) => {
-        item.activate();
+    (0, vscode_azext_utils_1.registerCommand)("alerts.menu.actionMenu.activate", (_context, node) => {
+        node.activate();
     });
 }
 // this method is called when your extension is deactivated

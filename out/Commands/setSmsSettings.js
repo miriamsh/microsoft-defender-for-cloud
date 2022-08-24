@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setSmsNotificationSettings = void 0;
-//Set SMS notification Command
+//Sets SMS notification Command
 async function setSmsNotificationSettings(resource) {
     const ans = await resource.verifyRequiredInfrastructure();
     if (ans) {

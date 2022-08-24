@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.smsSettingsInput = void 0;
-const configUtils_1 = require("../../Utility/configUtils");
+const ConfigUtils_1 = require("../../Utility/ConfigUtils");
 const constants_1 = require("../../constants");
 const multiStepInputContract_1 = require("../../Models/multiStepInputContract");
 async function smsSettingsInput(subscription) {
-    const configSettings = (await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, subscription.subscriptionId));
+    const configSettings = (await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, subscription.subscriptionId));
     const settings = {
         name: configSettings?.notificationSettings?.name ? configSettings.notificationSettings.name : '',
         countryCode: configSettings?.notificationSettings?.code ? configSettings.notificationSettings.code : '',

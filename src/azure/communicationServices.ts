@@ -1,14 +1,14 @@
 import { SecurityCenter, SecurityContact, SecurityContactsCreateOptionalParams, AlertNotifications } from "@azure/arm-security";
 import * as vscode from 'vscode';
 import { Constants } from "../constants";
-import { getConfigurationSettings, setConfigurationSettings } from '../Utility/configUtils';
+import { getConfigurationSettings, setConfigurationSettings } from '../Utility/ConfigUtils';
 import { ResourceManagementClient ,ResourceGroup, DeploymentOperation, DeploymentOperations } from '@azure/arm-resources';
 import { CommunicationServiceCreateOrUpdateOptionalParams, CommunicationService, CommunicationServiceGetOptionalParams, CommunicationServiceManagementClient, CommunicationServiceResource } from "@azure/arm-communication";
 import { RestError, URLBuilder } from "@azure/ms-rest-js";
 import { PhoneNumbersClient, PurchasePhoneNumbersResult, SearchAvailablePhoneNumbersRequest } from "@azure/communication-phone-numbers";
 import { ISubscriptionContext } from "vscode-azureextensionui";
-import { Client } from "../Utility/clientUtils";
-import { singleStepInputBox } from "../Commands/InputsUtils/singleStepInputBox";
+import { Client } from "../Utility/ClientUtils";
+import { singleStepInputBox } from "../Commands/Inputs/SingleStepInputBox";
  
 export class CommunicationServices {
 

@@ -13,11 +13,12 @@ export class FilterSettings {
                     { option: "Healthy", enable: true },
                     { option: "Unhealthy", enable: true },
                     { option: "NotApplicable", enable: true },
-                 ],
-                "environment": [{ option: "Azure", enable: true },
+                ],
+                "environment":
+                    [{ option: "Azure", enable: true },
                     { option: "AWS", enable: true },
                     { option: "GCP", enable: true }
-                ]
+                    ]
             },
             "alerts": {
                 "status": [
@@ -42,15 +43,15 @@ export class FilterSettings {
         };
     }
 
-    public get settings(){
+    public get settings() {
         return this._settings;
     }
 
 }
 
-export interface IFilterPropertyOption{
-     option:string, 
-     enable:boolean
+export interface IFilterPropertyOption {
+    option: string,
+    enable: boolean
 }
 
 //Gets type and property. returns concrete property array of concrete type property in this.settings property
@@ -63,8 +64,7 @@ export function getConcreteProperty(type: string, prop: string, settings: any): 
     return tempTypeObj[concreteProperty];
 }
 
-//todo:change the parameters, should get the concreteProperty as a parameter, and simply update
 //Gets type and property. uses getConcreteProperty() function, set the returned value and returns it.
-export function updateConcreteProperty(type: string, prop: string, settings: any,propertyToUpdate:IFilterPropertyOption[] , updatedProperty: IFilterPropertyOption[]) {
-     propertyToUpdate = updatedProperty; 
+export function updateConcreteProperty(type: string, prop: string, settings: any, propertyToUpdate: IFilterPropertyOption[], updatedProperty: IFilterPropertyOption[]) {
+    propertyToUpdate = updatedProperty;
 }

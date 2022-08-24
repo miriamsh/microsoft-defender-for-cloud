@@ -8,13 +8,13 @@ export class AlertTreeItem extends AzExtTreeItem {
 	public label: string;
 	private _severity!: string;
 	private _status!: string;
-	private client: SecurityCenter;
-	private name: string;
-	private resourceGroupName: string;
+	private _client: SecurityCenter;
+	private _name: string;
+	private _resourceGroupName: string;
 	private location: string;
 	private _alertUri!: string;
 	private _entities: AlertEntity[];
-	private alertName: string;
+	private _alertName: string;
 
 	public readonly contextValue: string = "securityCenter.securityAlerts.affected-resources.alert";
 
@@ -22,75 +22,57 @@ export class AlertTreeItem extends AzExtTreeItem {
 		return this._jsonItem;
 	}
 
-	public set jsonItem(item: string) {
-		this._jsonItem = item;
-	}
-
 	public get entities(): AlertEntity[] {
 		return this._entities;
-	}
-
-	public set entities(item: AlertEntity[]) {
-		this._entities = item;
 	}
 
 	public get severity(): string {
 		return this._severity;
 	}
 
-	public set severity(s: string) {
-		this._severity = s;
-	}
-
 	public get status(): string {
 		return this._status;
-	}
-
-	public set status(s: string) {
-		this._status = s;
 	}
 
 	public get alertUri(): string {
 		return this._alertUri;
 	}
 
-	public set alertUri(uri: string) {
-		this._alertUri = uri;
-	}
-
-	constructor(label: string, severity: string, status: string, parent: AzExtParentTreeItem, jsonItem: string, name: string, resourceGroupName: string, location: string, entities: AlertEntity[], alertUri: string, id: string) {
+	constructor(label: string, severity: string, status: string, parent: AzExtParentTreeItem, jsonItem: string, name: string, resourceGroupName: string, location: string, entities: AlertEntity[], alertUri: string, id: string, client: SecurityCenter) {
 		super(parent);
 		this.label = label;
 		if (status === "Dismissed") {
 			this.label += " (Dismissed)";
 		}
-		this.severity = severity;
-		this.status = status;
-		this.jsonItem = jsonItem;
-		this.name = name;
-		this.resourceGroupName = resourceGroupName;
+		this._severity = severity;
+		this._status = status;
+		this._jsonItem = jsonItem;
+		this._name = name;
+		this._resourceGroupName = resourceGroupName;
 		this.location = location;
-		this.client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
+		this._client = client;
 		this._entities = entities;
 		this.id = id;
-		this.alertUri = alertUri;
-		this.alertName = label;
+		this._alertUri = alertUri;
+		this._alertName = label;
 		this._entities = entities;
 	}
 
+	//Dismisses a security alert
 	public async dismiss(): Promise<void> {
-		this.client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this.name, this.resourceGroupName).then(() => {
-			window.showInformationMessage(this.alertName + " Dismissed");
+		this._client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this._name, this._resourceGroupName).then(() => {
+			window.showInformationMessage(this._alertName + " Dismissed");
 			this.label += " (Dismissed)";
 		}).catch((err) => {
 			window.showErrorMessage(err.code + ": " + err.message);
 		});
 	}
 
+	//Activates a security alert
 	public async activate(): Promise<void> {
-		this.client.alerts.updateResourceGroupLevelStateToActivate(this.location, this.name, this.resourceGroupName).then(() => {
-			window.showInformationMessage(this.alertName + " Activate");
-			this.label = this.alertName;
+		this._client.alerts.updateResourceGroupLevelStateToActivate(this.location, this._name, this._resourceGroupName).then(() => {
+			window.showInformationMessage(this._alertName + " Activate");
+			this.label = this._alertName;
 		}).catch((err) => {
 			window.showErrorMessage(err.code + ": " + err.message);
 		});

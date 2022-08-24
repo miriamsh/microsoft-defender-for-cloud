@@ -4,14 +4,15 @@ import * as path from "path";
 import { AzureAccountTreeItem } from './VulnerabilitiesTree/AzureAccountTreeItem';
 import { createAzExtOutputChannel, AzExtTreeDataProvider, registerCommand } from '@microsoft/vscode-azext-utils';
 import { registerAzureUtilsExtensionVariables } from '@microsoft/vscode-azext-azureutils';
-import { selectFiltersCommand } from './Commands/filterVulnerabilities';
+import { selectFiltersCommand } from './Commands/FilterVulnerabilities';
 import { Constants } from './constants';
 import { setEmailNotificationSettings } from './Commands/setEmailSettings';
 import { callWithTelemetryAndErrorHandling, IActionContext } from 'vscode-azureextensionui';
-import { sendSmsWithAzureMonitor } from './Commands/sendSmsAM';
+import { sendSmsWithAzureMonitor } from './Commands/SendSmsAM';
 import { setSmsNotification } from './Commands/setSmsSettingsAM';
 import { AlertTreeItem } from './VulnerabilitiesTree/Security Alerts/AlertTreeItem';
-import { AssessmentTreeItem } from './VulnerabilitiesTree/Recommendations/AssesmentTreeItem';
+import { setSmsNotificationSettings } from './Commands/setSmsSettings';
+import { sendSmsNotification } from './Commands/SendSms';
 
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -46,7 +47,7 @@ async function registerCommands(context: vscode.ExtensionContext) {
     });
 
     registerCommand('subscription.sms.notification.settings', async (_context: IActionContext, node) => {
-        //await setSmsNotificationSettings(args.getCommunicationServices());
+        //await setSmsNotificationSettings(node.getCommunicationServices());
         await setSmsNotification(node.subscription.subscriptionId, await node.getMonitor(_context));
     });
 
@@ -71,13 +72,13 @@ async function registerCommands(context: vscode.ExtensionContext) {
     });
 
     registerCommand("recommendation.menu.showInBrowser", (_context: IActionContext, node) => {
-        vscode.env.openExternal(vscode.Uri.parse(Constants.recommendationOnPortal(node.assessmentId)));
+        vscode.env.openExternal(vscode.Uri.parse(Constants.recommendationOnPortal(node.assessmentName)));
     });
 
     //TODO:Get the root file, of the project
     registerCommand("recommendations.menu.showDetailed", (_context: IActionContext, node) => {
-        fs.writeFile(path.join(Constants.resourcesFolderPath, 'details.json'), JSON.stringify(node.jsonItem), (err) => { });
-        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'jsonFiles')));
+        fs.writeFile(path.join(Constants.resourcesFolderPath, 'details'), node.jsonItem, (err) => { });
+        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'details')));
     });
 
     registerCommand("alerts.menu.showInBrowser", (_context: IActionContext, node: AlertTreeItem) => {
@@ -85,21 +86,22 @@ async function registerCommands(context: vscode.ExtensionContext) {
     });
 
     registerCommand("alerts.menu.showDetailed", (_context: IActionContext, node: AlertTreeItem) => {
-        fs.writeFile(path.join(Constants.resourcesFolderPath, 'details.json'), JSON.stringify(node.jsonItem), (err) => { });
+        fs.writeFile(path.join(Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
         vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'jsonFiles')));
     });
 
     //TODO:sync with the correct hierarchy
-    registerCommand("alerts.menu.ActionMenu.sendNotifications", async (_context: IActionContext, node) => {
-        await sendSmsWithAzureMonitor(_context, node.parent.client, await node.parent.getMonitor(_context));
+    registerCommand("alerts.menu.actionMenu.sendNotifications", async (_context: IActionContext, node) => {
+        await sendSmsWithAzureMonitor(_context, node.parent.subscription.subscriptionId, await node.parent.getMonitor(_context));
+        //await sendSmsNotification(node.subscription.subscriptionId, node.parent._client.communicationServices(), new Alert());
     });
 
-    registerCommand("alerts.menu.ActionMenu.Dismiss", (event, item: AlertTreeItem) => {
-        item.dismiss();
+    registerCommand("alerts.menu.actionMenu.dismiss", (_context: IActionContext, node: AlertTreeItem) => {
+        node.dismiss();
     });
 
-    registerCommand("alerts.menu.ActionMenu.Activate", (event, item: AlertTreeItem) => {
-        item.activate();
+    registerCommand("alerts.menu.actionMenu.activate", (_context: IActionContext, node: AlertTreeItem) => {
+        node.activate();
     });
 }
 

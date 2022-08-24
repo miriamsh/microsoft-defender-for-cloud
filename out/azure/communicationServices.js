@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommunicationServices = void 0;
 const vscode = require("vscode");
 const constants_1 = require("../constants");
-const configUtils_1 = require("../Utility/configUtils");
+const ConfigUtils_1 = require("../Utility/ConfigUtils");
 const communication_phone_numbers_1 = require("@azure/communication-phone-numbers");
-const singleStepInputBox_1 = require("../Commands/InputsUtils/singleStepInputBox");
+const SingleStepInputBox_1 = require("../Commands/Inputs/SingleStepInputBox");
 class CommunicationServices {
     constructor(subscription, client) {
         this.resourceGroupName = "vscodeExSmsNotification";
@@ -40,7 +40,7 @@ class CommunicationServices {
         if (phoneNumber === "") {
             return false;
         }
-        await (0, configUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
+        await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": phoneNumber, "to": "" }, vscode.ConfigurationTarget.Global);
         return true;
     }
     //Checks existence of Azure Communication Services resource
@@ -148,16 +148,16 @@ class CommunicationServices {
     }
     //Gets a phone list  as an input, saves it as config
     async updateToPhoneNumber() {
-        const phonesList = await (0, singleStepInputBox_1.singleStepInputBox)("6505135041, 9508477714", "List of phone numbers (separated by commas)");
+        const phonesList = await (0, SingleStepInputBox_1.singleStepInputBox)("6505135041, 9508477714", "List of phone numbers (separated by commas)");
         if (phonesList === "") {
             vscode.window.showErrorMessage("No phone numbers have been entered");
             return false;
         }
-        const smsConfig = await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, this.subscription.subscriptionId);
-        await (0, configUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": smsConfig.from, "to": phonesList }, vscode.ConfigurationTarget.Global);
+        const smsConfig = await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, this.subscription.subscriptionId);
+        await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, this.subscription.subscriptionId, { "from": smsConfig.from, "to": phonesList }, vscode.ConfigurationTarget.Global);
         vscode.window.showInformationMessage("The recipient's phone list saved successfully");
         return true;
     }
 }
 exports.CommunicationServices = CommunicationServices;
-//# sourceMappingURL=communicationServices.js.map
+//# sourceMappingURL=CommunicationServices.js.map

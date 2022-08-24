@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Monitor = void 0;
-const configUtils_1 = require("../Utility/configUtils");
+const ConfigUtils_1 = require("../Utility/ConfigUtils");
 const constants_1 = require("../constants");
 const vscode_1 = require("vscode");
 const vscode = require("vscode");
 const axios_1 = require("axios");
-const smsSettingsInputs_1 = require("../Commands/InputsUtils/smsSettingsInputs");
+const SmsSettingsInputs_1 = require("../Commands/Inputs/SmsSettingsInputs");
 class Monitor {
     constructor(context, subscription, genericClient, client) {
         this.actionGroupName = 'SecurityAlertsNotification';
@@ -43,7 +43,8 @@ class Monitor {
             return false;
         }
         if (exists === false) {
-            return await this.createActionGroup();
+            const actionGroup = await this.getActionGroupParams();
+            return await this.createActionGroup(actionGroup);
         }
         return true;
     }
@@ -62,7 +63,7 @@ class Monitor {
     async checkActionGroupExistence() {
         try {
             const actionGroup = await this._monitorClient.actionGroups.get(this.resourceGroupName, this.actionGroupName);
-            await (0, configUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId, actionGroup.id, vscode.ConfigurationTarget.Global);
+            await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId, actionGroup.id, vscode.ConfigurationTarget.Global);
             return true;
         }
         catch (error) {
@@ -73,17 +74,16 @@ class Monitor {
         }
     }
     //Creates ActionGroup
-    async createActionGroup(name, code, phone) {
+    async createActionGroup(actionGroup) {
         try {
-            const actionGroup = await this.getActionGroupParams(name || '', code || '', phone || '');
             await this._resourceManagement.resourceGroups.createOrUpdate(this.resourceGroupName, { location: 'eastus' });
             const newActionGroup = await this._monitorClient.actionGroups.createOrUpdate(this.resourceGroupName, this.actionGroupName, actionGroup);
             const actionGroupSetting = {
-                "name": actionGroup.smsReceivers[0].name,
-                "code": actionGroup.smsReceivers[0].countryCode,
-                "phone": actionGroup.smsReceivers[0].phoneNumber
+                name: actionGroup.smsReceivers[0].name,
+                countryCode: actionGroup.smsReceivers[0].countryCode,
+                phoneNumber: actionGroup.smsReceivers[0].phoneNumber
             };
-            await (0, configUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId, { "id": newActionGroup.id, "notificationSettings": actionGroupSetting }, vscode_1.ConfigurationTarget.Global);
+            await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId, { "id": newActionGroup.id, "notificationSettings": actionGroupSetting }, vscode_1.ConfigurationTarget.Global);
             return true;
         }
         catch (error) {
@@ -127,9 +127,10 @@ class Monitor {
         const _id = this._subscription.subscriptionId + this._subscription.credentials.clientId;
         return _id;
     }
-    async getActionGroupParams(name, code, phone) {
+    //Returns action group notification settings by an input
+    async getActionGroupParams(name = '', code = '', phone = '') {
         let smsSettings;
-        await (0, smsSettingsInputs_1.smsSettingsInput)(this._subscription).then(response => {
+        await (0, SmsSettingsInputs_1.smsSettingsInput)(this._subscription).then(response => {
             smsSettings = response;
         }).catch(console.error);
         const actionGroup = {
@@ -146,7 +147,7 @@ class Monitor {
     }
     //Returns alert rule properties
     async getAlertRuleProperties() {
-        const actionGroupId = (await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId)).id;
+        const actionGroupId = (await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId)).id;
         //Verify:Is it required to get the action group id by an arm call?
         return {
             "location": "eastus",
@@ -192,4 +193,4 @@ class Monitor {
     }
 }
 exports.Monitor = Monitor;
-//# sourceMappingURL=azureMonitor.js.map
+//# sourceMappingURL=AzureMonitor.js.map

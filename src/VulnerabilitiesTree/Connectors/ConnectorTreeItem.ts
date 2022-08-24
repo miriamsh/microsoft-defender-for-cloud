@@ -10,11 +10,12 @@ export class ConnectorTreeItem extends AzExtParentTreeItem {
 	private _children: AzExtTreeItem[] = [];
 	private _cloudOfferings!: string[];
 
-	constructor(label: string, possibleOfferings: any[], cloudOfferings: string[], parent: AzExtParentTreeItem) {
+	constructor(label: string, possibleOfferings: { "offeringType": AWSOfferings | GCPOfferings | GithubOfferings }[], cloudOfferings: string[], parent: AzExtParentTreeItem, id:string) {
 		super(parent);
 		this.label = label;
 		this._possibleOfferings = possibleOfferings;
 		this._cloudOfferings = cloudOfferings;
+		this.id = id;
 	}
 
 	public readonly contextValue: string = 'securityCenter.connectors.cloudProvider.connector';

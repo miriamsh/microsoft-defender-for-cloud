@@ -3,22 +3,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendSmsWithAzureMonitor = void 0;
 const vscode = require("vscode");
 const axios_1 = require("axios");
+const constants_1 = require("../constants");
+const ConfigUtils_1 = require("../Utility/ConfigUtils");
 //Sends SMS messages, using Monitor service of Azure Monitor
-async function sendSmsWithAzureMonitor(context, client, monitor) {
+async function sendSmsWithAzureMonitor(context, subscriptionId, monitor) {
     const _monitor = monitor;
     const name = _monitor.getResourceGroup();
-    const ans = await _monitor.verifyRequiredInfrastructure();
-    if (ans) {
-        const response = await axios_1.default.get(`https://today2dayfunc.azurewebsites.net/api/HttpTrigger1?code=nDhyw-27FKoetpSDlQHEHLsvrKknUQ5Lc3ZcabGU8QSxAzFuobKWig==&name=${name}`).then(async (res) => {
-            //const phone = getConfigurationSettings(Constants.extensionPrefix, Constants.actionGroupId,
-            await vscode.window.showInformationMessage("SMS message will be sent in a few minutes");
-        }).catch(async (error) => {
-            await vscode.window.showErrorMessage("SMS won't be sent due to an error. Try again later");
+    try {
+        const ans = await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+        }, async (progress) => {
+            progress.report({
+                message: `Verifying the requirements to complete this action ...`,
+            });
+            //return await _monitor.verifyRequiredInfrastructure();
+            //NOTE: Preventing access to a private Azure account 
+            return false;
         });
+        if (ans) {
+            await axios_1.default.get(constants_1.Constants.sendSmsByAzureFunction(name));
+            const phone = (await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, subscriptionId)).notificationSettings?.phoneNumber;
+            await vscode.window.showInformationMessage(`SMS message will be sent in a few minutes.${phone !== undefined ? "to:" + phone : ""}`);
+        }
+        else {
+            await vscode.window.showErrorMessage("Couldn't verify the requirements to complete this action");
+        }
     }
-    else {
-        await vscode.window.showErrorMessage("Couldn't complete the required operations for sending the SMS message");
+    catch (error) {
+        await vscode.window.showErrorMessage("SMS won't be sent due to an error. Try again later");
     }
 }
 exports.sendSmsWithAzureMonitor = sendSmsWithAzureMonitor;
-//# sourceMappingURL=sendSmsAM.js.map
+const latency = () => {
+    const a = setTimeout(() => {
+        return false;
+    }, 1000);
+};
+//# sourceMappingURL=SendSmsAM.js.map

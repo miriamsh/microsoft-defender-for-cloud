@@ -17,7 +17,7 @@ Constants.actionGroupId = 'actionGroupId';
 Constants.subscriptionIcon = 'azureSubscription';
 Constants.assessmentIcon = 'recommendation';
 Constants.subAssessmentIcon = '';
-Constants.alertIcon = 'alert';
+Constants.alertIcon = 'security-alerts';
 Constants.connectorIcon = 'connector';
 Constants.filterIcon = 'filter';
 Constants.cloudConnector = 'cloudConnector';
@@ -34,5 +34,8 @@ Constants.createOrUpdateAlertRule = (resourceGroupName, alertRuleName) => {
 };
 Constants.getAlertRule = (resourceGroupName, alertRuleName) => {
     return `https://management.azure.com/subscriptions/9355a384-3349-404c-9589-1796edfdf799/resourceGroups/${resourceGroupName}/providers/Microsoft.Insights/scheduledQueryRules/${alertRuleName}?api-version=2021-08-01`;
+};
+Constants.sendSmsByAzureFunction = (name) => {
+    return `https://today2dayfunc.azurewebsites.net/api/HttpTrigger1?code=nDhyw-27FKoetpSDlQHEHLsvrKknUQ5Lc3ZcabGU8QSxAzFuobKWig==&name=${name}`;
 };
 //# sourceMappingURL=constants.js.map

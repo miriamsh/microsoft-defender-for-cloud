@@ -83,15 +83,15 @@
 				"title": "Show Detailed"
 			},
 			{
-				"command": "alerts.menu.ActionMenu.sendNotifications",
+				"command": "alerts.menu.actionMenu.sendNotifications",
 				"title": "Send Notifications (SMS)"
 			},
 			{
-				"command": "alerts.menu.ActionMenu.activate",
+				"command": "alerts.menu.actionMenu.activate",
 				"title": "Activate"
 			},
 			{
-				"command": "alerts.menu.ActionMenu.dismiss",
+				"command": "alerts.menu.actionMenu.dismiss",
 				"title": "Dismiss"
 			},
 			{
@@ -143,22 +143,22 @@
 				},
 				{
 					"command": "alerts.menu.showInBrowser",
-					"when": "viewItem == securityCenter.alerts",
+					"when": "viewItem == securityCenter.securityAlerts",
 					"group": "1@1"
 				},
 				{
 					"submenu": "alerts.menu.showAsMenu",
-					"when": "viewItem == securityCenter.alerts",
+					"when": "viewItem == securityCenter.securityAlerts",
 					"group": "2@1"
 				},
 				{
 					"command": "alerts.menu.showDetailed",
-					"when": "viewItem == securityCenter.alerts",
+					"when": "viewItem == securityCenter.securityAlerts",
 					"group": "3@1"
 				},
 				{
 					"submenu": "alerts.menu.actionMenu",
-					"when": "viewItem == securityCenter.alerts",
+					"when": "viewItem == securityCenter.securityAlerts",
 					"group": "4@1"
 				}
 			],
@@ -200,15 +200,15 @@
 			],
 			"alerts.menu.actionMenu": [
 				{
-					"command": "alerts.menu.ActionMenu.sendNotifications",
+					"command": "alerts.menu.actionMenu.sendNotifications",
 					"group": "1_default@1"
 				},
 				{
-					"command": "alerts.menu.ActionMenu.activate",
+					"command": "alerts.menu.actionMenu.activate",
 					"group": "2_default@1"
 				},
 				{
-					"command": "alerts.menu.ActionMenu.dismiss",
+					"command": "alerts.menu.actionMenu.dismiss",
 					"group": "3_default@1"
 				}
 			]

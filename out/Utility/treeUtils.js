@@ -15,4 +15,4 @@ class TreeUtils {
     }
 }
 exports.TreeUtils = TreeUtils;
-//# sourceMappingURL=treeUtils.js.map
+//# sourceMappingURL=TreeUtils.js.map

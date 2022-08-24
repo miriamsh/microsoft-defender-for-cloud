@@ -2,15 +2,15 @@ import { SubscriptionTreeItemBase } from "@microsoft/vscode-azext-azureutils";
 import { AzExtParentTreeItem, AzExtTreeItem, IActionContext, ISubscriptionContext } from "@microsoft/vscode-azext-utils";
 import { Constants } from '../constants';
 import { FilterSettings } from "../Models/filterSettings";
-import { AlertsTreeDataProvider } from "./Security Alerts/AlertTreeDataProvider";
+import { AlertsTreeDataProvider } from "./Security Alerts/AlertsTreeDataProvider";
 import { RecommendationsTreeDataProvider } from "./Recommendations/RecommendationsTreeDataProvider";
 import { ConnectorsTreeDataProvider } from "./Connectors/ConnectorsTreeDataProvider";
 import * as vscode from 'vscode';
-import { getConfigurationSettings, setConfigurationSettings } from "../Utility/configUtils";
-import { TreeUtils } from '../Utility/treeUtils';
-import { Client } from "../Utility/clientUtils";
-import { CommunicationServices } from "../azure/communicationServices";
-import { Monitor } from "../azure/azureMonitor";
+import { getConfigurationSettings, setConfigurationSettings } from "../Utility/ConfigUtils";
+import { Client } from "../Utility/ClientUtils";
+import { CommunicationServices } from "../azure/CommunicationServices";
+import { Monitor } from "../azure/AzureMonitor";
+import { TreeUtils } from "../Utility/TreeUtils";
 
 export class SubscriptionTreeItem extends SubscriptionTreeItemBase {
 
@@ -56,9 +56,9 @@ export class SubscriptionTreeItem extends SubscriptionTreeItemBase {
             await setConfigurationSettings(Constants.extensionPrefix, Constants.filtering, this.subscription.subscriptionId, new FilterSettings().settings, vscode.ConfigurationTarget.Global);
         }
 
-        const alerts: AlertsTreeDataProvider = new AlertsTreeDataProvider("Security Alerts", this);
-        const recommendations: RecommendationsTreeDataProvider = new RecommendationsTreeDataProvider("Recommendations", this);
-        const connectors: ConnectorsTreeDataProvider = new ConnectorsTreeDataProvider("Connectors", this);
+        const alerts: AlertsTreeDataProvider = new AlertsTreeDataProvider("Security Alerts", this, this._client.getSecurityCenterClient());
+        const recommendations: RecommendationsTreeDataProvider = new RecommendationsTreeDataProvider("Recommendations", this, this._client.getSecurityCenterClient());
+        const connectors: ConnectorsTreeDataProvider = new ConnectorsTreeDataProvider("Connectors", this, this._client.getSecurityCenterClient());
         return [connectors, recommendations, alerts];
     }
 

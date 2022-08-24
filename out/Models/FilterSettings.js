@@ -51,7 +51,6 @@ function getConcreteProperty(type, prop, settings) {
     return tempTypeObj[concreteProperty];
 }
 exports.getConcreteProperty = getConcreteProperty;
-//todo:change the parameters, should get the concreteProperty as a parameter, and simply update
 //Gets type and property. uses getConcreteProperty() function, set the returned value and returns it.
 function updateConcreteProperty(type, prop, settings, propertyToUpdate, updatedProperty) {
     propertyToUpdate = updatedProperty;

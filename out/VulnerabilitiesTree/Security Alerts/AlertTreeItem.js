@@ -1,72 +1,58 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AlertTreeItem = void 0;
-const arm_security_1 = require("@azure/arm-security");
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const vscode_1 = require("vscode");
 class AlertTreeItem extends vscode_azext_utils_1.AzExtTreeItem {
-    constructor(label, severity, status, parent, jsonItem, name, resourceGroupName, location, entities, alertUri, id) {
+    constructor(label, severity, status, parent, jsonItem, name, resourceGroupName, location, entities, alertUri, id, client) {
         super(parent);
         this.contextValue = "securityCenter.securityAlerts.affected-resources.alert";
         this.label = label;
         if (status === "Dismissed") {
             this.label += " (Dismissed)";
         }
-        this.severity = severity;
-        this.status = status;
-        this.jsonItem = jsonItem;
-        this.name = name;
-        this.resourceGroupName = resourceGroupName;
+        this._severity = severity;
+        this._status = status;
+        this._jsonItem = jsonItem;
+        this._name = name;
+        this._resourceGroupName = resourceGroupName;
         this.location = location;
-        this.client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
+        this._client = client;
         this._entities = entities;
         this.id = id;
-        this.alertUri = alertUri;
-        this.alertName = label;
+        this._alertUri = alertUri;
+        this._alertName = label;
         this._entities = entities;
     }
     get jsonItem() {
         return this._jsonItem;
     }
-    set jsonItem(item) {
-        this._jsonItem = item;
-    }
     get entities() {
         return this._entities;
-    }
-    set entities(item) {
-        this._entities = item;
     }
     get severity() {
         return this._severity;
     }
-    set severity(s) {
-        this._severity = s;
-    }
     get status() {
         return this._status;
-    }
-    set status(s) {
-        this._status = s;
     }
     get alertUri() {
         return this._alertUri;
     }
-    set alertUri(uri) {
-        this._alertUri = uri;
-    }
+    //Dismisses a security alert
     async dismiss() {
-        this.client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this.name, this.resourceGroupName).then(() => {
-            vscode_1.window.showInformationMessage(this.alertName + " Dismissed");
+        this._client.alerts.updateResourceGroupLevelStateToDismiss(this.location, this._name, this._resourceGroupName).then(() => {
+            vscode_1.window.showInformationMessage(this._alertName + " Dismissed");
             this.label += " (Dismissed)";
         }).catch((err) => {
             vscode_1.window.showErrorMessage(err.code + ": " + err.message);
         });
     }
+    //Activates a security alert
     async activate() {
-        this.client.alerts.updateResourceGroupLevelStateToActivate(this.location, this.name, this.resourceGroupName).then(() => {
-            vscode_1.window.showInformationMessage(this.alertName + " Activate");
-            this.label = this.alertName;
+        this._client.alerts.updateResourceGroupLevelStateToActivate(this.location, this._name, this._resourceGroupName).then(() => {
+            vscode_1.window.showInformationMessage(this._alertName + " Activate");
+            this.label = this._alertName;
         }).catch((err) => {
             vscode_1.window.showErrorMessage(err.code + ": " + err.message);
         });

@@ -3,8 +3,9 @@ import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/v
 import { AlertTreeItem } from "./AlertTreeItem";
 import { AffectedResourceTreeItem } from "./AffectedResourceTreeItem";
 import { Constants } from "../../constants";
-import { alertsFiltering } from "../../Commands/filterVulnerabilities";
-import { getConfigurationSettings } from "../../Utility/configUtils";
+import { alertsFiltering } from "../../Commands/FilterVulnerabilities";
+import { getConfigurationSettings } from "../../Utility/ConfigUtils";
+import { TreeUtils } from "../../Utility/TreeUtils";
 
 export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 	private _children: AffectedResourceTreeItem[] = [];
@@ -14,19 +15,15 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 	public label: string;
 	public readonly contextValue: string = 'securityCenter.securityAlerts';
 
-	constructor(label: string, parent: AzExtParentTreeItem) {
+	constructor(label: string, parent: AzExtParentTreeItem, client:SecurityCenter) {
 		super(parent);
 		this.label = label;
 		this._title=label;
-		this._client = new SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
-		this.iconPath = Constants.alertIcon;
+		this._client = client;
+		this.iconPath = TreeUtils.getIconPath(Constants.alertIcon);
 	}
 
-	public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtTreeItem[]> {
-
-		if (clearCache) {
-            this._nextLink = undefined;
-        }
+	public async loadMoreChildrenImpl(): Promise<AzExtTreeItem[]> {
 
 		if(this._children.length === 0) {
 			let alertByResource: Map<string, AffectedResourceTreeItem> | undefined = new Map<string, AffectedResourceTreeItem>();
@@ -39,15 +36,17 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 				if (resource === undefined) {
 					resource = new AffectedResourceTreeItem(alert.compromisedEntity!, this);
 				}
-				const alertItem = new AlertTreeItem(alert.alertDisplayName!, alert.severity!, alert.status!, resource, JSON.stringify(alert), alert.name!, parameters.getResourceGroupName(), parameters.getLocation(), alert.entities!, alert.alertUri!, alert.id!);
+				const alertItem = new AlertTreeItem(alert.alertDisplayName!, alert.severity!, alert.status!, resource, JSON.stringify(alert), alert.name!, parameters.getResourceGroupName(), parameters.getLocation(), alert.entities!, alert.alertUri!, alert.id!, this._client);
 				resource.appendChildren(alertItem);
 				alertByResource!.set(alert.compromisedEntity!, resource!);
 			});
 
 			this._children = Array.from(alertByResource.values());
-			this.label = `${this._title} (${this._children.length})`;
 		}
-		return alertsFiltering(await getConfigurationSettings(Constants.extensionPrefix,Constants.filtering, this.subscription.subscriptionId), this._children);
+
+		const filteredAlerts = alertsFiltering(await getConfigurationSettings(Constants.extensionPrefix,Constants.filtering, this.subscription.subscriptionId), this._children);
+		this.label = `${this._title} (${filteredAlerts.length})`;
+		return filteredAlerts;
 	}
 
 	public hasMoreChildrenImpl(): boolean {

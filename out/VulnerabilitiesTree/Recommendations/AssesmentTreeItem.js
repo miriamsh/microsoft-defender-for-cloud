@@ -1,29 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AssessmentTreeItem = void 0;
-const arm_security_1 = require("@azure/arm-security");
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
-const SubAssesmentTreeItem_1 = require("./SubAssesmentTreeItem");
+const SubAssessmentTreeItem_1 = require("./SubAssessmentTreeItem");
 class AssessmentTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem {
-    constructor(label, assessmentId, severity, status, cloud, parent, jsonItem) {
+    constructor(id, label, name, status, environment, parent, item, client) {
         super(parent);
-        this._children = [];
+        this.children = [];
         this.contextValue = 'securityCenter.recommendations.assessments';
+        this.id = id;
+        this._assessmentName = name;
         this.label = label;
-        this._client = new arm_security_1.SecurityCenter(this.subscription.credentials, this.subscription.subscriptionId);
-        this.severity = severity;
-        this.status = status;
-        this.cloud = cloud;
-        this._assessmentId = assessmentId;
-        this._jsonItem = jsonItem;
+        this._client = client;
+        this._status = status;
+        this._environment = environment;
+        this._jsonItem = item;
     }
-    async loadMoreChildrenImpl() {
-        let subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
-        let value = await (await this._client.subAssessments.list(subscriptionId, this._assessmentId).byPage().next()).value;
-        for (let item of value) {
-            this._children.push(new SubAssesmentTreeItem_1.SubAssessmentTreeItem(item.displayName, this));
-        }
-        return this._children;
+    get status() {
+        return this._status;
+    }
+    get environment() {
+        return this._environment;
+    }
+    get jsonItem() {
+        return this._jsonItem;
+    }
+    get assessmentName() {
+        return this._assessmentName;
+    }
+    async loadMoreChildrenImpl(clearCache, context) {
+        const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
+        const data = await (await this._client.subAssessments.list(subscriptionId, this._assessmentName).byPage().next()).value;
+        data.map((assessment) => {
+            this.children.push(new SubAssessmentTreeItem_1.SubAssessmentTreeItem(assessment.displayName, this, this._client));
+        });
+        return this.children;
     }
     hasMoreChildrenImpl() {
         return false;

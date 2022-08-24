@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getConfigurationSettings } from '../../Utility/configUtils';
+import { getConfigurationSettings } from '../../Utility/ConfigUtils';
 import { Constants } from '../../constants';
 import { ISubscriptionContext } from 'vscode-azureextensionui';
 import { KnownAlertNotifications, SecurityCenter, SecurityContact, SecurityContacts } from '@azure/arm-security';

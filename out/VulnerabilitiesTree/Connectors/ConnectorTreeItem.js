@@ -4,13 +4,14 @@ exports.ConnectorTreeItem = void 0;
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const ConnecorOfferingTreeItem_1 = require("./ConnecorOfferingTreeItem");
 class ConnectorTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem {
-    constructor(label, possibleOfferings, cloudOfferings, parent) {
+    constructor(label, possibleOfferings, cloudOfferings, parent, id) {
         super(parent);
         this._children = [];
         this.contextValue = 'securityCenter.connectors.cloudProvider.connector';
         this.label = label;
         this._possibleOfferings = possibleOfferings;
         this._cloudOfferings = cloudOfferings;
+        this.id = id;
     }
     hasMoreChildrenImpl() {
         return false;

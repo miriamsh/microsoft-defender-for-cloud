@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendSmsNotification = void 0;
 const communication_sms_1 = require("@azure/communication-sms");
-const configUtils_1 = require("../Utility/configUtils");
+const ConfigUtils_1 = require("../Utility/ConfigUtils");
 const constants_1 = require("../constants");
 const vscode = require("vscode");
 async function sendSmsNotification(subscription, notify, alert) {
@@ -10,7 +10,7 @@ async function sendSmsNotification(subscription, notify, alert) {
         const _notify = notify;
         const ans = await _notify.verifyRequiredInfrastructure();
         if (ans) {
-            const phoneList = (await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, subscription.subscriptionId)).to;
+            const phoneList = (await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, subscription.subscriptionId)).to;
             if (phoneList === undefined || phoneList === "") {
                 const set = await _notify.updateToPhoneNumber();
                 if (!set) {
@@ -23,7 +23,7 @@ async function sendSmsNotification(subscription, notify, alert) {
         }
         const connectionString = await (await _notify.getAccessKey()).primaryConnectionString;
         const smsClient = new communication_sms_1.SmsClient(connectionString);
-        const smsData = await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, subscription.subscriptionId);
+        const smsData = await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, subscription.subscriptionId);
         const sendRequest = {
             "from": smsData.from,
             "to": smsData.to.split(','),
@@ -36,4 +36,4 @@ async function sendSmsNotification(subscription, notify, alert) {
     }
 }
 exports.sendSmsNotification = sendSmsNotification;
-//# sourceMappingURL=sendSms.js.map
+//# sourceMappingURL=SendSms.js.map

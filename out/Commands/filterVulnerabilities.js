@@ -4,11 +4,11 @@ exports.connectorsFiltering = exports.alertsFiltering = exports.recommendationsF
 const vscode = require("vscode");
 const filterSettings_1 = require("../Models/filterSettings");
 const constants_1 = require("../constants");
-const configUtils_1 = require("../Utility/configUtils");
-const FilterSettingsInput_1 = require("./FilteringUtils/FilterSettingsInput");
+const ConfigUtils_1 = require("../Utility/ConfigUtils");
+const FilterSettingsInput_1 = require("./Inputs/FilterSettingsInput");
 async function selectFiltersCommand(args, type, property) {
     const subscriptionId = args.parent.subscription.subscriptionId;
-    const configurations = await (0, configUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId);
+    const configurations = await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId);
     const filtersSettings = (0, filterSettings_1.getConcreteProperty)(type, property, configurations);
     const quickPickItems = filtersSettings.map((filter) => {
         return {
@@ -25,7 +25,9 @@ async function selectFiltersCommand(args, type, property) {
             f.enable = picks.indexOf(f.option) !== -1;
             return f;
         });
-        await (0, configUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId, (0, filterSettings_1.updateConcreteProperty)(type, property, (0, filterSettings_1.getConcreteProperty)(type, property, configurations), configurations, newFilters), vscode.ConfigurationTarget.Global);
+        (0, filterSettings_1.updateConcreteProperty)(type, property, (0, filterSettings_1.getConcreteProperty)(type, property, configurations), configurations, newFilters);
+        const updatedSettings = await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId);
+        await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, subscriptionId, updatedSettings, vscode.ConfigurationTarget.Global);
         args.refresh();
     }
 }
@@ -41,7 +43,7 @@ function recommendationsFiltering(filteringSettings, assessments) {
         ;
     });
     return relevantData.filter(a => {
-        if (environmentFilters?.findIndex(environment => { return environment.option === a.cloud && environment.enable; }) !== -1) {
+        if (environmentFilters?.findIndex(environment => { return environment.option === a.environment && environment.enable; }) !== -1) {
             return a;
         }
         ;
@@ -49,7 +51,7 @@ function recommendationsFiltering(filteringSettings, assessments) {
 }
 exports.recommendationsFiltering = recommendationsFiltering;
 //Filters alerts vulnerability list
-//TODO: Change format, to match the requirements
+//TODO: IMP
 function alertsFiltering(filteringSettings, affectedResources) {
     const statusFilters = (0, filterSettings_1.getConcreteProperty)("alerts", "severity", filteringSettings);
     const severityFilters = (0, filterSettings_1.getConcreteProperty)("alerts", "status", filteringSettings);
@@ -87,4 +89,4 @@ function connectorsFiltering(filteringSettings, connectors) {
     });
 }
 exports.connectorsFiltering = connectorsFiltering;
-//# sourceMappingURL=filterVulnerabilities.js.map
+//# sourceMappingURL=FilterVulnerabilities.js.map

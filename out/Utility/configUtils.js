@@ -6,10 +6,7 @@ const vscode = require("vscode");
 async function getConfigurationSettings(extensionPrefix, section, subscriptionId) {
     const mdcConfig = vscode.workspace.getConfiguration().get(`${extensionPrefix}.${section}`);
     const configurationsSettings = Object.assign({}, mdcConfig);
-    if (subscriptionId !== undefined) {
-        return configurationsSettings[subscriptionId] !== undefined ? configurationsSettings[subscriptionId] : '';
-    }
-    return configurationsSettings !== undefined ? configurationsSettings : '';
+    return configurationsSettings[subscriptionId] !== undefined ? configurationsSettings[subscriptionId] : undefined;
 }
 exports.getConfigurationSettings = getConfigurationSettings;
 //Set configuration object by subscriptionId
@@ -29,4 +26,4 @@ const getGeneralConfiguration = async (extensionPrefix, section) => {
     return await vscode.workspace.getConfiguration().get(`${extensionPrefix}.${section}`);
 };
 exports.getGeneralConfiguration = getGeneralConfiguration;
-//# sourceMappingURL=configUtils.js.map
+//# sourceMappingURL=ConfigUtils.js.map

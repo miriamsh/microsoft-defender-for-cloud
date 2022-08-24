@@ -1,6 +1,6 @@
-import { CommunicationServices } from "../azure/communicationServices";
+import { CommunicationServices } from "../azure/CommunicationServices";
 
-//Set SMS notification Command
+//Sets SMS notification Command
 export async function setSmsNotificationSettings(resource: CommunicationServices) {
 
     const ans = await resource.verifyRequiredInfrastructure();
