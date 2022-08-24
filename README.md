@@ -1,4 +1,4 @@
-# microsoft-defender-for-cloud README
+# Microsoft Defender For Cloud README
 
 Microsoft Defender For Cloud Extension
 Use Microsoft Defender For Cloud extension to visible your Azure MDC workload without switching away from Visual Studio Code.
