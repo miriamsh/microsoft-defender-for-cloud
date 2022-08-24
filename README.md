@@ -1,51 +1,22 @@
 # microsoft-defender-for-cloud README
 
-This is the README for your extension "microsoft-defender-for-cloud". After writing up a brief description, we recommend including the following sections.
+Microsoft Defender For Cloud Extension
+Use Microsoft Defender For Cloud extension to visible your Azure MDC workload without switching away from Visual Studio Code.
 
 ## Features
+Microsoft Defender For Cloud VSCode Extension provides additional features, such as graph view of the entities affected by a security alert, and send SMS notification for a security alerts (preview).
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
+\!\[View Vulnerabilities Tree\]\(resources/view_1.png\)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+In order to login to your Azure accout, Azure Account VSCode Extension is required.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+SMS notification is limited to specific Azure account billing countries due to regulation requirements.
 
 -----------------------------------------------------------------------------------------------------------
 ## Following extension guidelines

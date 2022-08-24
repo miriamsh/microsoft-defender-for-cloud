@@ -1,16 +1,25 @@
 {
 	"name": "microsoft-defender-for-cloud",
-	"displayName": "microsoft-defender-for-cloud",
-	"description": "",
+	"displayName": "Microsoft Defender For Cloud",
+	"description": "A Microsoft Defender For Cloud extension for Visual Studio Code",
 	"version": "0.0.1",
 	"publisher": "mdc-detection",
+	"icon": "resources/mdc-mdcIcon.png",
 	"aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/miriamsh/microsoft-defender-for-cloud"
+	},
 	"engines": {
 		"vscode": "^1.69.0"
 	},
 	"categories": [
-		"Other"
+		"Azure"
 	],
+	"galleryBanner": {
+        "color": "#0072c6",
+        "theme": "dark"
+    },
 	"activationEvents": [
 		"*"
 	],
