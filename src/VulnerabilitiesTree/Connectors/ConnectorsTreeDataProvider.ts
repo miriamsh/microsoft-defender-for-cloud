@@ -1,10 +1,10 @@
 import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
-import { Constants } from '../../constants';
+import { Constants } from '../../Constants';
 import { connectorsFiltering } from "../../Commands/FilterVulnerabilities";
 import { TreeUtils } from "../../Utility/TreeUtils";
 import { getConfigurationSettings } from "../../Utility/ConfigUtils";
 import { CloudProviderTreeItem } from './CloudProviderTreeItem';
-import { AWSOfferings, GCPOfferings, GithubOfferings } from "../../Models/connectorOfferings.enum";
+import { AWSOfferings, GCPOfferings, GithubOfferings } from "../../Models/ConnectorOfferings.enum";
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
 import { SecurityConnector } from "./SecurityConnector.type";
 import { SecurityCenter } from "@azure/arm-security";

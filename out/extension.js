@@ -8,15 +8,15 @@ const AzureAccountTreeItem_1 = require("./VulnerabilitiesTree/AzureAccountTreeIt
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const vscode_azext_azureutils_1 = require("@microsoft/vscode-azext-azureutils");
 const FilterVulnerabilities_1 = require("./Commands/FilterVulnerabilities");
-const constants_1 = require("./constants");
-const setEmailSettings_1 = require("./Commands/setEmailSettings");
+const Constants_1 = require("./Constants");
+const SetEmailSettings_1 = require("./Commands/SetEmailSettings");
 const vscode_azureextensionui_1 = require("vscode-azureextensionui");
 const SendSmsAM_1 = require("./Commands/SendSmsAM");
-const setSmsSettingsAM_1 = require("./Commands/setSmsSettingsAM");
-const createGraphCommand_1 = require("./Commands/createGraphCommand");
-const createHierarchyCommand_1 = require("./Commands/createHierarchyCommand");
+const SetSmsSettingsAM_1 = require("./Commands/SetSmsSettingsAM");
+const CreateGraphCommand_1 = require("./Commands/CreateGraphCommand");
+const CreateHierarchyCommand_1 = require("./Commands/CreateHierarchyCommand");
 async function activate(context) {
-    constants_1.Constants.initialize(context);
+    Constants_1.Constants.initialize(context);
     const uiExtensionVariables = {
         context,
         ignoreBundle: false,
@@ -36,11 +36,11 @@ async function activate(context) {
 exports.activate = activate;
 async function registerCommands(context) {
     (0, vscode_azext_utils_1.registerCommand)('subscription.email.notification.settings', async (_context, node) => {
-        await (0, setEmailSettings_1.setEmailNotificationSettings)(context, node.client, node.root);
+        await (0, SetEmailSettings_1.setEmailNotificationSettings)(context, node.client, node.root);
     });
     (0, vscode_azext_utils_1.registerCommand)('subscription.sms.notification.settings', async (_context, node) => {
         //await setSmsNotificationSettings(node.getCommunicationServices());
-        await (0, setSmsSettingsAM_1.setSmsNotification)(node.subscription.subscriptionId, await node.getMonitor(_context));
+        await (0, SetSmsSettingsAM_1.setSmsNotification)(node.subscription.subscriptionId, await node.getMonitor(_context));
     });
     (0, vscode_azext_utils_1.registerCommand)('recommendation.filter.status', async (_context, node) => {
         await (0, FilterVulnerabilities_1.selectFiltersCommand)(node, "recommendations", "status");
@@ -58,19 +58,19 @@ async function registerCommands(context) {
         await (0, FilterVulnerabilities_1.selectFiltersCommand)(node, "connectors", "cloudProvider");
     });
     (0, vscode_azext_utils_1.registerCommand)("recommendation.menu.showInBrowser", (_context, node) => {
-        vscode.env.openExternal(vscode.Uri.parse(constants_1.Constants.recommendationOnPortal(node.assessmentName)));
+        vscode.env.openExternal(vscode.Uri.parse(Constants_1.Constants.recommendationOnPortal(node.assessmentName)));
     });
     //TODO:Get the root file, of the project
     (0, vscode_azext_utils_1.registerCommand)("recommendations.menu.showDetailed", (_context, node) => {
-        fs.writeFile(path.join(constants_1.Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
-        vscode.window.showTextDocument(vscode.Uri.file(path.join(constants_1.Constants.resourcesFolderPath, 'details.json')));
+        fs.writeFile(path.join(Constants_1.Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
+        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants_1.Constants.resourcesFolderPath, 'details.json')));
     });
     (0, vscode_azext_utils_1.registerCommand)("alerts.menu.showInBrowser", (_context, node) => {
         vscode.env.openExternal(vscode.Uri.parse(node.alertUri));
     });
     (0, vscode_azext_utils_1.registerCommand)("alerts.menu.showDetailed", (_context, node) => {
-        fs.writeFile(path.join(constants_1.Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
-        vscode.window.showTextDocument(vscode.Uri.file(path.join(constants_1.Constants.resourcesFolderPath, 'details.json')));
+        fs.writeFile(path.join(Constants_1.Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
+        vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants_1.Constants.resourcesFolderPath, 'details.json')));
     });
     (0, vscode_azext_utils_1.registerCommand)("alerts.menu.actionMenu.sendNotifications", async (_context, node) => {
         await (0, SendSmsAM_1.sendSmsWithAzureMonitor)(_context, node.subscription.subscriptionId, await node.parent.parent.parent.getMonitor(_context));
@@ -82,15 +82,15 @@ async function registerCommands(context) {
         node.activate();
     });
     (0, vscode_azext_utils_1.registerCommand)('alerts.menu.showAs.graph', async (_context, node) => {
-        (0, createGraphCommand_1.createGraph)(node.entities, context);
+        (0, CreateGraphCommand_1.createGraph)(node.entities, context);
     });
     (0, vscode_azext_utils_1.registerCommand)('alerts.menu.showAs.hierarchy', async (event, node) => {
-        (0, createHierarchyCommand_1.createHierarchy)(node.entities, context);
+        (0, CreateHierarchyCommand_1.createHierarchy)(node.entities, context);
     });
 }
 // this method is called when your extension is deactivated
 function deactivate() {
-    fs.rm(path.join(constants_1.Constants.resourcesFolderPath, 'details.json'), (err) => { });
+    fs.rm(path.join(Constants_1.Constants.resourcesFolderPath, 'details.json'), (err) => { });
 }
 exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map

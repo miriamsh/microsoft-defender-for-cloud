@@ -1,4 +1,4 @@
-import { AWSOfferings, GCPOfferings , GithubOfferings} from "../../Models/connectorOfferings.enum";
+import { AWSOfferings, GCPOfferings , GithubOfferings} from "../../Models/ConnectorOfferings.enum";
 
 export type SecurityConnector={
    id:string, 

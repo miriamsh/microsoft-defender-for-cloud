@@ -49,6 +49,14 @@ export class FilterSettings {
         return this._settings;
     }
 
+    //TODO:Complete this function. gets settings obj, has to returns if the structure is equal to this.settings structure
+    public static isInstance(previousSettings:any){
+        //Be aware for nested objects
+        for (const key of Object.keys(previousSettings)) {
+            
+        }
+    }
+
 }
 
 export interface IFilterPropertyOption {

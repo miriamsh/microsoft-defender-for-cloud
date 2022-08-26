@@ -1,7 +1,7 @@
 import { ActionGroupResource } from '@azure/arm-monitor';
 import * as vscode from 'vscode';
 import { Monitor } from '../azure/AzureMonitor';
-import { Constants } from '../constants';
+import { Constants } from '../Constants';
 import { getConfigurationSettings } from '../Utility/ConfigUtils';
 
 export const setSmsNotification = async (subscriptionId: string, monitor: Monitor) => {

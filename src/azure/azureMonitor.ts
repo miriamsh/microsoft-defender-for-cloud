@@ -6,7 +6,7 @@ import { ResourceManagementClient } from '@azure/arm-resources';
 import { IActionContext, ISubscriptionContext } from "@microsoft/vscode-azext-utils";
 import { DeviceTokenCredentials } from "@azure/ms-rest-nodeauth";
 import { getConfigurationSettings, setConfigurationSettings } from "../Utility/ConfigUtils";
-import { Constants } from "../constants";
+import { Constants } from "../Constants";
 import { ConfigurationTarget } from "vscode";
 import * as vscode from 'vscode';
 import axios from "axios";

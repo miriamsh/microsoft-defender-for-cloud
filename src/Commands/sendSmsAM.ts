@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { IActionContext } from "vscode-azureextensionui";
 import { Monitor } from "../azure/AzureMonitor";
 import axios from 'axios';
-import { Constants } from '../constants';
+import { Constants } from '../Constants';
 import { getConfigurationSettings } from '../Utility/ConfigUtils';
 
 

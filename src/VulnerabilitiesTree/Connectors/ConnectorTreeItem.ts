@@ -1,5 +1,5 @@
 import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
-import { AWSOfferings, GCPOfferings, GithubOfferings } from "../../Models/connectorOfferings.enum";
+import { AWSOfferings, GCPOfferings, GithubOfferings } from "../../Models/ConnectorOfferings.enum";
 import { ConnectorOfferingTreeItem } from "./ConnecorOfferingTreeItem";
 
 

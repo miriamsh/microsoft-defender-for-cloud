@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import { SecurityContact } from "@azure/arm-security";
 import { emailSettingsInput } from './Inputs/EmailSettingsInputs';
 import { ISubscriptionContext } from 'vscode-azureextensionui';
-import { Constants } from '../constants';
+import { Constants } from '../Constants';
 import { Client } from '../Utility/ClientUtils';
 import { setConfigurationSettings } from '../Utility/ConfigUtils';
 

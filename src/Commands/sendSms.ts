@@ -2,7 +2,7 @@ import { Alert } from "@azure/arm-security";
 import { SmsClient, SmsSendRequest } from "@azure/communication-sms";
 import { ISubscriptionContext } from "vscode-azureextensionui";
 import { getConfigurationSettings } from "../Utility/ConfigUtils";
-import { Constants } from "../constants";
+import { Constants } from "../Constants";
 import * as vscode from 'vscode';
 import { CommunicationServices } from "../azure/CommunicationServices";
 

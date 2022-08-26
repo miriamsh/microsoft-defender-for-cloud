@@ -1,6 +1,6 @@
 import path = require('path');
 import * as vscode from 'vscode';
-import { Constants } from '../constants';
+import { Constants } from '../Constants';
 
 export function getHierarchyWebViewContent(panel: vscode.WebviewPanel, context: vscode.ExtensionContext, tree: string) {
    return `<div id="tree"></div>

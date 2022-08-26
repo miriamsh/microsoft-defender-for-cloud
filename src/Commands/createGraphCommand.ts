@@ -1,7 +1,7 @@
 import { AlertEntity } from "@azure/arm-security";
 import path = require("path");
 import * as vscode from 'vscode';
-import { getGraphWebviewContent } from "./getGrapWebViewContentCommand";
+import { getGraphWebviewContent } from "./GetGrapWebViewContentCommand";
 import * as fs from 'fs';
 import { addEdge, createIconPath, createLabel } from '../Utility/nodeUtils';
 

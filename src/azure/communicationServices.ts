@@ -1,6 +1,6 @@
 import { SecurityCenter, SecurityContact, SecurityContactsCreateOptionalParams, AlertNotifications } from "@azure/arm-security";
 import * as vscode from 'vscode';
-import { Constants } from "../constants";
+import { Constants } from "../Constants";
 import { getConfigurationSettings, setConfigurationSettings } from '../Utility/ConfigUtils';
 import { ResourceManagementClient ,ResourceGroup, DeploymentOperation, DeploymentOperations } from '@azure/arm-resources';
 import { CommunicationServiceCreateOrUpdateOptionalParams, CommunicationService, CommunicationServiceGetOptionalParams, CommunicationServiceManagementClient, CommunicationServiceResource } from "@azure/arm-communication";

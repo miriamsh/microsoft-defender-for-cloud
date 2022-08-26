@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createHierarchy = void 0;
 const vscode = require("vscode");
-const getHierarchyWebViewContentCommand_1 = require("./getHierarchyWebViewContentCommand");
+const GetHierarchyWebViewContentCommand_1 = require("./GetHierarchyWebViewContentCommand");
 const NodeUtils_1 = require("../Utility/NodeUtils");
 const HierarchyTreeItem_1 = require("./HierarchyTreeItem");
 function createHierarchy(entities, context) {
@@ -42,7 +42,7 @@ function createHierarchy(entities, context) {
                 tree.push(subTree);
             }
         });
-        panel.webview.html = (0, getHierarchyWebViewContentCommand_1.getHierarchyWebViewContent)(panel, context, JSON.stringify(tree));
+        panel.webview.html = (0, GetHierarchyWebViewContentCommand_1.getHierarchyWebViewContent)(panel, context, JSON.stringify(tree));
     }
 }
 exports.createHierarchy = createHierarchy;
@@ -62,4 +62,4 @@ function createSubTree(panel, context, children, entitiesById) {
         return subTree;
     }
 }
-//# sourceMappingURL=createHierarchyCommand.js.map
+//# sourceMappingURL=CreateHierarchyCommand.js.map

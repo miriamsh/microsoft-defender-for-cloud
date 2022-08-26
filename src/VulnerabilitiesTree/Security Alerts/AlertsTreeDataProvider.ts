@@ -2,7 +2,7 @@ import { Alert, SecurityCenter } from "@azure/arm-security";
 import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/vscode-azext-utils";
 import { AlertTreeItem } from "./AlertTreeItem";
 import { AffectedResourceTreeItem } from "./AffectedResourceTreeItem";
-import { Constants } from "../../constants";
+import { Constants } from "../../Constants";
 import { alertsFiltering } from "../../Commands/FilterVulnerabilities";
 import { getConfigurationSettings } from "../../Utility/ConfigUtils";
 import { TreeUtils } from "../../Utility/TreeUtils";
@@ -29,8 +29,7 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 			let alertByResource: Map<string, AffectedResourceTreeItem> | undefined = new Map<string, AffectedResourceTreeItem>();
 			const alerts = await (await this._client.alerts.list().byPage().next()).value;
 			let resource: AffectedResourceTreeItem | undefined;
-
-			alerts.map((alert: Alert) => {
+ 			alerts.map((alert: Alert) => {
 				const parameters = new URLParameters(alert.alertUri!);
 				resource = alertByResource!.get(alert.compromisedEntity!);
 				if (resource === undefined) {
@@ -43,7 +42,7 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 
 			this._children = Array.from(alertByResource.values());
 		}
-
+        
 		const filteredAlerts = alertsFiltering(await getConfigurationSettings(Constants.extensionPrefix,Constants.filtering, this.subscription.subscriptionId), this._children);
 		//this.label = `${this._title} (${filteredAlerts.length})`;
 		return filteredAlerts;

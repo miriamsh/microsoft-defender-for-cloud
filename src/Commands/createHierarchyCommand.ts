@@ -1,7 +1,7 @@
 import { AlertEntity } from "@azure/arm-security";
 import path = require("path");
 import * as vscode from 'vscode';
-import { getHierarchyWebViewContent } from "./getHierarchyWebViewContentCommand";
+import { getHierarchyWebViewContent } from "./GetHierarchyWebViewContentCommand";
 import * as fs from 'fs';
 import { createIconPath, createLabel } from '../Utility/NodeUtils';
 import { HierarchyTreeItem } from "./HierarchyTreeItem";

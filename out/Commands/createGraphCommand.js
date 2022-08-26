@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createGraph = void 0;
 const vscode = require("vscode");
-const getGrapWebViewContentCommand_1 = require("./getGrapWebViewContentCommand");
+const GetGrapWebViewContentCommand_1 = require("./GetGrapWebViewContentCommand");
 const nodeUtils_1 = require("../Utility/nodeUtils");
 function createGraph(entities, context) {
     if (entities === undefined) {
@@ -24,8 +24,8 @@ function createGraph(entities, context) {
                 edges = (0, nodeUtils_1.addEdge)(prop, entity[prop], node, entity, edges);
             }
         }
-        panel.webview.html = (0, getGrapWebViewContentCommand_1.getGraphWebviewContent)(nodes, edges);
+        panel.webview.html = (0, GetGrapWebViewContentCommand_1.getGraphWebviewContent)(nodes, edges);
     }
 }
 exports.createGraph = createGraph;
-//# sourceMappingURL=createGraphCommand.js.map
+//# sourceMappingURL=CreateGraphCommand.js.map

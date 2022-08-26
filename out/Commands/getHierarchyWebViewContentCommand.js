@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getHierarchyWebViewContent = void 0;
 const path = require("path");
 const vscode = require("vscode");
-const constants_1 = require("../constants");
+const Constants_1 = require("../Constants");
 function getHierarchyWebViewContent(panel, context, tree) {
     return `<div id="tree"></div>
-<script id="script" value=${tree} src=${panel.webview.asWebviewUri(vscode.Uri.file(path.join(constants_1.Constants.resourcesFolderPath, 'Hierarchy', 'HierarchyTree.js')))}></script>
-<link rel="stylesheet" href=${panel.webview.asWebviewUri(vscode.Uri.file(path.join(constants_1.Constants.resourcesFolderPath, 'Hierarchy', 'HierarchyTree.css')))} />`;
+<script id="script" value=${tree} src=${panel.webview.asWebviewUri(vscode.Uri.file(path.join(Constants_1.Constants.resourcesFolderPath, 'Hierarchy', 'HierarchyTree.js')))}></script>
+<link rel="stylesheet" href=${panel.webview.asWebviewUri(vscode.Uri.file(path.join(Constants_1.Constants.resourcesFolderPath, 'Hierarchy', 'HierarchyTree.css')))} />`;
 }
 exports.getHierarchyWebViewContent = getHierarchyWebViewContent;
-//# sourceMappingURL=getHierarchyWebViewContentCommand.js.map
+//# sourceMappingURL=GetHierarchyWebViewContentCommand.js.map

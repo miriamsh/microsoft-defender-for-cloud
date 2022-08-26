@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.smsSettingsInput = void 0;
 const ConfigUtils_1 = require("../../Utility/ConfigUtils");
-const constants_1 = require("../../constants");
-const multiStepInputContract_1 = require("../../Models/multiStepInputContract");
+const Constants_1 = require("../../Constants");
+const MultiStepInputContract_1 = require("../../Models/MultiStepInputContract");
 async function smsSettingsInput(subscription) {
-    const configSettings = (await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.smsNotificationSettings, subscription.subscriptionId));
+    const configSettings = (await (0, ConfigUtils_1.getConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.smsNotificationSettings, subscription.subscriptionId));
     const settings = {
         name: configSettings?.notificationSettings?.name ? configSettings.notificationSettings.name : '',
         countryCode: configSettings?.notificationSettings?.code ? configSettings.notificationSettings.code : '',
@@ -15,7 +15,7 @@ async function smsSettingsInput(subscription) {
         .map(label => ({ label }));
     async function collectInputs() {
         const state = {};
-        await multiStepInputContract_1.MultiStepInput.run(input => inputName(input));
+        await MultiStepInputContract_1.MultiStepInput.run(input => inputName(input));
         return state;
     }
     const title = 'Email Notification Settings';

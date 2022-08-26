@@ -17,9 +17,9 @@
 		"Azure"
 	],
 	"galleryBanner": {
-        "color": "#0072c6",
-        "theme": "dark"
-    },
+		"color": "#0072c6",
+		"theme": "dark"
+	},
 	"activationEvents": [
 		"*"
 	],
@@ -315,6 +315,7 @@
 	"dependencies": {
 		"@azure/arm-communication": "^3.0.1",
 		"@azure/arm-monitor": "^7.0.0",
+		"@azure/arm-resources": "^5.0.1",
 		"@azure/arm-security": "^5.0.0",
 		"@azure/arm-subscriptions": "^5.0.1",
 		"@azure/arm-templatespecs": "^2.0.1",

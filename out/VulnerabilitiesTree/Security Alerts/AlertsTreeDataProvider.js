@@ -4,7 +4,7 @@ exports.URLParameters = exports.AlertsTreeDataProvider = void 0;
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
 const AlertTreeItem_1 = require("./AlertTreeItem");
 const AffectedResourceTreeItem_1 = require("./AffectedResourceTreeItem");
-const constants_1 = require("../../constants");
+const Constants_1 = require("../../Constants");
 const FilterVulnerabilities_1 = require("../../Commands/FilterVulnerabilities");
 const ConfigUtils_1 = require("../../Utility/ConfigUtils");
 const TreeUtils_1 = require("../../Utility/TreeUtils");
@@ -16,7 +16,7 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
         this.label = label;
         this._title = label;
         this._client = client;
-        this.iconPath = TreeUtils_1.TreeUtils.getIconPath(constants_1.Constants.alertIcon);
+        this.iconPath = TreeUtils_1.TreeUtils.getIconPath(Constants_1.Constants.alertIcon);
     }
     async loadMoreChildrenImpl() {
         if (this._children.length === 0) {
@@ -35,7 +35,7 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
             });
             this._children = Array.from(alertByResource.values());
         }
-        const filteredAlerts = (0, FilterVulnerabilities_1.alertsFiltering)(await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.filtering, this.subscription.subscriptionId), this._children);
+        const filteredAlerts = (0, FilterVulnerabilities_1.alertsFiltering)(await (0, ConfigUtils_1.getConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.filtering, this.subscription.subscriptionId), this._children);
         //this.label = `${this._title} (${filteredAlerts.length})`;
         return filteredAlerts;
     }

@@ -1,6 +1,6 @@
 import * as path from "path";
 import { TreeItemIconPath } from "vscode-azureextensionui";
-import { Constants } from "../constants";
+import { Constants } from "../Constants";
 
 export class TreeUtils {
 

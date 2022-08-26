@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setEmailNotificationSettings = void 0;
 const vscode = require("vscode");
 const EmailSettingsInputs_1 = require("./Inputs/EmailSettingsInputs");
-const constants_1 = require("../constants");
+const Constants_1 = require("../Constants");
 const ConfigUtils_1 = require("../Utility/ConfigUtils");
 //Sets or updates email notification for alerts 
 async function setEmailNotificationSettings(context, client, subscription) {
@@ -21,7 +21,7 @@ async function setEmailNotificationSettings(context, client, subscription) {
             });
             return await _client.getSecurityCenterClient().securityContacts.create("default", contactsDetails);
         });
-        await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.emailNotificationSettings, _client.getSecurityCenterClient().subscriptionId, data, vscode.ConfigurationTarget.Global);
+        await (0, ConfigUtils_1.setConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.emailNotificationSettings, _client.getSecurityCenterClient().subscriptionId, data, vscode.ConfigurationTarget.Global);
         vscode.window.showInformationMessage("Email notification settings have been saved successfully");
     }
     catch (error) {
@@ -29,4 +29,4 @@ async function setEmailNotificationSettings(context, client, subscription) {
     }
 }
 exports.setEmailNotificationSettings = setEmailNotificationSettings;
-//# sourceMappingURL=setEmailSettings.js.map
+//# sourceMappingURL=SetEmailSettings.js.map

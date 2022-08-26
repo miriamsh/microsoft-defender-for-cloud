@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CloudProviderTreeItem = void 0;
 const vscode_azext_utils_1 = require("@microsoft/vscode-azext-utils");
-const constants_1 = require("../../constants");
+const Constants_1 = require("../../Constants");
 const TreeUtils_1 = require("../../Utility/TreeUtils");
 class CloudProviderTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent) {
@@ -12,7 +12,7 @@ class CloudProviderTreeItem extends vscode_azext_utils_1.AzExtParentTreeItem {
         this._title = label;
         this.label = label;
         this.cloudProvider = label;
-        this.iconPath = TreeUtils_1.TreeUtils.getIconPath(constants_1.Constants.cloudConnector);
+        this.iconPath = TreeUtils_1.TreeUtils.getIconPath(Constants_1.Constants.cloudConnector);
     }
     hasMoreChildrenImpl() {
         return false;

@@ -5,16 +5,16 @@ import { AzureAccountTreeItem } from './VulnerabilitiesTree/AzureAccountTreeItem
 import { createAzExtOutputChannel, AzExtTreeDataProvider, registerCommand } from '@microsoft/vscode-azext-utils';
 import { registerAzureUtilsExtensionVariables } from '@microsoft/vscode-azext-azureutils';
 import { selectFiltersCommand } from './Commands/FilterVulnerabilities';
-import { Constants } from './constants';
-import { setEmailNotificationSettings } from './Commands/setEmailSettings';
+import { Constants } from './Constants';
+import { setEmailNotificationSettings } from './Commands/SetEmailSettings';
 import { callWithTelemetryAndErrorHandling, IActionContext } from 'vscode-azureextensionui';
 import { sendSmsWithAzureMonitor } from './Commands/SendSmsAM';
-import { setSmsNotification } from './Commands/setSmsSettingsAM';
+import { setSmsNotification } from './Commands/SetSmsSettingsAM';
 import { AlertTreeItem } from './VulnerabilitiesTree/Security Alerts/AlertTreeItem';
-import { setSmsNotificationSettings } from './Commands/setSmsSettings';
+import { setSmsNotificationSettings } from './Commands/SetSmsSettings';
 import { sendSmsNotification } from './Commands/SendSms';
-import { createGraph } from './Commands/createGraphCommand';
-import { createHierarchy } from './Commands/createHierarchyCommand';
+import { createGraph } from './Commands/CreateGraphCommand';
+import { createHierarchy } from './Commands/CreateHierarchyCommand';
 import { AlertEntity } from '@azure/arm-security';
 
 
@@ -80,7 +80,7 @@ async function registerCommands(context: vscode.ExtensionContext) {
 
     //TODO:Get the root file, of the project
     registerCommand("recommendations.menu.showDetailed", (_context: IActionContext, node) => {
-        fs.writeFile(path.join(Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
+         fs.writeFile(path.join(Constants.resourcesFolderPath, 'details.json'), node.jsonItem, (err) => { });
         vscode.window.showTextDocument(vscode.Uri.file(path.join(Constants.resourcesFolderPath, 'details.json')));
     });
 

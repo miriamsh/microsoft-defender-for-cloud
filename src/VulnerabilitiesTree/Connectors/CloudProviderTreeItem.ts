@@ -1,5 +1,5 @@
 import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
-import { Constants } from '../../constants';
+import { Constants } from '../../Constants';
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
 import { TreeUtils } from "../../Utility/TreeUtils";
 

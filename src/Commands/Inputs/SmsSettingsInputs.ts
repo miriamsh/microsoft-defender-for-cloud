@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import { getConfigurationSettings } from '../../Utility/ConfigUtils';
-import { Constants } from '../../constants';
+import { Constants } from '../../Constants';
 import { ISubscriptionContext } from 'vscode-azureextensionui';
 import { KnownAlertNotifications, SecurityCenter, SecurityContact, SecurityContacts } from '@azure/arm-security';
 import { resolvePtr } from 'dns';
-import { MultiStepInput } from '../../Models/multiStepInputContract';
+import { MultiStepInput } from '../../Models/MultiStepInputContract';
 import { SmsReceiver } from '@azure/arm-monitor';
 
 export async function smsSettingsInput(subscription: ISubscriptionContext): Promise<SmsReceiver> {

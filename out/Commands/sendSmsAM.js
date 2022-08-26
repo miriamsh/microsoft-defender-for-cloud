@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendSmsWithAzureMonitor = void 0;
 const vscode = require("vscode");
 const axios_1 = require("axios");
-const constants_1 = require("../constants");
+const Constants_1 = require("../Constants");
 const ConfigUtils_1 = require("../Utility/ConfigUtils");
 //Sends SMS messages, using Monitor service of Azure Monitor
 async function sendSmsWithAzureMonitor(context, subscriptionId, monitor) {
@@ -21,8 +21,8 @@ async function sendSmsWithAzureMonitor(context, subscriptionId, monitor) {
         //     return await _monitor.verifyRequiredInfrastructure();        
         // });
         if (ans) {
-            await axios_1.default.get(constants_1.Constants.sendSmsByAzureFunction(name));
-            const phone = (await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, subscriptionId)).notificationSettings?.phoneNumber;
+            await axios_1.default.get(Constants_1.Constants.sendSmsByAzureFunction(name));
+            const phone = (await (0, ConfigUtils_1.getConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.actionGroupId, subscriptionId)).notificationSettings?.phoneNumber;
             await vscode.window.showInformationMessage(`SMS message will be sent in a few minutes.${phone !== undefined ? "to:" + phone : ""}`);
         }
         else {

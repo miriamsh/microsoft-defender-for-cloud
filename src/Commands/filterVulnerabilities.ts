@@ -3,7 +3,7 @@ import { AssessmentTreeItem } from '../VulnerabilitiesTree/Recommendations/Asses
 import { FilterSettings, getConcreteProperty, updateConcreteProperty, } from '../Models/FilterSettings';
 import { AlertTreeItem } from '../VulnerabilitiesTree/Security Alerts/AlertTreeItem';
 import { ConnectorTreeItem } from '../VulnerabilitiesTree/Connectors/ConnectorTreeItem';
-import { Constants } from '../constants';
+import { Constants } from '../Constants';
 import { setConfigurationSettings, getConfigurationSettings } from '../Utility/ConfigUtils';
 import { showFilteringMenu } from './Inputs/FilterSettingsInput';
 import { CloudProviderTreeItem } from '../VulnerabilitiesTree/Connectors/CloudProviderTreeItem';
@@ -72,7 +72,7 @@ export function alertsFiltering(filteringSettings: FilterSettings, affectedResou
         });
 
         if (relevantData.length>0) {
-            const updatedAffectedResource: AffectedResourceTreeItem = resource;
+            const updatedAffectedResource =  new AffectedResourceTreeItem(resource.label,resource.parent!);
             updatedAffectedResource.children = relevantData;
             filteredAffectedResource.push(updatedAffectedResource);
         }

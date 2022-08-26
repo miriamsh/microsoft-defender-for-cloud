@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Monitor = void 0;
 const ConfigUtils_1 = require("../Utility/ConfigUtils");
-const constants_1 = require("../constants");
+const Constants_1 = require("../Constants");
 const vscode_1 = require("vscode");
 const vscode = require("vscode");
 const axios_1 = require("axios");
@@ -63,7 +63,7 @@ class Monitor {
     async checkActionGroupExistence() {
         try {
             const actionGroup = await this._monitorClient.actionGroups.get(this.resourceGroupName, this.actionGroupName);
-            await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId, actionGroup.id, vscode.ConfigurationTarget.Global);
+            await (0, ConfigUtils_1.setConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.actionGroupId, this._subscription.subscriptionId, actionGroup.id, vscode.ConfigurationTarget.Global);
             return true;
         }
         catch (error) {
@@ -83,7 +83,7 @@ class Monitor {
                 countryCode: actionGroup.smsReceivers[0].countryCode,
                 phoneNumber: actionGroup.smsReceivers[0].phoneNumber
             };
-            await (0, ConfigUtils_1.setConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId, { "id": newActionGroup.id, "notificationSettings": actionGroupSetting }, vscode_1.ConfigurationTarget.Global);
+            await (0, ConfigUtils_1.setConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.actionGroupId, this._subscription.subscriptionId, { "id": newActionGroup.id, "notificationSettings": actionGroupSetting }, vscode_1.ConfigurationTarget.Global);
             return true;
         }
         catch (error) {
@@ -94,7 +94,7 @@ class Monitor {
     async checkAlertRuleExistence() {
         try {
             const token = await this._subscription.credentials.getToken();
-            const response = await axios_1.default.get(constants_1.Constants.getAlertRule(this.resourceGroupName, this.alertRuleName), {
+            const response = await axios_1.default.get(Constants_1.Constants.getAlertRule(this.resourceGroupName, this.alertRuleName), {
                 headers: {
                     'authorization': `Bearer ${token.accessToken}`
                 }
@@ -110,7 +110,7 @@ class Monitor {
         try {
             const alertRuleBody = await this.getAlertRuleProperties();
             const token = await this._subscription.credentials.getToken();
-            const response = await axios_1.default.put(constants_1.Constants.createOrUpdateAlertRule(this.resourceGroupName, this.alertRuleName), alertRuleBody, {
+            const response = await axios_1.default.put(Constants_1.Constants.createOrUpdateAlertRule(this.resourceGroupName, this.alertRuleName), alertRuleBody, {
                 headers: {
                     'authorization': `Bearer ${token.accessToken}`,
                     'content-type': "application/json",
@@ -147,7 +147,7 @@ class Monitor {
     }
     //Returns alert rule properties
     async getAlertRuleProperties() {
-        const actionGroupId = (await (0, ConfigUtils_1.getConfigurationSettings)(constants_1.Constants.extensionPrefix, constants_1.Constants.actionGroupId, this._subscription.subscriptionId)).id;
+        const actionGroupId = (await (0, ConfigUtils_1.getConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.actionGroupId, this._subscription.subscriptionId)).id;
         //Verify:Is it required to get the action group id by an arm call?
         return {
             "location": "eastus",

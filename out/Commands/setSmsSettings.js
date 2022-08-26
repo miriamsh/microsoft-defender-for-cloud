@@ -13,4 +13,4 @@ async function setSmsNotificationSettings(resource) {
     return false;
 }
 exports.setSmsNotificationSettings = setSmsNotificationSettings;
-//# sourceMappingURL=setSmsSettings.js.map
+//# sourceMappingURL=SetSmsSettings.js.map

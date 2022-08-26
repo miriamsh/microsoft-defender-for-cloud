@@ -46,7 +46,7 @@ export class AssessmentTreeItem extends AzExtParentTreeItem {
 	public async loadMoreChildrenImpl(clearCache: boolean, context: IActionContext): Promise<AzExtTreeItem[]> {
 		const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
 		const data = await (await this._client.subAssessments.list(subscriptionId,this._assessmentName).byPage().next()).value;
-		data.map((assessment:SecuritySubAssessment)=>{
+ 		data.map((assessment:SecuritySubAssessment)=>{
 			this.children.push(new SubAssessmentTreeItem(assessment.displayName!, this, this._client));
 		});
 		return this.children;

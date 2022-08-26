@@ -42,6 +42,12 @@ class FilterSettings {
     get settings() {
         return this._settings;
     }
+    //TODO:Complete this function. gets settings obj, has to returns if the structure is equal to this.settings structure
+    static isInstance(previousSettings) {
+        //Be aware for nested objects
+        for (const key of Object.keys(previousSettings)) {
+        }
+    }
 }
 exports.FilterSettings = FilterSettings;
 //Gets type and property. returns concrete property array of concrete type property in this.settings property
