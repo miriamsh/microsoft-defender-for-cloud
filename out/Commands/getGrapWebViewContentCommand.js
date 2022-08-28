@@ -32,4 +32,4 @@ function getGraphWebviewContent(nodes, edges) {
 `;
 }
 exports.getGraphWebviewContent = getGraphWebviewContent;
-//# sourceMappingURL=getGrapWebViewContentCommand.js.map
+//# sourceMappingURL=GetGrapWebViewContentCommand.js.map

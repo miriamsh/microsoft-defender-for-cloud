@@ -18,4 +18,4 @@ var GithubOfferings;
 (function (GithubOfferings) {
     GithubOfferings["cspmMonitorGithub"] = "CspmMonitorGithub";
 })(GithubOfferings = exports.GithubOfferings || (exports.GithubOfferings = {}));
-//# sourceMappingURL=connectorOfferings.enum.js.map
+//# sourceMappingURL=ConnectorOfferings.enum.js.map

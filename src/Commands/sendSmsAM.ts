@@ -11,17 +11,16 @@ export async function sendSmsWithAzureMonitor(context: IActionContext, subscript
     const _monitor: Monitor = monitor;
     const name = _monitor.getResourceGroup();
     try {
-        
-        const ans = false;
         //NOTE: Preventing access to a private Azure account 
-        // await vscode.window.withProgress({
-        //     location: vscode.ProgressLocation.Notification,
-        // }, async (progress) => {
-        //     progress.report({
-        //         message: `Verifying the requirements to complete this action ...`,
-        //     });
-        //     return await _monitor.verifyRequiredInfrastructure();        
-        // });
+        const ans =
+            await vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+            }, async (progress) => {
+                progress.report({
+                    message: `Verifying the requirements to complete this action ...`,
+                });
+                return await _monitor.verifyRequiredInfrastructure();
+            });
 
         if (ans) {
             await axios.get(Constants.sendSmsByAzureFunction(name));

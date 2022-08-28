@@ -93,4 +93,4 @@ function deactivate() {
     fs.rm(path.join(Constants_1.Constants.resourcesFolderPath, 'details.json'), (err) => { });
 }
 exports.deactivate = deactivate;
-//# sourceMappingURL=extension.js.map
+//# sourceMappingURL=Extension.js.map

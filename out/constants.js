@@ -38,4 +38,4 @@ Constants.getAlertRule = (resourceGroupName, alertRuleName) => {
 Constants.sendSmsByAzureFunction = (name) => {
     return `https://today2dayfunc.azurewebsites.net/api/HttpTrigger1?code=nDhyw-27FKoetpSDlQHEHLsvrKknUQ5Lc3ZcabGU8QSxAzFuobKWig==&name=${name}`;
 };
-//# sourceMappingURL=constants.js.map
+//# sourceMappingURL=Constants.js.map
