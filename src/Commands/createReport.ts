@@ -4,7 +4,7 @@ import { PDF } from '../Document/PDF';
 
 
 export async function createReport(context: vscode.ExtensionContext, node: any) {
-    const path = context.extensionPath + '\\new\\mdc_report.pdf';
+    const path = context.extensionPath + '\\mdc_report.pdf';
     try {
 
         const res = await vscode.window.withProgress({

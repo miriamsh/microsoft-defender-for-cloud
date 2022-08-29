@@ -36,7 +36,7 @@ export async function smsSettingsInput(subscription: ISubscriptionContext): Prom
         return state as State;
     }
 
-    const title = 'Email Notification Settings';
+    const title = 'SMS Notification Settings';
 
     async function inputName(input: MultiStepInput) {
         settings.name = await input.showInputBox({

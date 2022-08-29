@@ -5,7 +5,7 @@ const axios_1 = require("axios");
 const vscode = require("vscode");
 const PDF_1 = require("../Document/PDF");
 async function createReport(context, node) {
-    const path = context.extensionPath + '\\new\\mdc_report.pdf';
+    const path = context.extensionPath + '\\mdc_report.pdf';
     try {
         const res = await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,

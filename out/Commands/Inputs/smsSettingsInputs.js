@@ -18,7 +18,7 @@ async function smsSettingsInput(subscription) {
         await MultiStepInputContract_1.MultiStepInput.run(input => inputName(input));
         return state;
     }
-    const title = 'Email Notification Settings';
+    const title = 'SMS Notification Settings';
     async function inputName(input) {
         settings.name = await input.showInputBox({
             title,

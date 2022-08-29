@@ -1,345 +1,350 @@
 {
-	"name": "microsoft-defender-for-cloud",
-	"displayName": "Microsoft Defender For Cloud",
-	"description": "A Microsoft Defender For Cloud extension for Visual Studio Code",
-	"version": "0.0.1",
-	"publisher": "mdc-detection",
-	"icon": "resources/mdc-mdcIcon.png",
-	"aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/miriamsh/microsoft-defender-for-cloud"
-	},
-	"engines": {
-		"vscode": "^1.69.0"
-	},
-	"categories": [
-		"Azure"
-	],
-	"galleryBanner": {
-		"color": "#0072c6",
-		"theme": "dark"
-	},
-	"activationEvents": [
-		"*"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"viewsContainers": {
-			"activitybar": [
-				{
-					"id": "package-explorer",
-					"title": "Defender For Cloud",
-					"icon": "resources/mdc-icon.svg"
-				}
-			]
-		},
-		"views": {
-			"package-explorer": [
-				{
-					"id": "package-resources",
-					"name": "RESOURCES"
-				},
-				{
-					"id": "package-features",
-					"name": "MORE FEATURES"
-				}
-			]
-		},
-		"commands": [
-			{
-				"command": "recommendation.filter.status",
-				"title": "Status"
-			},
-			{
-				"command": "recommendation.filter.environment",
-				"title": "Environment"
-			},
-			{
-				"command": "alerts.filter.severity",
-				"title": "Severity"
-			},
-			{
-				"command": "alerts.filter.status",
-				"title": "Status"
-			},
-			{
-				"command": "connectors.filter.cloudProvider",
-				"title": "Cloud Provider"
-			},
-			{
-				"command": "recommendation.menu.showInBrowser",
-				"title": "Show In Browser"
-			},
-			{
-				"command": "recommendations.menu.showDetailed",
-				"title": "Show Detailed"
-			},
-			{
-				"command": "alerts.menu.showInBrowser",
-				"title": "Show In Browser"
-			},
-			{
-				"command": "alerts.menu.showAs.graph",
-				"title": "Graph"
-			},
-			{
-				"command": "alerts.menu.showAs.hierarchy",
-				"title": "Hierarchy"
-			},
-			{
-				"command": "alerts.menu.showDetailed",
-				"title": "Show Detailed"
-			},
-			{
-				"command": "alerts.menu.actionMenu.sendNotifications",
-				"title": "Send Notifications (SMS)"
-			},
-			{
-				"command": "alerts.menu.actionMenu.activate",
-				"title": "Activate"
-			},
-			{
-				"command": "alerts.menu.actionMenu.dismiss",
-				"title": "Dismiss"
-			},
-			{
-				"command": "subscription.email.notification.settings",
-				"title": "Email Notification Settings"
-			},
-			{
-				"command": "subscription.sms.notification.settings",
-				"title": "SMS Notification Settings"
-			}
-			,
-			{
-				"command": "createReport",
-				"title": "Create Report"
-			}
-		],
-		"menus": {
-			"view/title": [],
-			"view/item/context": [
-				{
-					"submenu": "recommendations.filters",
-					"when": "viewItem == securityCenter.recommendations",
-					"group": "inline"
-				},
-				{
-					"submenu": "alerts.filters",
-					"when": "viewItem == securityCenter.securityAlerts",
-					"group": "inline"
-				},
-				{
-					"submenu": "connectors.filters",
-					"when": "viewItem == securityCenter.connectors",
-					"group": "inline"
-				},
-				{
-					"command": "subscription.email.notification.settings",
-					"when": "viewItem == azureutils.subscription",
-					"group": "1@1"
-				},
-				{
-					"command": "subscription.sms.notification.settings",
-					"when": "viewItem == azureutils.subscription",
-					"group": "2@1"
-				},
-				{
-					"command": "recommendation.menu.showInBrowser",
-					"when": "viewItem == securityCenter.recommendations.assessments",
-					"group": "1@1"
-				},
-				{
-					"command": "recommendations.menu.showDetailed",
-					"when": "viewItem == securityCenter.recommendations.assessments",
-					"group": "2@1"
-				},
-				{
-					"command": "alerts.menu.showInBrowser",
-					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
-					"group": "1@1"
-				},
-				{
-					"submenu": "alerts.menu.showAsMenu",
-					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
-					"group": "2@1"
-				},
-				{
-					"command": "alerts.menu.showDetailed",
-					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
-					"group": "3@1"
-				},
-				{
-					"submenu": "alerts.menu.actionMenu",
-					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
-					"group": "4@1"
-				},
-				{
-					"command": "createReport",
-					"group": "navigation"
-				}
-			],
-			"recommendations.filters": [
-				{
-					"command": "recommendation.filter.status",
-					"group": "1_default@1"
-				},
-				{
-					"command": "recommendation.filter.environment",
-					"group": "2_default@1"
-				}
-			],
-			"alerts.filters": [
-				{
-					"command": "alerts.filter.severity",
-					"group": "1_default@1"
-				},
-				{
-					"command": "alerts.filter.status",
-					"group": "2_default@1"
-				}
-			],
-			"connectors.filters": [
-				{
-					"command": "connectors.filter.cloudProvider",
-					"group": "1_default@1"
-				}
-			],
-			"alerts.menu.showAsMenu": [
-				{
-					"command": "alerts.menu.showAs.graph",
-					"group": "1_default@1"
-				},
-				{
-					"command": "alerts.menu.showAs.hierarchy",
-					"group": "2_default@1"
-				}
-			],
-			"alerts.menu.actionMenu": [
-				{
-					"command": "alerts.menu.actionMenu.sendNotifications",
-					"group": "1_default@1"
-				},
-				{
-					"command": "alerts.menu.actionMenu.activate",
-					"group": "2_default@1"
-				},
-				{
-					"command": "alerts.menu.actionMenu.dismiss",
-					"group": "3_default@1"
-				}
-			]
-		},
-		"submenus": [
-			{
-				"id": "recommendations.filters",
-				"label": "Filter",
-				"icon": {
-					"light": "resources/light/filter.svg",
-					"dark": "resources/dark/filter.svg"
-				}
-			},
-			{
-				"id": "alerts.filters",
-				"label": "Filter",
-				"icon": {
-					"light": "resources/light/filter.svg",
-					"dark": "resources/dark/filter.svg"
-				}
-			},
-			{
-				"id": "connectors.filters",
-				"label": "Filter",
-				"icon": {
-					"light": "resources/light/filter.svg",
-					"dark": "resources/dark/filter.svg"
-				}
-			},
-			{
-				"id": "alerts.menu.showAsMenu",
-				"label": "Show As.."
-			},
-			{
-				"id": "alerts.menu.actionMenu",
-				"label": "Actions"
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "MDC configuration",
-			"properties": {
-				"mdc.filterSettings": {
-					"type": "object",
-					"default": {},
-					"description": "filter settings, saved as a map - subscriptionId as a key, and filter settings as a value",
-					"scope": "window"
-				},
-				"mdc.emailNotification": {
-					"type": "object",
-					"default": {},
-					"description": "email notification settings of security center",
-					"scope": "window"
-				},
-				"mdc.smsNotification": {
-					"type": "object",
-					"default": {},
-					"description": "SMS settings of Azure Communication Services SMS messages",
-					"scope": "window"
-				},
-				"mdc.actionGroupId": {
-					"type": "object",
-					"default": {},
-					"description": "action group settings, saved as a map - actionGroupId as a key, action group notification settings as a value",
-					"scope": "window"
-				}
-			},
-			"default": null
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.2.0",
-		"@types/mocha": "^9.1.1",
-		"@types/node": "16.x",
-		"@types/vscode": "^1.69.0",
-		"@typescript-eslint/eslint-plugin": "^5.30.0",
-		"@typescript-eslint/parser": "^5.30.0",
-		"@vscode/test-electron": "^2.1.5",
-		"eslint": "^8.18.0",
-		"glob": "^8.0.3",
-		"mocha": "^10.0.0",
-		"typescript": "^4.7.4"
-	},
-	"extensionDependencies": [
-		"ms-vscode.azure-account"
-	],
-	"dependencies": {
-		"@azure/arm-communication": "^3.0.1",
-		"@azure/arm-monitor": "^7.0.0",
-		"@azure/arm-resources": "^5.0.1",
-		"@azure/arm-security": "^5.0.0",
-		"@azure/arm-subscriptions": "^5.0.1",
-		"@azure/arm-templatespecs": "^2.0.1",
-		"@azure/communication-phone-numbers": "^1.0.0",
-		"@azure/communication-sms": "^1.0.0",
-		"@azure/identity": "^2.1.0",
-		"@azure/ms-rest-azure-env": "^2.0.0",
-		"@azure/ms-rest-nodeauth": "^3.1.1",
-		"@microsoft/vscode-azext-azureutils": "^0.3.4",
-		"axios": "^0.27.2",
-		"az-ts": "^1.0.18",
-		"azure-cli": "^0.10.20",
-		"fs": "^0.0.1-security",
-		"js-treeview": "^1.1.5",
-		"pdfkit-table": "^0.1.99",
-		"vscode-azureextensionui": "^0.50.0"
-	}
+    "name": "microsoft-defender-for-cloud",
+    "displayName": "Microsoft Defender For Cloud",
+    "description": "A Microsoft Defender For Cloud extension for Visual Studio Code",
+    "version": "0.0.1",
+    "publisher": "mdc-detection",
+    "icon": "resources/mdc-mdcIcon.png",
+    "aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/miriamsh/microsoft-defender-for-cloud"
+    },
+    "engines": {
+        "vscode": "^0.0.1"
+    },
+    "categories": [
+        "Azure"
+    ],
+    "galleryBanner": {
+        "color": "#0072c6",
+        "theme": "dark"
+    },
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "package-explorer",
+                    "title": "Defender For Cloud",
+                    "icon": "resources/mdc-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "package-explorer": [
+                {
+                    "id": "package-resources",
+                    "name": "RESOURCES"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "recommendation.filter.status",
+                "title": "Status"
+            },
+            {
+                "command": "recommendation.filter.environment",
+                "title": "Environment"
+            },
+            {
+                "command": "alerts.filter.severity",
+                "title": "Severity"
+            },
+            {
+                "command": "alerts.filter.status",
+                "title": "Status"
+            },
+            {
+                "command": "connectors.filter.cloudProvider",
+                "title": "Cloud Provider"
+            },
+            {
+                "command": "recommendation.menu.showInBrowser",
+                "title": "Show In Browser"
+            },
+            {
+                "command": "recommendations.menu.showDetailed",
+                "title": "Show Detailed"
+            },
+            {
+                "command": "alerts.menu.showInBrowser",
+                "title": "Show In Browser"
+            },
+            {
+                "command": "alerts.menu.showAs.graph",
+                "title": "Graph"
+            },
+            {
+                "command": "alerts.menu.showAs.hierarchy",
+                "title": "Hierarchy"
+            },
+            {
+                "command": "alerts.menu.showDetailed",
+                "title": "Show Detailed"
+            },
+            {
+                "command": "alerts.menu.actionMenu.sendNotifications",
+                "title": "Send Notifications (SMS)"
+            },
+            {
+                "command": "alerts.menu.actionMenu.activate",
+                "title": "Activate"
+            },
+            {
+                "command": "alerts.menu.actionMenu.dismiss",
+                "title": "Dismiss"
+            },
+            {
+                "command": "subscription.email.notification.settings",
+                "title": "Email Notification Settings"
+            },
+            {
+                "command": "subscription.sms.notification.settings",
+                "title": "SMS Notification Settings"
+            }
+            ,
+            {
+                "command": "createReport",
+                "title": "Create Report"
+            }
+        ],
+        "menus": {
+            "view/title": [],
+            "view/item/context": [
+                {
+                    "submenu": "recommendations.filters",
+                    "when": "viewItem == securityCenter.recommendations",
+                    "group": "inline"
+                },
+                {
+                    "submenu": "alerts.filters",
+                    "when": "viewItem == securityCenter.securityAlerts",
+                    "group": "inline"
+                },
+                {
+                    "submenu": "connectors.filters",
+                    "when": "viewItem == securityCenter.connectors",
+                    "group": "inline"
+                },
+                {
+                    "submenu": "subsription.settings",
+                    "when": "viewItem == azureutils.subscription",
+                    "group": "1@1"
+                },
+                {
+                    "command": "recommendation.menu.showInBrowser",
+                    "when": "viewItem == securityCenter.recommendations.assessments",
+                    "group": "1@1"
+                },
+                {
+                    "command": "recommendations.menu.showDetailed",
+                    "when": "viewItem == securityCenter.recommendations.assessments",
+                    "group": "2@1"
+                },
+                {
+                    "command": "alerts.menu.showInBrowser",
+                    "when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
+                    "group": "1@1"
+                },
+                {
+                    "submenu": "alerts.menu.showAsMenu",
+                    "when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
+                    "group": "2@1"
+                },
+                {
+                    "command": "alerts.menu.showDetailed",
+                    "when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
+                    "group": "3@1"
+                },
+                {
+                    "submenu": "alerts.menu.actionMenu",
+                    "when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
+                    "group": "4@1"
+                },
+                {
+                    "command": "createReport",
+                    "group": "navigation"
+                }
+            ],
+            "recommendations.filters": [
+                {
+                    "command": "recommendation.filter.status",
+                    "group": "1_default@1"
+                },
+                {
+                    "command": "recommendation.filter.environment",
+                    "group": "2_default@1"
+                }
+            ],
+            "alerts.filters": [
+                {
+                    "command": "alerts.filter.severity",
+                    "group": "1_default@1"
+                },
+                {
+                    "command": "alerts.filter.status",
+                    "group": "2_default@1"
+                }
+            ],
+            "connectors.filters": [
+                {
+                    "command": "connectors.filter.cloudProvider",
+                    "group": "1_default@1"
+                }
+            ],
+            "alerts.menu.showAsMenu": [
+                {
+                    "command": "alerts.menu.showAs.graph",
+                    "group": "1_default@1"
+                },
+                {
+                    "command": "alerts.menu.showAs.hierarchy",
+                    "group": "2_default@1"
+                }
+            ],
+            "alerts.menu.actionMenu": [
+                {
+                    "command": "alerts.menu.actionMenu.sendNotifications",
+                    "group": "1_default@1"
+                },
+                {
+                    "command": "alerts.menu.actionMenu.activate",
+                    "group": "2_default@1"
+                },
+                {
+                    "command": "alerts.menu.actionMenu.dismiss",
+                    "group": "3_default@1"
+                }
+            ],
+            "subsription.settings":[
+                {
+                    "command": "subscription.email.notification.settings",
+                    "group": "1_default@1"
+                },
+                {
+                    "command": "subscription.sms.notification.settings",
+                    "group": "2_default@1"
+                }
+            ]
+        },
+        "submenus": [
+            {
+                "id": "recommendations.filters",
+                "label": "Filter",
+                "icon": {
+                    "light": "resources/light/filter.svg",
+                    "dark": "resources/dark/filter.svg"
+                }
+            },
+            {
+                "id": "alerts.filters",
+                "label": "Filter",
+                "icon": {
+                    "light": "resources/light/filter.svg",
+                    "dark": "resources/dark/filter.svg"
+                }
+            },
+            {
+                "id": "connectors.filters",
+                "label": "Filter",
+                "icon": {
+                    "light": "resources/light/filter.svg",
+                    "dark": "resources/dark/filter.svg"
+                }
+            },
+            {
+                "id": "alerts.menu.showAsMenu",
+                "label": "Show As.."
+            },
+            {
+                "id": "alerts.menu.actionMenu",
+                "label": "Actions"
+            },
+            {
+                "id":"subsription.settings",
+                "label":"Settings"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "MDC configuration",
+            "properties": {
+                "mdc.filterSettings": {
+                    "type": "object",
+                    "default": {},
+                    "description": "filter settings, saved as a map - subscriptionId as a key, and filter settings as a value",
+                    "scope": "window"
+                },
+                "mdc.emailNotification": {
+                    "type": "object",
+                    "default": {},
+                    "description": "email notification settings of security center",
+                    "scope": "window"
+                },
+                "mdc.smsNotification": {
+                    "type": "object",
+                    "default": {},
+                    "description": "SMS settings of Azure Communication Services SMS messages",
+                    "scope": "window"
+                },
+                "mdc.actionGroupId": {
+                    "type": "object",
+                    "default": {},
+                    "description": "action group settings, saved as a map - actionGroupId as a key, action group notification settings as a value",
+                    "scope": "window"
+                }
+            },
+            "default": null
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.2.0",
+        "@types/mocha": "^9.1.1",
+        "@types/node": "16.x",
+        "@types/vscode": "^1.69.0",
+        "@typescript-eslint/eslint-plugin": "^5.30.0",
+        "@typescript-eslint/parser": "^5.30.0",
+        "@vscode/test-electron": "^2.1.5",
+        "eslint": "^8.18.0",
+        "glob": "^8.0.3",
+        "mocha": "^10.0.0",
+        "typescript": "^4.7.4"
+    },
+    "extensionDependencies": [
+        "ms-vscode.azure-account"
+    ],
+    "dependencies": {
+        "@azure/arm-communication": "^3.0.1",
+        "@azure/arm-monitor": "^7.0.0",
+        "@azure/arm-resources": "^5.0.1",
+        "@azure/arm-security": "^5.0.0",
+        "@azure/arm-subscriptions": "^5.0.1",
+        "@azure/arm-templatespecs": "^2.0.1",
+        "@azure/communication-phone-numbers": "^1.0.0",
+        "@azure/communication-sms": "^1.0.0",
+        "@azure/identity": "^2.1.0",
+        "@azure/ms-rest-azure-env": "^2.0.0",
+        "@azure/ms-rest-nodeauth": "^3.1.1",
+        "@microsoft/vscode-azext-azureutils": "^0.3.4",
+        "axios": "^0.27.2",
+        "az-ts": "^1.0.18",
+        "azure-cli": "^0.10.20",
+        "fs": "^0.0.1-security",
+        "js-treeview": "^1.1.5",
+        "pdfkit-table": "^0.1.99",
+        "vscode-azureextensionui": "^0.50.0"
+    }
 }
