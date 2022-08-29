@@ -6,6 +6,7 @@ import { Constants } from "../../Constants";
 import { alertsFiltering } from "../../Commands/FilterVulnerabilities";
 import { getConfigurationSettings } from "../../Utility/ConfigUtils";
 import { TreeUtils } from "../../Utility/TreeUtils";
+import { Alerts } from "./AlertModel";
 
 export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 	private _children: AffectedResourceTreeItem[] = [];
@@ -14,15 +15,23 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 	private _nextLink: string | undefined;
 	public label: string;
 	public readonly contextValue: string = 'securityCenter.securityAlerts';
-
+	private _apiUrl: string[]=[];
+	public model:any[]=[new Alerts()];
 	constructor(label: string, parent: AzExtParentTreeItem, client:SecurityCenter) {
 		super(parent);
 		this.label = label;
 		this._title=label;
 		this._client = client;
 		this.iconPath = TreeUtils.getIconPath(Constants.alertIcon);
-	}
+		this._apiUrl.push(Constants.getAlertListPath(this.subscription.subscriptionId));		this._apiUrl.push(Constants.getAlertListPath(this.subscription.subscriptionId));
 
+	}
+	public get apiUrl(): string[] {
+		return this._apiUrl;
+	}
+	public set apiUrl(apiUrl: string[]) {
+		this._apiUrl = apiUrl;
+	}
 	public async loadMoreChildrenImpl(): Promise<AzExtTreeItem[]> {
 
 		if(this._children.length === 0) {
@@ -41,6 +50,12 @@ export class AlertsTreeDataProvider extends AzExtParentTreeItem {
 			});
 
 			this._children = Array.from(alertByResource.values());
+			//Example
+			// const alert=await this._client.alerts.getSubscriptionLevel('centralus','2517427022085381501_c5b3855b-b05c-4877-bf30-ff1c52e11ff7');
+			// resource = new AffectedResourceTreeItem(alert.compromisedEntity!, this);
+			// const alertItem = new AlertTreeItem(alert.alertDisplayName!, alert.severity!, alert.status!, resource, JSON.stringify(alert), alert.name!, 'tivan-onboard','centralus', alert.entities!, alert.alertUri!, alert.id!, this._client);
+			// resource.appendChildren(alertItem);
+			// this._children.unshift(resource);
 		}
         
 		const filteredAlerts = alertsFiltering(await getConfigurationSettings(Constants.extensionPrefix,Constants.filtering, this.subscription.subscriptionId), this._children);

@@ -1,0 +1,20 @@
+<svg width="288" height="288" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <title>Layer 1</title>
+  <g stroke="null" y="-1" x="-3" id="svg_9">
+   <defs transform="translate(-7 -4) translate(15 7) translate(-7 0)" stroke="null">
+    <linearGradient stroke="null" y2="0" y1="1" x2="0.5" x1="0.5" id="svg_1">
+     <stop stroke="null" offset="0" class="stopColor5e9624 svgShape"/>
+     <stop stroke="null" offset="0.321" class="stopColor639d26 svgShape"/>
+     <stop stroke="null" offset="0.794" class="stopColor6fb12a svgShape"/>
+     <stop stroke="null" offset="0.999" class="stopColor76bc2d svgShape"/>
+    </linearGradient>
+   </defs>
+   <path stroke="null" id="svg_4" class="colorfff svgShape" d="m17.083,11.438c0,4.571 -5.626,8.25 -6.85,9a0.449,0.449 0 0 1 -0.466,0c-1.224,-0.747 -6.85,-4.426 -6.85,-9l0,-5.5a0.44,0.44 0 0 1 0.434,-0.438c4.377,-0.114 3.369,-2 6.649,-2s2.272,1.886 6.649,2a0.44,0.44 0 0 1 0.434,0.435l0,5.503z"/>
+   <path stroke="null" id="svg_5" d="m16.5,11.485c0,4.191 -5.16,7.566 -6.282,8.25a0.412,0.412 0 0 1 -0.428,0c-1.126,-0.684 -6.29,-4.059 -6.29,-8.25l0,-5.044a0.4,0.4 0 0 1 0.4,-0.4c4.016,-0.106 3.092,-1.836 6.1,-1.836s2.084,1.73 6.1,1.837a0.4,0.4 0 0 1 0.4,0.4l0,5.043z" fill="url(#svg_1)"/>
+   <path stroke="null" id="svg_6" class="color000 svgShape" d="m12.853,10.66l-0.408,0l0,-1.417a2.652,2.652 0 0 0 -0.7,-1.809a2.358,2.358 0 0 0 -3.483,0a2.606,2.606 0 0 0 -0.7,1.808l0,1.418l-0.415,0a0.328,0.328 0 0 0 -0.326,0.32l0,3.682a0.329,0.329 0 0 0 0.326,0.32l5.706,0a0.329,0.329 0 0 0 0.326,-0.32l0,-3.682a0.328,0.328 0 0 0 -0.326,-0.32zm-1.549,0l-2.604,0l0,-1.441a1.434,1.434 0 0 1 0.41,-0.99a1.2,1.2 0 0 1 1.788,0a1.394,1.394 0 0 1 0.153,0.2l0,0a1.445,1.445 0 0 1 0.258,0.791l-0.005,1.44z" fill="#fff"/>
+   <path stroke="null" id="svg_7" opacity="0.15" class="colorb3b3b3 svgShape" d="m7.148,10.658l5.705,0a0.328,0.328 0 0 1 0.21,0.08l-6.125,4.162a0.313,0.313 0 0 1 -0.116,-0.241l0,-3.68a0.328,0.328 0 0 1 0.326,-0.321z" fill="#fdfdfd"/>
+   <path stroke="null" id="svg_8" opacity="0.09" class="colora3a3a3 svgShape" d="m12.853,10.658l-5.706,0a0.328,0.328 0 0 0 -0.209,0.08l6.124,4.162a0.314,0.314 0 0 0 0.117,-0.241l0,-3.68a0.329,0.329 0 0 0 -0.326,-0.321z" fill="#fff"/>
+  </g>
+ </g>
+</svg>

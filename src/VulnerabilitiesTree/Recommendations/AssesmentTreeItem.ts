@@ -1,5 +1,7 @@
 import {  SecurityCenter, SecuritySubAssessment, SubAssessments } from "@azure/arm-security";
 import { AzExtParentTreeItem, AzExtTreeItem, IActionContext } from "@microsoft/vscode-azext-utils";
+import { Constants } from "../../constants";
+import { Assessments } from "./AssessmentModel";
 import { SubAssessmentTreeItem } from "./SubAssessmentTreeItem";
 
 
@@ -12,7 +14,16 @@ export class AssessmentTreeItem extends AzExtParentTreeItem {
     private children:SubAssessmentTreeItem[]=[];
 	private _jsonItem!:string;
 	private _assessmentName:string;
+	private _resourceId!: string;
+	public model: any[] = [new Assessments()];
+	private _apiUrl: string[] = [];
 
+	public get apiUrl(): string[] {
+		return this._apiUrl;
+	}
+	public get resourceId(): string {
+		return this._resourceId;
+	}
 	public get status() : string {
 		return this._status;
 	}
@@ -30,7 +41,7 @@ export class AssessmentTreeItem extends AzExtParentTreeItem {
 	}
 	
 
-    constructor(id:string,label:string,name:string, status:string,environment:string,parent: AzExtParentTreeItem,jsonItem:string, client:SecurityCenter) {
+    constructor(id:string,label:string,name:string, status:string,environment:string,parent: AzExtParentTreeItem,jsonItem:string, client:SecurityCenter,resourceId:string) {
 		super(parent);
 		this.id=id;	
 		this._assessmentName=name;
@@ -38,7 +49,10 @@ export class AssessmentTreeItem extends AzExtParentTreeItem {
  		this._client = client;
 		this._status = status;
         this._environment=environment;
-		this._jsonItem=jsonItem;	
+		this._jsonItem=jsonItem;
+		this._resourceId = resourceId;
+		this._apiUrl.push(Constants.getAssessmentPath(this.subscription.subscriptionId, resourceId, name));
+	
 	}
 
 	public readonly contextValue: string = 'securityCenter.recommendations.assessments';
@@ -47,7 +61,7 @@ export class AssessmentTreeItem extends AzExtParentTreeItem {
 		const subscriptionId = `subscriptions/${this.subscription.subscriptionId}`;
 		const data = await (await this._client.subAssessments.list(subscriptionId,this._assessmentName).byPage().next()).value;
  		data.map((assessment:SecuritySubAssessment)=>{
-			this.children.push(new SubAssessmentTreeItem(assessment.displayName!, this, this._client));
+			this.children.push(new SubAssessmentTreeItem(assessment.displayName!,assessment.name!, this, this._client));
 		});
 		return this.children;
 	}

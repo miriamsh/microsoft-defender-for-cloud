@@ -29,8 +29,8 @@
 			"activitybar": [
 				{
 					"id": "package-explorer",
-					"title": "MDC",
-					"icon": "$(preview)"
+					"title": "Defender For Cloud",
+					"icon": "resources/mdc-icon.svg"
 				}
 			]
 		},
@@ -111,6 +111,11 @@
 				"command": "subscription.sms.notification.settings",
 				"title": "SMS Notification Settings"
 			}
+			,
+			{
+				"command": "createReport",
+				"title": "Create Report"
+			}
 		],
 		"menus": {
 			"view/title": [],
@@ -169,6 +174,10 @@
 					"submenu": "alerts.menu.actionMenu",
 					"when": "viewItem == securityCenter.securityAlerts.affectedResources.alert",
 					"group": "4@1"
+				},
+				{
+					"command": "createReport",
+					"group": "navigation"
 				}
 			],
 			"recommendations.filters": [
@@ -330,6 +339,7 @@
 		"azure-cli": "^0.10.20",
 		"fs": "^0.0.1-security",
 		"js-treeview": "^1.1.5",
+		"pdfkit-table": "^0.1.99",
 		"vscode-azureextensionui": "^0.50.0"
 	}
 }

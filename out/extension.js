@@ -15,6 +15,7 @@ const SendSmsAM_1 = require("./Commands/SendSmsAM");
 const SetSmsSettingsAM_1 = require("./Commands/SetSmsSettingsAM");
 const CreateGraphCommand_1 = require("./Commands/CreateGraphCommand");
 const CreateHierarchyCommand_1 = require("./Commands/CreateHierarchyCommand");
+const createReport_1 = require("./Commands/createReport");
 async function activate(context) {
     Constants_1.Constants.initialize(context);
     const uiExtensionVariables = {
@@ -87,10 +88,13 @@ async function registerCommands(context) {
     (0, vscode_azext_utils_1.registerCommand)('alerts.menu.showAs.hierarchy', async (event, node) => {
         (0, CreateHierarchyCommand_1.createHierarchy)(node.entities, context);
     });
+    (0, vscode_azext_utils_1.registerCommand)('createReport', async (event, node) => {
+        (0, createReport_1.createReport)(context, node);
+    });
 }
 // this method is called when your extension is deactivated
 function deactivate() {
     fs.rm(path.join(Constants_1.Constants.resourcesFolderPath, 'details.json'), (err) => { });
 }
 exports.deactivate = deactivate;
-//# sourceMappingURL=Extension.js.map
+//# sourceMappingURL=extension.js.map

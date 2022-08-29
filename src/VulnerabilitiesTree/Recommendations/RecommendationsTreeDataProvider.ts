@@ -9,6 +9,7 @@ import { getConfigurationSettings } from '../../Utility/ConfigUtils';
 import { SecurityAssessment } from './SecurityAssessment.type';
 import { json } from 'stream/consumers';
 import { IActionContext } from 'vscode-azureextensionui';
+import { Assessments } from './AssessmentModel';
 
 
 
@@ -22,7 +23,8 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
     private _children: AssessmentTreeItem[] = [];
     private _title: string;
     private _nextLink: string | undefined;
-
+    private _apiUrl: string[] = [];
+    public model: any[] = [new Assessments()];
     public readonly contextValue: string = 'securityCenter.recommendations';
 
     constructor(label: string, parent: AzExtParentTreeItem, client: SecurityCenter) {
@@ -31,8 +33,14 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
         this.label = label;
         this._client = client;
         this.iconPath = TreeUtils.getIconPath(Constants.assessmentIcon);
+        this._apiUrl.push(Constants.getAssessmentListPath(this.subscription.subscriptionId));
     }
-
+    public get apiUrl(): string[] {
+        return this._apiUrl;
+    }
+    public set apiUrl(apiUrl: string[]) {
+        this._apiUrl = apiUrl;
+    }
     public async loadMoreChildrenImpl(clearCache: boolean, _context: IActionContext): Promise<AzExtParentTreeItem[]> {
         if (clearCache) {
             this._nextLink = undefined;
@@ -45,7 +53,8 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
             //TODO:check if loadMoreChildren works. if it does - add this functionality to all the treeDataProvider classes 
             this._nextLink = data.next;
             data.map((assessment: SecurityAssessment) => {
-                this._children.push(new AssessmentTreeItem(assessment.id, assessment.displayName, assessment.name, assessment.status.code, assessment.resourceDetails.Source, this, JSON.stringify(assessment), this._client));
+                const parameters = new URLParameters(assessment.id);
+                this._children.push(new AssessmentTreeItem(assessment.id, assessment.displayName, assessment.name, assessment.status.code, assessment.resourceDetails.Source, this, JSON.stringify(assessment), this._client,parameters.getResourceId()));
             });
         }
         
@@ -61,4 +70,21 @@ export class RecommendationsTreeDataProvider extends AzExtParentTreeItem {
     }
 
 
+}
+export class URLParameters {
+    private id: string;
+    private startResourceId: string = "resourceGroups/";
+    private endResourceId: string = "/providers/Microsoft.Security";
+    constructor(id: string) {
+        this.id = id;
+    }
+
+    public getResourceId(): string {
+        let start = this.id.indexOf(this.startResourceId);
+        if (start === -1) {
+            start = this.id.indexOf(this.startResourceId.toLocaleLowerCase());
+        }
+        const end = this.id.indexOf(this.endResourceId);
+        return this.id.slice(start + this.startResourceId.length, end);
+    }
 }

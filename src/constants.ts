@@ -31,7 +31,31 @@ export class Constants {
     public static getConnectorsList = (subscriptionId: string): string => {
         return `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.Security/securityConnectors?api-version=2021-12-01-preview`;
     };
+    public static getAlertListPath(subscriptionId: string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.Security/alerts?api-version=2021-01-01`;
+    }
+    public static getAlertPath(subscriptionId: string,ascLocation:string,alertName:string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.Security/locations/${ascLocation}/alerts/${alertName}?api-version=2022-01-01`;
+    }
+    public static getAssessmentListPath(subscriptionId: string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.Security/assessments?api-version=2020-01-01`;
+    }
+    public static getAssessmentPath(subscriptionId: string,resourceId:string,assessmentName:string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceId}/providers/Microsoft.Security/assessments/${assessmentName}?api-version=2020-01-01`;
+    }
+    public static getConnectorListPath(subscriptionId: string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.Security/securityConnectors?api-version=2021-12-01-preview`;
+    }
+    public static getConnectorPath(subscriptionId: string,resourceGroupName:string,securityConnectorName:string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Security/securityConnectors/${securityConnectorName}?api-version=2021-12-01-preview`;
+    }
 
+    public static getSubAssessmentListPath(subscriptionId: string,assessmentName:string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.Security/assessments/${assessmentName}/subAssessments?api-version=2019-01-01-preview`;
+    }
+    public static getSubAssessmentPath(subscriptionId: string,assessmentName:string,subAssessmentName:string): string {
+        return `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.Security/assessments/${assessmentName}/subAssessments/{subAssessmentName}?api-version=2019-01-01-preview`;
+    }
     public static createOrUpdateAlertRule = (resourceGroupName: string, alertRuleName: string): string => {
         return `https://management.azure.com/subscriptions/9355a384-3349-404c-9589-1796edfdf799/resourceGroups/${resourceGroupName}/providers/Microsoft.Insights/scheduledQueryRules/${alertRuleName}?api-version=2021-08-01`;
     };

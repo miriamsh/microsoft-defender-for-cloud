@@ -8,6 +8,7 @@ import { AWSOfferings, GCPOfferings, GithubOfferings } from "../../Models/Connec
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
 import { SecurityConnector } from "./SecurityConnector.type";
 import { SecurityCenter } from "@azure/arm-security";
+import { Connectors } from "./ConnectorModel";
 
 
 export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
@@ -15,14 +16,22 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
     label: string;
     private _children: CloudProviderTreeItem[] = [];
     private _client: SecurityCenter;
-
+    private _apiUrl: string[] = [];
+    public model: any[]=[new Connectors() ];
     constructor(label: string, parent: AzExtParentTreeItem, client: SecurityCenter) {
         super(parent);
         this.label = label;
         this._client = client;
         this.iconPath = TreeUtils.getIconPath(Constants.connectorIcon);
-    }
+        this._apiUrl.push(Constants.getConnectorListPath(this.subscription.subscriptionId));
 
+    }
+    public get apiUrl(): string[] {
+        return this._apiUrl;
+    }
+    public set apiUrl(apiUrl: string[]) {
+        this._apiUrl = apiUrl;
+    }
     public readonly contextValue: string = 'securityCenter.connectors';
 
     public get children(): CloudProviderTreeItem[] {
@@ -40,14 +49,15 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
 
             const data = (await this._client.securityConnectors.list().byPage().next()).value;
             data.map((connector: SecurityConnector) => {
+                const parameters = new URLParameters(connector.id);
                 if (connector.cloudName === 'AWS') {
-                    awsConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(AWSOfferings), awsConnector, connector.id));
+                    awsConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(AWSOfferings), awsConnector, connector.id,parameters.getResourceGroupName()));
                 }
                 else if (connector.cloudName === 'GCP') {
-                    gcpConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(GCPOfferings), gcpConnector, connector.id));
+                    gcpConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(GCPOfferings), gcpConnector, connector.id,parameters.getResourceGroupName()));
                 }
                 else {
-                    githubConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(GithubOfferings), githubConnector, connector.id));
+                    githubConnector.appendChild(new ConnectorTreeItem(connector.name, connector.offerings, Object.keys(GithubOfferings), githubConnector, connector.id,parameters.getResourceGroupName()));
                 }
             });
 
@@ -59,6 +69,21 @@ export class ConnectorsTreeDataProvider extends AzExtParentTreeItem {
     public hasMoreChildrenImpl(): boolean {
 
         return false;
+    }
+
+}
+export class URLParameters {
+    private url: string;
+    private startResourceGroup: string = "resourcegroups/";
+    private endResourceGroup: string = "/providers";
+    constructor(url: string) {
+        this.url = url;
+    }
+
+    public getResourceGroupName(): string {
+        const start = this.url.indexOf(this.startResourceGroup);
+        const end = this.url.indexOf(this.endResourceGroup);
+        return this.url.slice(start + this.startResourceGroup.length, end);
     }
 
 }

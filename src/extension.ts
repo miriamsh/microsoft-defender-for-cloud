@@ -16,6 +16,9 @@ import { sendSmsNotification } from './Commands/SendSms';
 import { createGraph } from './Commands/CreateGraphCommand';
 import { createHierarchy } from './Commands/CreateHierarchyCommand';
 import { AlertEntity } from '@azure/arm-security';
+import axios from 'axios';
+import { PDF } from './Document/PDF';
+import { createReport } from './Commands/createReport';
 
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -114,7 +117,9 @@ async function registerCommands(context: vscode.ExtensionContext) {
         createHierarchy(node.entities, context);
     });
 
-
+    registerCommand('createReport', async (event, node) => {
+         createReport(context,node);        
+    });
 
 }
 

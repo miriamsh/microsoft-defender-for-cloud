@@ -13,14 +13,25 @@ const ClientUtils_1 = require("../Utility/ClientUtils");
 const CommunicationServices_1 = require("../azure/CommunicationServices");
 const AzureMonitor_1 = require("../azure/AzureMonitor");
 const TreeUtils_1 = require("../Utility/TreeUtils");
+const AssessmentModel_1 = require("./Recommendations/AssessmentModel");
+const ConnectorModel_1 = require("./Connectors/ConnectorModel");
+const AlertModel_1 = require("./Security Alerts/AlertModel");
 class SubscriptionTreeItem extends vscode_azext_azureutils_1.SubscriptionTreeItemBase {
     constructor(parent, root) {
         super(parent, root);
+        this._apiUrl = [];
+        this.model = [new AssessmentModel_1.Assessments(), new ConnectorModel_1.Connectors(), new AlertModel_1.Alerts()];
         this.contextValue = 'azureutils.subscription';
         this.root = root;
         this.iconPath = TreeUtils_1.TreeUtils.getIconPath(Constants_1.Constants.subscriptionIcon);
         this._client = new ClientUtils_1.Client(root);
         this._communicationServices = new CommunicationServices_1.CommunicationServices(root, this._client);
+        this._apiUrl.push(Constants_1.Constants.getAssessmentListPath(this.subscription.subscriptionId));
+        this._apiUrl.push(Constants_1.Constants.getConnectorListPath(this.subscription.subscriptionId));
+        this._apiUrl.push(Constants_1.Constants.getAlertListPath(this.subscription.subscriptionId));
+    }
+    get apiUrl() {
+        return this._apiUrl;
     }
     get client() {
         return this._client;

@@ -2,6 +2,8 @@ import { AlertEntity, SecurityCenter } from "@azure/arm-security";
 import { RestError } from "@azure/ms-rest-js";
 import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-utils";
 import { window } from "vscode";
+import { Constants } from "../../constants";
+import { Alerts } from "./AlertModel";
 
 export class AlertTreeItem extends AzExtTreeItem {
 
@@ -16,9 +18,17 @@ export class AlertTreeItem extends AzExtTreeItem {
 	private _alertUri!: string;
 	private _entities: AlertEntity[];
 	private _alertName: string;
+	private _apiUrl: string[]=[];
+	public model:any[]=[new Alerts()];
 
 	public readonly contextValue: string = "securityCenter.securityAlerts.affectedResources.alert";
 
+	public get apiUrl(): string[] {
+		return this._apiUrl;
+	}
+	public set apiUrl(apiUrl: string[]) {
+		this._apiUrl = apiUrl;
+	}
 	public get jsonItem(): string {
 		return this._jsonItem;
 	}
@@ -57,6 +67,8 @@ export class AlertTreeItem extends AzExtTreeItem {
 		this._alertUri = alertUri;
 		this._alertName = label;
 		this._entities = entities;
+		this._apiUrl.push(Constants.getAlertPath(this.subscription.subscriptionId,location,name));
+
 	}
 
 	//Dismisses a security alert

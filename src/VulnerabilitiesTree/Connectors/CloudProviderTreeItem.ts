@@ -2,6 +2,8 @@ import { AzExtParentTreeItem, AzExtTreeItem } from "@microsoft/vscode-azext-util
 import { Constants } from '../../Constants';
 import { ConnectorTreeItem } from "./ConnectorTreeItem";
 import { TreeUtils } from "../../Utility/TreeUtils";
+import { ConnectorFilter } from "./ConnectorFilter";
+import { Connectors } from "./ConnectorModel";
 
 
 export class CloudProviderTreeItem extends AzExtParentTreeItem {
@@ -10,6 +12,9 @@ export class CloudProviderTreeItem extends AzExtParentTreeItem {
     private _children: ConnectorTreeItem[] = [];
     public cloudProvider: string;
     private _title: string;
+    private _apiUrl: string[]=[];
+    public filter!: ConnectorFilter;
+    public model:any[]=[new Connectors()] ;
 
     constructor(label: string, parent: AzExtParentTreeItem) {
         super(parent);
@@ -17,10 +22,18 @@ export class CloudProviderTreeItem extends AzExtParentTreeItem {
         this.label = label;
         this.cloudProvider = label;
         this.iconPath = TreeUtils.getIconPath(Constants.cloudConnector);
+        this._apiUrl.push( Constants.getConnectorListPath(this.subscription.subscriptionId));
+        this.filter = new ConnectorFilter();
+        this.filter.properties!['environmentName']=this.label;
     }
 
     public readonly contextValue: string = 'securityCenter.connectors.cloudProvider';
-
+    public get apiUrl(): string[] {
+        return this._apiUrl;
+    }
+    public set apiUrl(apiUrl: string[]) {
+        this._apiUrl = apiUrl;
+    }
     public hasMoreChildrenImpl(): boolean {
         return false;
     }

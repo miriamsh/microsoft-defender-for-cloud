@@ -8,15 +8,26 @@ const Constants_1 = require("../../Constants");
 const FilterVulnerabilities_1 = require("../../Commands/FilterVulnerabilities");
 const ConfigUtils_1 = require("../../Utility/ConfigUtils");
 const TreeUtils_1 = require("../../Utility/TreeUtils");
+const AlertModel_1 = require("./AlertModel");
 class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
     constructor(label, parent, client) {
         super(parent);
         this._children = [];
         this.contextValue = 'securityCenter.securityAlerts';
+        this._apiUrl = [];
+        this.model = [new AlertModel_1.Alerts()];
         this.label = label;
         this._title = label;
         this._client = client;
         this.iconPath = TreeUtils_1.TreeUtils.getIconPath(Constants_1.Constants.alertIcon);
+        this._apiUrl.push(Constants_1.Constants.getAlertListPath(this.subscription.subscriptionId));
+        this._apiUrl.push(Constants_1.Constants.getAlertListPath(this.subscription.subscriptionId));
+    }
+    get apiUrl() {
+        return this._apiUrl;
+    }
+    set apiUrl(apiUrl) {
+        this._apiUrl = apiUrl;
     }
     async loadMoreChildrenImpl() {
         if (this._children.length === 0) {
@@ -34,6 +45,12 @@ class AlertsTreeDataProvider extends vscode_azext_utils_1.AzExtParentTreeItem {
                 alertByResource.set(alert.compromisedEntity, resource);
             });
             this._children = Array.from(alertByResource.values());
+            //Example
+            // const alert=await this._client.alerts.getSubscriptionLevel('centralus','2517427022085381501_c5b3855b-b05c-4877-bf30-ff1c52e11ff7');
+            // resource = new AffectedResourceTreeItem(alert.compromisedEntity!, this);
+            // const alertItem = new AlertTreeItem(alert.alertDisplayName!, alert.severity!, alert.status!, resource, JSON.stringify(alert), alert.name!, 'tivan-onboard','centralus', alert.entities!, alert.alertUri!, alert.id!, this._client);
+            // resource.appendChildren(alertItem);
+            // this._children.unshift(resource);
         }
         const filteredAlerts = (0, FilterVulnerabilities_1.alertsFiltering)(await (0, ConfigUtils_1.getConfigurationSettings)(Constants_1.Constants.extensionPrefix, Constants_1.Constants.filtering, this.subscription.subscriptionId), this._children);
         //this.label = `${this._title} (${filteredAlerts.length})`;
