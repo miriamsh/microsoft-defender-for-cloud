@@ -1,1 +1,18 @@
-{"id":"/subscriptions/2f69bcc6-e7d1-4de5-9006-d8ede4c4c6d5/providers/Microsoft.Security/assessments/dabc9bc4-b8a8-45bd-9a5a-43000df8aa1c","name":"dabc9bc4-b8a8-45bd-9a5a-43000df8aa1c","type":"Microsoft.Security/assessments","resourceDetails":{"Source":"Azure","Id":"/subscriptions/2f69bcc6-e7d1-4de5-9006-d8ede4c4c6d5"},"displayName":"Accounts with read permissions on Azure resources should be MFA enabled","additionalData":{"subAssessmentsLink":"/subscriptions/2f69bcc6-e7d1-4de5-9006-d8ede4c4c6d5/providers/Microsoft.Security/assessments/dabc9bc4-b8a8-45bd-9a5a-43000df8aa1c/subAssessments"},"status":{"code":"Healthy","firstEvaluationDate":"2022-08-22T17:06:47.161Z","statusChangeDate":"2022-08-22T17:06:47.161Z"}}
+{
+    "id": "/subscriptions/2f69bcc6-e7d1-4de5-9006-d8ede4c4c6d5/providers/Microsoft.Security/assessments/6f90a6d6-d4d6-0794-0ec1-98fa77878c2e",
+    "name": "6f90a6d6-d4d6-0794-0ec1-98fa77878c2e",
+    "type": "Microsoft.Security/assessments",
+    "resourceDetails": {
+        "Source": "Azure",
+        "Id": "/subscriptions/2f69bcc6-e7d1-4de5-9006-d8ede4c4c6d5"
+    },
+    "displayName": "A maximum of 3 owners should be designated for subscriptions",
+    "additionalData": {
+        "identityDesignateLessThanXOwnersObjectIdList": "[\"87515ba8-1820-4b63-a93c-225f2b9bc9fe\"]"
+    },
+    "status": {
+        "code": "Healthy",
+        "firstEvaluationDate": "2022-08-29T15:29:04.391Z",
+        "statusChangeDate": "2022-08-29T15:29:04.391Z"
+    }
+}
